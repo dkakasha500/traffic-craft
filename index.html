@@ -1,0 +1,1537 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+/* init вызывается ниже в микроконверсиях — здесь только загрузка SDK */
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=2342435819568558&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>Traffic Craft — Реклама для клиник</title>
+<meta name="description" content="Выводим клиники на 3 000 заявок и 300 продаж в месяц. Окупаемость от 600%.">
+<meta property="og:title" content="Traffic Craft — Выводим клиники на 3000 заявок">
+<meta property="og:description" content="Приводим пациентов из рекламы так, чтобы они доходили до записи и оплаты.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://traffic-craft.com/">
+<meta property="og:image" content="https://traffic-craft.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Traffic Craft — Выводим клиники на 3000 заявок">
+<meta name="twitter:description" content="Приводим пациентов из рекламы так, чтобы они доходили до записи и оплаты.">
+<meta name="twitter:image" content="https://traffic-craft.com/og-image.png">
+<link rel="canonical" href="https://traffic-craft.com/">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg: #000000; 
+  --bg2: #030303; 
+  --bg3: #080808; 
+  --white: #ffffff;
+  --dark: #000000;
+  
+  --accent: #0ee0cf; 
+  --accent-soft: rgba(14, 224, 207, 0.15);
+  --accent-mid: rgba(14, 224, 207, 0.3);
+  --blue: #3b82f6;
+  --gold: #fbbf24;
+  --gold-soft: rgba(251, 191, 36, 0.1);
+  --red: #ef4444;
+  --green: #4ade80;
+  
+  --txt: #a1a1aa; 
+  --txt2: #71717a; 
+  --txt3: #52525b; 
+  --heading: #f4f4f5; 
+  
+  --brd: rgba(255, 255, 255, 0.08); 
+  --brd2: rgba(255, 255, 255, 0.15);
+  --glass-bg: rgba(255, 255, 255, 0.02); 
+  --glass-hover: rgba(255, 255, 255, 0.05);
+  
+  --sec-pad: 100px;
+  --sec-pad-sm: 64px;
+}
+
+html {-webkit-tap-highlight-color: transparent; scroll-behavior: smooth; scroll-padding-top: 80px; overflow-y: scroll;}
+body { font-family: -apple-system, BlinkMacSystemFont, 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--txt); line-height: 1.6; -webkit-font-smoothing: antialiased; opacity: 0; animation: pageReveal 1s cubic-bezier(.22,1,.36,1) forwards; overflow-x: clip; width: 100%; position: relative; }
+@keyframes pageReveal{to{opacity:1}}
+a{color:inherit;text-decoration:none}
+.ctn{max-width:1140px;margin:0 auto;padding:0 32px;position:relative;z-index:2}
+
+/* ===== CUSTOM CURSOR ===== */
+html.js-cursor, html.js-cursor *, html.js-cursor *::before, html.js-cursor *::after { cursor: none !important; }
+html.js-cursor ::-webkit-scrollbar { cursor: auto; }
+.cursor-dot, .cursor-outline { position: fixed; top: 0; left: 0; transform: translate(-50%, -50%); border-radius: 50%; z-index: 10000; pointer-events: none; will-change: transform; display: none; }
+@media(pointer: fine){ .cursor-dot, .cursor-outline { display: block; } }
+.cursor-dot { width: 6px; height: 6px; background: var(--accent); transition: opacity 0.15s, width 0.15s, height 0.15s; box-shadow: 0 0 10px var(--accent); }
+.cursor-outline { width: 40px; height: 40px; border: 1px solid rgba(14,224,207,0.5); transition: width 0.3s cubic-bezier(.22,1,.36,1), height 0.3s cubic-bezier(.22,1,.36,1), background 0.3s, border-color 0.3s, opacity 0.3s; }
+body.cursor-hover .cursor-dot { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+body.cursor-hover .cursor-outline { width: 64px; height: 64px; background: rgba(14,224,207,0.1); border-color: var(--accent); backdrop-filter: blur(2px); mix-blend-mode: screen; }
+body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 !important; }
+
+.noise-overlay {
+  position: fixed; inset: 0; z-index: 9999; pointer-events: none; opacity: 0.04; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--txt3);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:var(--accent)}
+*:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+
+.scroll-progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg, var(--accent), var(--blue));z-index:1001;width:0%;pointer-events:none;box-shadow:0 0 12px var(--accent)}
+
+.nav{position:fixed;top:0;left:0;right:0;z-index:999;padding:22px 0;padding-top:calc(22px + env(safe-area-inset-top));transition:transform .4s cubic-bezier(.22,1,.36,1), background .4s, padding .4s, border .4s}
+.nav.scrolled{padding:14px 0;padding-top:calc(14px + env(safe-area-inset-top));background:rgba(0, 0, 0, .6);backdrop-filter:blur(24px) saturate(1.8);border-bottom:1px solid var(--brd)}
+.nav.nav-hidden{transform:translateY(-100%)}
+.nav-in{display:flex;align-items:center;justify-content:space-between}
+
+.logo{font-weight:700;font-size:26px;letter-spacing:-0.03em;color:var(--heading);display:flex;align-items:center;gap:14px}
+.logo-mark{width:44px;height:44px;background:transparent;border:none;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .4s cubic-bezier(.22,1,.36,1), filter .4s;}
+.logo-mark svg{width:100%;height:100%}
+@media(hover:hover){ .logo:hover .logo-mark { transform: scale(1.1); filter: drop-shadow(0 0 8px rgba(14,224,207,0.3)); } }
+
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{color:var(--txt);font-size:14px;font-weight:500;transition:all .3s;position:relative;padding-bottom:4px}
+.nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1px;background:var(--white);transition:width .3s}
+@media(hover:hover){ .nav-links a:hover{color:var(--white)} }
+.nav-links a.active{color:var(--white)}
+.nav-links a.active::after{width:100%}
+
+.nav-right { display: flex; align-items: center; gap: 20px; }
+.lang-switcher { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; background: rgba(255,255,255,0.05); padding: 8px 14px; border-radius: 60px; border: 1px solid var(--brd); }
+.lang-switcher a { color: var(--txt2); transition: color 0.3s; }
+.lang-switcher a.active { color: var(--white); pointer-events: none; }
+@media(hover:hover){ .lang-switcher a:not(.active):hover { color: var(--accent); } }
+.lang-sep { color: var(--brd2); font-weight: 400; }
+
+.nav-cta{background:var(--white);color:var(--dark);padding:10px 24px;border-radius:60px;font-size:13px;font-weight:700;transition:all .3s;white-space:nowrap; -webkit-appearance:none; appearance:none; border:none;}
+@media(hover:hover){ .nav-cta:hover{background:var(--accent);color:var(--dark);box-shadow:0 0 16px var(--accent-mid)} }
+
+.label{font-size:13px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);display:inline-flex;align-items:center;gap:12px}
+.label::before{content:'';width:24px;height:1px;background:var(--accent)}
+
+.heading{font-weight:700;letter-spacing:-0.03em;line-height:1.1;color:var(--heading)}
+.body-text{font-size:17px;color:var(--txt);line-height:1.7;max-width:560px}
+
+.spotlight-card { position: relative; background: var(--glass-bg); border: 1px solid var(--brd); overflow: hidden; transition: border-color 0.3s, transform 0.3s, background 0.3s; }
+.spotlight-card::before { content: ''; position: absolute; inset: 0; background: radial-gradient(500px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(14,224,207,0.12), transparent 40%); opacity: 0; transition: opacity 0.5s; z-index: 0; pointer-events: none; }
+.spotlight-card > * { position: relative; z-index: 1; }
+@media(hover:hover){ .spotlight-card:hover { border-color: rgba(255,255,255,0.2); transform: translateY(-2px); } .spotlight-card:hover::before { opacity: 1; } }
+
+.btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:10px;background:var(--white);color:var(--dark);padding:16px 36px;border-radius:60px !important;font-weight:600;font-size:15px;border:none;transition:all .4s cubic-bezier(.22,1,.36,1);position:relative;overflow:hidden;z-index:1; -webkit-appearance:none !important; appearance:none !important; outline:none;}
+.btn-primary::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(135deg,var(--accent),var(--blue));transition:left .5s cubic-bezier(.22,1,.36,1);z-index:-1}
+.btn-primary:active{transform:translateY(0) scale(0.98)}
+@media(hover:hover){ .btn-primary:hover::before{left:0} .btn-primary:hover{color:var(--dark);transform:translateY(-2px);box-shadow:0 0 32px rgba(14, 224, 207, 0.4)} }
+.btn-primary span{position:relative;z-index:1}
+.btn-secondary{display:inline-flex;align-items:center;justify-content:center;gap:8px;color:var(--txt);padding:16px 32px;border-radius:60px !important;font-weight:500;font-size:15px;transition:all .3s;border:1px solid var(--brd); -webkit-appearance:none !important; appearance:none !important; outline:none; background:transparent; cursor:pointer;}
+@media(hover:hover){.btn-secondary:hover{color:var(--white);background:var(--glass-hover);border-color:var(--brd2)}}
+
+.hero{min-height:100vh; min-height:100svh; display:flex;align-items:center;padding:110px 0 60px;position:relative;overflow:hidden;background:radial-gradient(ellipse at 50% -20%, rgba(14,224,207,0.1) 0%, var(--bg) 60%)}
+.hero-glow-1{position:absolute;top:0%;left:-10%;width:600px;height:600px;background:radial-gradient(circle,rgba(59,130,246,.15) 0%,transparent 60%);pointer-events:none;filter:blur(60px);animation:floatOrb 15s ease-in-out infinite alternate}
+.hero-glow-2{position:absolute;bottom:-10%;right:-5%;width:700px;height:700px;background:radial-gradient(circle,rgba(14,224,207,.1) 0%,transparent 60%);pointer-events:none;filter:blur(80px);animation:floatOrb 20s ease-in-out infinite alternate-reverse}
+@keyframes floatOrb { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(50px, 50px) scale(1.1); } }
+.hero-grid-bg {position:absolute;inset:0;background-image:linear-gradient(var(--brd) 1px, transparent 1px), linear-gradient(90deg, var(--brd) 1px, transparent 1px);background-size:60px 60px;opacity:0.3;mask-image:radial-gradient(circle at center, black, transparent 80%);-webkit-mask-image:radial-gradient(circle at center, black, transparent 80%);pointer-events:none}
+
+.hero-layout{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center;position:relative;z-index:2;perspective:1000px}
+.hero-content{max-width:760px}
+.hero-eyebrow{margin-bottom:24px; animation:fadeUp .8s cubic-bezier(.22,1,.36,1) forwards; opacity:0; transform:translateY(24px)}
+
+.hero-h1{font-size:clamp(32px,4.5vw,56px);margin-bottom:16px;letter-spacing:-0.03em;line-height:1.05;font-weight:700;}
+.hero-h1 .accent{background:linear-gradient(to right, var(--accent), var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-style:italic;position:relative;display:inline-block;filter:drop-shadow(0 0 40px rgba(14,224,207,0.2))}
+.reveal-wrap { display: block; overflow: hidden; padding-bottom: 6px; }
+.reveal-text { display: block; transform: translateY(110%); animation: slideUpReveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+@keyframes slideUpReveal { to { transform: translateY(0); } }
+
+.hero-desc{font-size:16px;color:var(--txt);line-height:1.6;margin-bottom:24px;animation:fadeUp .8s .5s ease forwards; opacity:0}
+.hero-channels{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px;animation:fadeUp .8s .6s ease forwards; opacity:0}
+.hero-tag{padding:6px 14px 6px 12px;border-radius:100px;font-size:12px;font-weight:500;color:var(--txt);background:var(--glass-bg);border:1px solid var(--brd);display:inline-flex;align-items:center;gap:6px;backdrop-filter:blur(10px); transition:all 0.3s;}
+.tag-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+@media(hover:hover){.hero-tag:hover{border-color:var(--accent);color:var(--white);background:rgba(14,224,207,0.1)}}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;animation:fadeUp .8s .8s ease forwards; opacity:0}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+
+.hero-dash-wrap{animation:fadeUp 1s 1s cubic-bezier(.22,1,.36,1) forwards;will-change:transform, opacity;transform-style:preserve-3d; opacity:0}
+.animated-border { position: relative; padding: 2px; border-radius: 24px; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,.8); }
+.animated-border::before {
+  content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+  background: conic-gradient(transparent, rgba(14,224,207,0.1), var(--accent), transparent 15%);
+  animation: spinBorder 6s linear infinite; z-index: 0;
+}
+@keyframes spinBorder { 100% { transform: rotate(360deg); } }
+.animated-border.paused::before{animation-play-state:paused}
+.animated-border::after {
+  content: ''; position: absolute; inset: 2px; border-radius: 22px; background: #0a0a0a; z-index: 1;
+}
+.beam-overlay {
+  position: absolute; inset: 2px; border-radius: 22px; overflow: hidden; z-index: 10; pointer-events: none;
+}
+.beam-overlay::before {
+  content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+  background: conic-gradient(transparent, rgba(14,224,207,0.07), rgba(14,224,207,0.20), transparent 15%);
+  animation: spinBorder 6s linear infinite;
+}
+.animated-border.paused .beam-overlay::before{animation-play-state:paused}
+.hero-dash{background:rgba(10, 10, 10, 0.85);backdrop-filter:blur(30px);border-radius:22px;padding:24px;position:relative;z-index:2;}
+.dash-header{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--txt2);margin-bottom:16px}
+.dash-metrics{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.dash-metric{background:rgba(255,255,255,0.02);border-radius:14px;padding:16px 12px;text-align:center;border:1px solid var(--brd)}
+.dash-metric-num{font-weight:700;letter-spacing:-0.03em;font-size:26px;color:var(--heading);line-height:1;margin-bottom:4px}
+.dash-metric-num.green{color:var(--accent);text-shadow:0 0 20px rgba(14,224,207,0.4)}
+.dash-metric-num.gold{color:var(--gold);text-shadow:0 0 20px rgba(251,191,36,0.3)}
+.dash-metric-label{font-size:11px;font-weight:500;color:var(--txt);text-wrap:balance;line-height:1.4}
+.dash-chart{margin-top:16px;padding:16px 0 0;border-top:1px solid var(--brd)}
+.dash-chart svg{width:100%;height:40px;overflow:visible}
+.dash-badge{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:11px;color:var(--accent);font-weight:500;letter-spacing:0.5px}
+.dash-badge-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 2s infinite;box-shadow:0 0 10px var(--accent)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+.stats{padding:var(--sec-pad-sm) 0 0}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.stat-card{border-radius:20px;padding:36px 20px;text-align:center;background:var(--bg2)}
+.stat-ico{margin-bottom:16px}
+.stat-ico svg{width:26px;height:26px;stroke:var(--accent);stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 8px rgba(14,224,207,0.4))}
+.stat-num{font-weight:700;letter-spacing:-0.03em;font-size:clamp(36px,4vw,52px);color:var(--heading);line-height:1}
+.stat-num .unit{font-size:.4em;color:var(--txt2);font-weight:500;letter-spacing:0}
+.stat-label{font-size:14px;color:var(--txt);margin-top:8px;line-height:1.4;font-weight:500}
+.stats-sub{display:flex;justify-content:center;gap:32px;margin-top:32px;flex-wrap:wrap}
+.stats-sub-item{font-size:13px;color:var(--txt2);display:flex;align-items:center;gap:8px}
+.stats-sub-item svg{width:16px;height:16px;stroke:var(--accent);stroke-width:1.5;fill:none;opacity:.8}
+
+.marquee-wrap{overflow:hidden;padding:32px 0;border-top:1px solid var(--brd);border-bottom:1px solid var(--brd);background:var(--bg2);margin-top:var(--sec-pad-sm)}
+.marquee-track{display:flex;gap:64px;width:max-content;animation:marquee 12.5s linear infinite;will-change:transform}
+@media(hover:hover){.marquee-wrap:hover .marquee-track{animation-play-state:paused}}
+.marquee-item{display:flex;align-items:center;gap:12px;font-size:15px;color:var(--txt);font-weight:500;white-space:nowrap}
+.marquee-item svg{width:22px;height:22px;stroke:var(--txt3);stroke-width:1.3;fill:none;flex-shrink:0}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+.sec{padding:var(--sec-pad) 0;position:relative}
+.sec-header{margin-bottom:64px}
+.sec-heading{font-size:clamp(28px,4vw,52px);margin-top:16px;font-weight:700;letter-spacing:-.03em;line-height:1.1;color:var(--heading)}
+
+.divider{padding:0;text-align:center;height:48px;display:flex;align-items:center;justify-content:center}
+.divider-diamond{width:10px;height:10px;background:var(--brd2);transform:rotate(45deg)}
+
+.problems-wrap{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
+.problem-card { position: sticky; background: #0a0a0a !important; box-shadow: 0 -2px 8px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06); }
+.problem-card:nth-child(2) { top: 80px; z-index: 1; }
+.problem-card:nth-child(3) { top: 100px; z-index: 2; }
+.problem-card:nth-child(4) { top: 120px; z-index: 3; }
+.problem-card:nth-child(5) { top: 140px; z-index: 4; }
+@media(min-width: 961px) {
+  .problem-card:nth-child(2) { top: 100px; }
+  .problem-card:nth-child(3) { top: 120px; }
+  .problem-card:nth-child(4) { top: 140px; }
+  .problem-card:nth-child(5) { top: 160px; }
+}
+.problem-card{display:flex;gap:20px;padding:28px;border-radius:16px;}
+.problem-card+.problem-card{margin-top:16px}
+.problem-num{font-weight:700;letter-spacing:-0.03em;font-size:28px;color:rgba(255,255,255,0.05);line-height:1;flex-shrink:0;width:28px;transition:color 1s ease, text-shadow 1s ease}
+.problem-num.revealed{color:var(--red);text-shadow:0 0 20px rgba(239, 68, 68, 0.4)}
+.problem-txt{font-size:16px;color:var(--txt);line-height:1.7}
+.clinics-card{border-radius:24px;padding:40px;background:var(--bg2);border:1px solid var(--brd)}
+.clinics-card-title{font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+.clinics-card-sub{font-size:15px;color:var(--txt);margin-bottom:28px;line-height:1.6}
+.clinic-tag{display:flex;align-items:center;gap:14px;padding:16px 20px;border-radius:14px;border:1px solid var(--brd);font-size:15px;color:var(--heading);font-weight:500;transition:all .3s;background:rgba(255,255,255,0.02)}
+.clinic-tag+.clinic-tag{margin-top:10px}
+.clinic-tag svg{width:24px;height:24px;stroke:var(--accent);stroke-width:1.5;fill:none;flex-shrink:0}
+@media(hover:hover){.clinic-tag:hover{border-color:var(--brd2);background:var(--glass-hover);transform:translateX(6px)}}
+
+.process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.process-step{text-align:center;position:relative;border-radius:24px;padding:32px 20px}
+.process-step:not(:last-child)::after{content:'';position:absolute;top:56px;left:calc(50% + 40px);width:calc(100% - 80px);height:1px;border-top:1.5px dashed var(--brd)}
+.process-icon{width:64px;height:64px;border-radius:18px;background:rgba(255,255,255,0.03);border:1px solid var(--brd2);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(0,0,0,0.5)}
+.process-icon svg{width:28px;height:28px;stroke:var(--accent);stroke-width:1.5;fill:none}
+.process-num{font-weight:700;font-size:16px;color:var(--accent);opacity:.6;margin-bottom:6px;letter-spacing:-0.02em}
+.process-title{font-size:16px;font-weight:700;color:var(--heading);margin-bottom:8px}
+.process-desc{font-size:14px;color:var(--txt);line-height:1.6}
+
+.ba-card{border-radius:24px;padding:48px;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:40px;max-width:800px;margin:0 auto;box-shadow:0 20px 60px rgba(0,0,0,0.5)}
+.ba-side{text-align:center;flex:1;min-width:160px}
+.ba-label{font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:12px}
+.ba-label.before{color:var(--txt3)}
+.ba-label.after{color:var(--accent)}
+.ba-num{font-weight:700;letter-spacing:-0.03em;font-size:clamp(42px,5vw,64px);line-height:1}
+.ba-num.before{color:var(--txt2);opacity:0.5} 
+.ba-num.after{color:var(--accent);text-shadow:0 0 32px var(--accent-mid)} 
+.ba-desc{font-size:14px;color:var(--txt);margin-top:8px;font-weight:500}
+.ba-arrow{font-size:36px;color:var(--txt3);opacity:.2}
+
+#cases { padding: var(--sec-pad-sm) 0; position: relative; }
+.cases-ghost{position:absolute;pointer-events:none;opacity:.03}
+.cases-ghost svg{stroke:#fff;stroke-width:1;fill:none}
+.cg1{top:10%;right:5%;width:200px;height:200px}
+.cg2{bottom:10%;left:5%;width:150px;height:150px}
+.cases-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:56px;position:relative;z-index:2}
+
+@media(min-width: 961px) {
+  .case { position: sticky; box-shadow: 0 -10px 30px rgba(0,0,0,0.9); }
+  .case:nth-child(1) { top: 120px; z-index: 10; }
+  .case:nth-child(2) { top: 140px; z-index: 11; }
+  .case:nth-child(3) { top: 160px; z-index: 12; }
+}
+
+.case{border-radius:24px;padding:40px 32px;display:flex;flex-direction:column; background:var(--bg2); border:1px solid var(--brd); transition: opacity 0.6s cubic-bezier(0.22,1,0.36,1), transform 0.3s cubic-bezier(0.22,1,0.36,1), background 0.3s, border-color 0.3s, box-shadow 0.3s}
+.js .case{opacity:0;transform:translateY(30px)}
+.case.visible{opacity:1;transform:translateY(0)}
+.case:nth-child(1){transition-delay:0s}.case:nth-child(2){transition-delay:.15s}.case:nth-child(3){transition-delay:.3s}
+.case::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),rgba(234,179,8,.1));opacity:0;transition:opacity .4s}
+@media(hover:hover){.case:hover::before{opacity:1}.case:hover{background:var(--bg3);border-color:var(--brd2);transform:translateY(-6px) scale(1);box-shadow:0 16px 40px rgba(0,0,0,0.5)}}
+.case-ico{margin-bottom:20px}
+.case-ico svg{width:32px;height:32px;stroke:var(--gold);stroke-width:1.2;fill:none;filter:drop-shadow(0 0 8px rgba(251,191,36,0.3))}
+.case-badge{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+.case-name{font-weight:700;letter-spacing:-0.02em;font-size:22px;margin-bottom:16px;color:var(--heading);line-height:1.3}
+.case-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.case-tag{font-size:12px;padding:6px 12px;border-radius:100px;background:rgba(255,255,255,.03);border:1px solid var(--brd);color:var(--txt);font-weight:500}
+.case-rows{display:grid;gap:0;overflow-wrap:break-word;word-break:break-word;margin-top:auto}
+.case-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-top:1px solid var(--brd)}
+.case-row-label{font-size:14px;color:var(--txt2)}
+.case-row-val{font-size:15px;font-weight:600;color:var(--heading);text-align:right;line-height:1.3;}
+
+.case-row-val.green{color:var(--green)}
+.case-roi{margin-top:24px;padding:16px;border-radius:14px;background:var(--gold-soft);border:1px solid rgba(251,191,36,.15);text-align:center;box-shadow:inset 0 0 20px rgba(251,191,36,0.05)}
+.case-roi-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);opacity:.8;margin-bottom:4px}
+.case-roi-num{font-weight:700;letter-spacing:-0.03em;font-size:32px;color:var(--gold);line-height:1.2;text-shadow:0 0 24px rgba(251,191,36,.3)}
+.case-roi.glow{animation:goldGlow 1.5s ease 2}
+@keyframes goldGlow{0%,100%{box-shadow:none}50%{box-shadow:0 0 24px rgba(234,179,8,.3)}}
+
+.cases-more{margin-top:40px;text-align:center;padding:48px 32px;border-radius:24px;display:flex;flex-direction:column;align-items:center;background:var(--bg2); border:1px solid var(--brd)}
+.cases-more .heading{font-size:clamp(20px,3vw,26px);margin-bottom:12px;max-width:800px}
+.cases-more .body-text{margin:0 auto 32px;color:var(--txt2);max-width:600px}
+
+.reviews-layout{display:grid;gap:24px}
+
+.review-card {
+  border-radius: 24px;
+  padding: 40px;
+  background: var(--bg2);
+  border: 1px solid var(--brd);
+  display: flex;
+  flex-direction: column;
+}
+.review-card.main-review {
+  grid-column: 1 / -1;
+  border-color: var(--accent-mid);
+  background: radial-gradient(circle at 0% 0%, rgba(14,224,207,0.08), transparent 40%), var(--bg2);
+  padding: 48px;
+}
+.review-card.main-review .review-body {
+  font-size: 18px;
+  line-height: 1.8;
+  font-weight: 500;
+}
+.review-card.main-review .review-avatar {
+  width: 72px;
+  height: 72px;
+}
+@media(max-width:960px) {
+  .review-card.main-review { padding: 32px 24px; }
+  .review-card.main-review .review-body { font-size: 16px; line-height: 1.75; }
+  .review-card.main-review .review-avatar { width: 60px; height: 60px; }
+}
+
+.review-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.review-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--accent-mid);
+  flex-shrink: 0;
+}
+.review-author-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--heading);
+}
+.review-author-role {
+  font-size: 13px;
+  color: var(--txt2);
+  margin-top: 2px;
+  font-weight: 500;
+}
+.review-stars{display:flex;gap:4px;margin-bottom:16px}
+.review-star{width:18px;height:18px;fill:var(--gold);filter:drop-shadow(0 0 4px rgba(251,191,36,0.4))}
+.js .review-star{opacity:0;animation:starIn .3s ease forwards;animation-play-state:paused}
+@keyframes starIn{to{opacity:1}}
+.review-body{font-size:16px;color:var(--txt);line-height:1.75;margin-bottom:0}
+
+.reviews-row{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:stretch}
+
+.approach-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.approach-text .body-text{margin-bottom:24px}
+.approach-text .body-text strong{color:var(--heading);font-weight:600}
+.metrics-abbr{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:32px}
+.metric-tag{padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;letter-spacing:1px;color:var(--accent);background:var(--glass-bg);border:1px solid var(--accent-mid)}
+.principle-item{padding:24px 0;border-bottom:1px solid var(--brd);display:flex;align-items:flex-start;gap:20px;transition:all .6s cubic-bezier(.22,1,.36,1)}
+.js .principle-item{opacity:0;transform:translateY(20px)}
+.principle-item:first-child{border-top:1px solid var(--brd)}
+.principle-item.visible{opacity:1;transform:translateY(0)}
+@media(hover:hover){.principle-item:hover{transform:translateX(10px)}}
+.principle-ico{width:40px;height:40px;border-radius:12px;background:var(--glass-bg);border:1px solid var(--accent-mid);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:inset 0 0 10px rgba(14,224,207,0.1)}
+.principle-ico svg{width:20px;height:20px;stroke:var(--accent);stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.principle-content{font-size:16px;color:var(--txt);line-height:1.65;padding-top:8px}
+.principle-content strong{color:var(--heading);font-weight:600}
+
+/* СТИЛИ ДЛЯ СЕКЦИИ ОБО МНЕ */
+.about-new-card { border-radius:32px; padding:64px; background:linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0) 100%), var(--bg2); border:1px solid var(--brd); display:flex; flex-direction:column; align-items:flex-start; position:relative; overflow:hidden; }
+.about-new-glow { position:absolute; right:-10%; bottom:-20%; width:500px; height:500px; background:radial-gradient(circle, var(--accent-soft) 0%, transparent 60%); filter:blur(80px); pointer-events:none; }
+.about-tags { display:flex; flex-wrap:wrap; gap:12px; margin-bottom:40px; }
+.about-tag { font-size:14px; padding:12px 20px; border-radius:100px; background:rgba(255,255,255,0.02); border:1px solid var(--brd2); color:var(--txt); font-weight:500; display:inline-flex; align-items:center; gap:8px; }
+.about-tag svg { width:18px; height:18px; stroke:var(--accent); stroke-width:1.5; fill:none; flex-shrink:0; }
+@media(max-width:600px){
+  .about-new-card { padding:40px 24px; border-radius:24px; }
+  .about-tag { font-size:13px; padding:10px 16px; width:100%; }
+  .about-new-glow { width:300px; height:300px; }
+}
+
+.lead-def{border-radius:24px;padding:64px 80px;max-width:860px;margin:0 auto;text-align:center;position:relative;overflow:hidden}
+.lead-quote{position:absolute;font-weight:700;font-size:140px;color:var(--accent);opacity:.05;line-height:1;filter:blur(2px)}
+.lead-quote.left{top:0px;left:20px;animation:floatQ 6s ease-in-out infinite}
+.lead-quote.right{bottom:-40px;right:20px;animation:floatQ 6s 3s ease-in-out infinite}
+@keyframes floatQ{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.lead-def-text{font-weight:700;letter-spacing:-0.03em;font-size:clamp(22px,3vw,30px);line-height:1.5;color:var(--heading);position:relative}
+.lead-def-note{font-size:15px;color:var(--txt2);margin-top:16px;position:relative;font-weight:500}
+.lead-pulse{margin-top:32px;display:flex;justify-content:center}
+.lead-pulse-inner{position:relative;width:100%;max-width:300px}
+.pulse-base,.pulse-bright{display:block;width:100%;height:auto}
+.pulse-bright{position:absolute;inset:0;-webkit-mask:linear-gradient(90deg,transparent,#fff 35%,#fff 65%,transparent) no-repeat -30% 0/30% 100%;mask:linear-gradient(90deg,transparent,#fff 35%,#fff 65%,transparent) no-repeat -30% 0/30% 100%;-webkit-animation:beamSweep 2.8s linear 2s infinite;animation:beamSweep 2.8s linear 2s infinite}
+@-webkit-keyframes beamSweep{from{-webkit-mask-position:-30% 0;mask-position:-30% 0}to{-webkit-mask-position:130% 0;mask-position:130% 0}}
+@keyframes beamSweep{from{-webkit-mask-position:-30% 0;mask-position:-30% 0}to{-webkit-mask-position:130% 0;mask-position:130% 0}}
+
+.cta-sec{padding:80px 0 var(--sec-pad)}
+.cta-card{background:linear-gradient(135deg, #09121a, #030811);border:1px solid var(--accent-mid);border-radius:32px;padding:80px 60px;text-align:center;position:relative;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.8), inset 0 0 40px rgba(14,224,207,0.1)}
+.cta-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(14,224,207,.15),transparent 60%);pointer-events:none}
+.cta-card .heading{color:var(--white);font-size:clamp(28px,4.5vw,48px);margin-bottom:16px;position:relative;text-shadow:0 0 40px rgba(14,224,207,.3)}
+.cta-desc{font-size:18px;color:var(--txt);max-width:560px;margin:0 auto 32px;line-height:1.7;position:relative}
+
+.cta-form{display:flex;gap:16px;justify-content:center;max-width:760px;margin:40px auto 32px;position:relative;z-index:2;flex-wrap:wrap;transition:opacity 0.4s}
+.cta-input-wrap{position:relative;flex:1;min-width:220px}
+.cta-input{width:100%;padding:24px 28px 12px;border-radius:60px !important;border:1px solid var(--brd2);background:rgba(0,0,0,0.4);color:var(--white);font-size:16px;outline:none;transition:all 0.3s;font-family:inherit;backdrop-filter:blur(10px); -webkit-appearance:none !important; appearance:none !important;}
+.cta-input:-webkit-autofill,
+.cta-input:-webkit-autofill:hover, 
+.cta-input:-webkit-autofill:focus, 
+.cta-input:-webkit-autofill:active{
+  -webkit-box-shadow: 0 0 0 30px #0a0a0a inset !important;
+  -webkit-text-fill-color: white !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.cta-label{position:absolute;left:28px;top:18px;color:var(--txt2);font-size:16px;pointer-events:none;transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);transform-origin:left top}
+.cta-input:focus, .cta-input:not(:placeholder-shown){background:rgba(0,0,0,0.6);border-color:var(--accent);box-shadow:0 0 0 4px rgba(14,224,207,0.15)}
+.cta-input:focus ~ .cta-label, .cta-input:not(:placeholder-shown) ~ .cta-label{transform:translateY(-10px) scale(0.75);color:var(--white)}
+
+.cta-form .btn-white{margin:0;background:var(--accent);color:var(--dark);padding:18px 48px; border-radius:60px !important; -webkit-appearance:none !important; appearance:none !important; outline:none; border:none; cursor:pointer; font-family:inherit; font-weight:700; font-size:16px; display:flex; align-items:center; justify-content:center; text-align:center; line-height:1.2;}
+@media(hover:hover){.cta-form .btn-white:hover{background:#0ce3d1;box-shadow:0 12px 40px rgba(14,224,207,.5)}}
+
+.cta-proof{margin-top:24px;font-size:14px;color:var(--txt2);position:relative;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity 0.4s}
+.cta-proof-dot{width:6px;height:6px;background:var(--txt3);border-radius:50%}
+.cta-watermark{position:absolute;right:20px;top:50%;transform:translateY(-50%);opacity:.03;pointer-events:none}
+.cta-watermark svg{width:240px;height:240px;stroke:#fff;stroke-width:.6;fill:none}
+
+.floating-socials { position: fixed; bottom: 32px; right: 32px; display: flex; flex-direction: column; gap: 16px; z-index: 998; transition: transform 0.4s; }
+.social-btn { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 32px rgba(0,0,0,0.5); transition: transform 0.3s, box-shadow 0.3s; -webkit-appearance: none; }
+.social-btn.wa { background: #25D366; }
+.social-btn.tg { background: #229ED9; }
+.social-btn svg { width: 28px; height: 28px; fill: #fff; }
+@media(hover:hover){ .social-btn:hover { transform: scale(1.1); box-shadow: 0 12px 40px rgba(0,0,0,0.8); } }
+
+.footer{padding:64px 0 40px;background:var(--bg);border-top:1px solid var(--brd);position:relative;z-index:2;line-height:normal;font-family:'Inter',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:auto;-moz-osx-font-smoothing:auto;text-rendering:auto}
+.footer-top{display:grid;grid-template-columns:1fr 1fr 1fr;gap:40px;padding-bottom:32px;border-bottom:1px solid var(--brd)}
+.footer-col-title{font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--heading);margin-bottom:16px}
+.footer-contact-link {display:flex;align-items:center;gap:10px;font-size:15px;color:var(--txt2);margin:0 0 12px;transition:color .3s;font-weight:500;}
+.footer-contact-link:hover {color:var(--white)}
+.footer-contact-link svg {width:18px;height:18px;fill:currentColor;flex-shrink:0;}
+
+.footer-col p, .footer-link {
+  display: block;
+  font-size: 15px;
+  color: var(--txt2);
+  margin-bottom: 12px;
+  transition: color .3s;
+  font-weight: 500;
+}
+@media(hover:hover){ .footer-link:hover{color:var(--white)} }
+
+.footer-bottom{max-width:1140px;margin:32px auto 0;padding:0 32px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px}
+.footer-bottom .logo{display:flex;align-items:center;gap:14px;text-decoration:none;transition:opacity .3s;color:var(--heading);font-size:16px;font-weight:normal;letter-spacing:normal}
+.footer-bottom .logo:hover{opacity:.8}
+.footer-bottom .logo svg{width:44px;height:44px}
+.footer-bottom .logo span{font-size:26px;font-weight:700;color:var(--heading);letter-spacing:-0.03em}
+.footer-copy{font-size:14px;color:var(--txt3)}
+.footer-legal{display:flex;gap:20px;flex-wrap:wrap;align-items:center;width:100%}
+.footer-legal a{font-size:13px;color:var(--txt3);text-decoration:underline;transition:color .3s}
+.footer-legal a:hover{color:var(--txt)}
+.footer-cta{background:var(--glass-bg);border:1px solid var(--brd);color:var(--white);padding:12px 28px;border-radius:60px;font-size:14px;font-weight:600;transition:all .3s;text-decoration:none}
+@media(hover:hover){.footer-cta:hover{background:var(--white);color:var(--dark)}}
+
+.sticky-cta{display:none;position:fixed;bottom:0;left:0;right:0;padding:12px 20px;padding-bottom:calc(12px + env(safe-area-inset-bottom));background:rgba(5, 5, 5, .8);backdrop-filter:blur(24px) saturate(1.5);border-top:1px solid var(--brd);z-index:998;transform:translateY(150%);opacity:0;pointer-events:none;transition:transform .5s cubic-bezier(.22,1,.36,1), opacity .5s}
+.sticky-cta.show{transform:translateY(0);opacity:1;pointer-events:auto}
+.sticky-cta.hide-zone{transform:translateY(150%);opacity:0;pointer-events:none}
+.sticky-cta a{display:block;text-align:center;background:linear-gradient(135deg, var(--accent), var(--blue));color:var(--dark);padding:16px;border-radius:16px !important;font-weight:700;font-size:16px;box-shadow:0 8px 24px rgba(14,224,207,.2); -webkit-appearance:none !important; appearance:none !important;}
+
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.marquee-track{animation:none!important}}
+
+@media(min-width: 961px) {
+  .problems-header { padding-left: 28px; }
+}
+
+@media(max-width:960px){
+  :root{--sec-pad:80px;--sec-pad-sm:60px}
+  .ctn{padding:0 24px}
+  .nav-links { display: none !important; }
+  
+  .nav { padding-top: 24px !important; }
+  .nav.scrolled { background: rgba(0,0,0,.85) !important; backdrop-filter: blur(24px) saturate(1.8) !important; border-bottom: 1px solid var(--brd) !important; }
+  .hero{padding-top:100px; padding-bottom:60px; min-height:auto}
+  
+  .hero-layout{grid-template-columns:1fr;gap:48px}
+  .hero-dash{margin-top:16px}
+  .sec-header{margin-bottom:48px}
+  .divider{height:40px}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .problems-wrap{grid-template-columns:1fr;gap:40px}
+  
+  .problems-header { padding-left: 28px; }
+  
+  .approach-grid{grid-template-columns:1fr;gap:48px}
+  .approach-grid>div:last-child{border-top:1px solid var(--brd);padding-top:40px}
+  .clinics-card{margin-top:0}
+  .process-grid{grid-template-columns:1fr 1fr}.process-step::after{display:none}
+  .ba-card{flex-wrap:wrap;gap:24px;padding:32px}
+  .ba-arrow{transform:rotate(90deg)}
+  
+  .cases-grid{grid-template-columns:1fr;max-width:560px;margin-left:auto;margin-right:auto}
+  .case-name{font-size:20px}
+  .cta-watermark{display:none}
+  .reviews-row{grid-template-columns:1fr}
+  
+  .footer-top{grid-template-columns:1fr;gap:32px}
+  .footer{padding:48px 0 32px}
+  .footer-bottom{padding:0 20px;flex-direction:column;align-items:flex-start;gap:16px}
+  .footer-bottom .logo{gap:10px}
+  .footer-bottom .logo span{font-size:20px}
+  .footer-legal{gap:10px}
+  .footer-cta{display:none}
+  .sticky-cta{display:block}
+  
+  .floating-socials { bottom: 90px; right: 20px; gap: 12px; }
+  .social-btn { width: 48px; height: 48px; }
+  .social-btn svg { width: 24px; height: 24px; }
+  
+  .lead-def{padding:48px 32px}
+  .lead-quote{font-size:100px}
+  .marquee-wrap{margin-top:48px}
+}
+
+@media(max-width:600px){
+  :root{--sec-pad:64px;--sec-pad-sm:48px}
+  .ctn{padding:0 16px}
+  
+  .sec { padding: var(--sec-pad) 0; }
+  .sec-header { margin-bottom: 32px; }
+  
+  .hero { padding-top: 103px !important; padding-bottom: 40px !important; background: radial-gradient(ellipse at 50% 0%, rgba(14,224,207,0.15) 0%, var(--bg) 80%); align-items: flex-start !important; }
+  .hero-glow-1, .hero-glow-2, .hero-grid-bg { display: none; }
+  
+  .logo { font-size: 20px; gap: 10px; }
+  .logo-mark { width: 36px; height: 36px; border-radius: 8px; }
+  .logo-mark svg { width: 100%; height: 100%; }
+  .footer-bottom .logo svg{width:44px;height:44px}
+  .footer-bottom .logo span{font-size:20px}
+  
+  .hero-h1{font-size:clamp(30px, 8vw, 42px) !important; margin-bottom:12px !important; margin-top:0 !important;}
+  .hero-desc{font-size:15px; margin-bottom:24px}
+  .hero-ctas{flex-direction:column; gap:12px;}
+  .hero-ctas .btn-primary,.hero-ctas .btn-secondary{width:100%;justify-content:center}
+  
+  .btn-primary, .btn-secondary {font-size:16px !important;padding:16px 24px !important;}
+  .btn-white{width:100%;justify-content:center;padding:16px 24px; font-size:16px !important;}
+  .sticky-cta a { font-size: 16px !important; padding: 16px !important; }
+  
+  .hero-channels{margin-bottom:24px; gap:8px}
+  .hero-tag{padding:6px 12px;font-size:12px}
+  
+  .stat-card{padding:24px 16px}
+  .stat-num{font-size:32px}
+  .stats-sub{flex-direction:column;align-items:flex-start;width:fit-content;margin:32px auto 0;gap:10px}
+  
+  .problems-header { padding-left: 16px; }
+  .problem-num { color: var(--red); text-shadow: 0 0 20px rgba(239, 68, 68, 0.4); }
+  
+  .process-grid{grid-template-columns:1fr}
+  .cases-grid{max-width:none}
+  
+  .cta-card{padding:48px 24px;border-radius:24px}
+  .cta-form{flex-direction:column;gap:12px}
+  .cta-proof{flex-direction:column;gap:4px;text-align:center}
+  .cta-proof-dot{display:none}
+  
+  .lead-def{padding:32px 20px}
+  .lead-def .lead-pulse{margin-top:16px !important}
+  .about-new-card > div[style*="display:flex"]{flex-direction:column}
+  .about-new-card .btn-primary{width:100%;justify-content:center;text-align:center}
+  .cta-input-wrap{min-width:auto}
+
+  .ba-card{flex-direction:column;gap:16px;padding:32px 24px}
+  .ba-arrow{font-size:28px}
+  .dash-metrics{gap:12px}
+  .dash-metric{padding:16px 12px}
+  .dash-metric-num{font-size:24px}
+}
+
+@media(max-width:380px){
+  .stats-grid{grid-template-columns:1fr}
+  .hero-h1{font-size:28px !important}
+}
+
+@media(max-height:500px)and(orientation:landscape){
+  .hero{min-height:auto;padding:60px 0 40px}
+  :root{--sec-pad:60px;--sec-pad-sm:40px}
+  .sticky-cta{display:none!important}
+  .floating-socials{display:none!important}
+}
+
+/* КНОПКИ НА МОБИЛКЕ — сразу в «hover» виде */
+@media(hover:none) {
+  .btn-primary::before { left: 0 !important; }
+  .btn-primary { box-shadow: 0 0 24px rgba(14,224,207,0.3); }
+  .btn-secondary { color: var(--white); border-color: var(--brd2); background: rgba(255,255,255,0.05); }
+}
+
+/* ТАКТИЛЬНЫЕ ЭФФЕКТЫ ДЛЯ МОБИЛОК (:active) */
+@media(hover:none) {
+  .btn-primary:active, .btn-secondary:active, .btn-white:active, .sticky-cta a:active { transform: scale(0.95) !important; opacity: 0.9; transition: all 0.1s ease !important; }
+  .social-btn:active { transform: scale(0.9) !important; box-shadow: 0 4px 15px rgba(0,0,0,0.5) !important; transition: all 0.1s ease !important; }
+  .clinic-tag:active { background: rgba(14,224,207,0.15) !important; border-color: var(--accent) !important; transform: scale(0.98); transition: all 0.1s ease !important; }
+  .logo:active .logo-mark { transform: scale(0.85); filter: drop-shadow(0 0 6px rgba(14,224,207,0.4)); transition: all 0.1s ease !important; }
+  .lang-switcher a:not(.active):active, .footer-link:active, .footer-contact-link:active { opacity: 0.4; transition: opacity 0.1s ease !important; }
+  .case:active { transform: scale(0.97) !important; background: var(--bg3) !important; transition: all 0.1s ease !important; }
+}
+</style>
+</head>
+<body>
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-outline" id="cursorOutline"></div>
+
+<div class="noise-overlay"></div>
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<nav class="nav" id="nav"><div class="ctn nav-in">
+  <a href="#hero" class="logo" aria-label="Traffic Craft Домашняя">
+    <div class="logo-mark">
+      <svg viewBox="0 0 40 40" fill="none">
+        <rect x="1" y="1" width="38" height="38" rx="10" fill="#0e0e12" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
+        <text x="6" y="28" font-family="Inter, sans-serif" font-weight="900" font-size="22" fill="#f4f4f5">T</text>
+        <text x="19" y="28" font-family="Inter, sans-serif" font-weight="900" font-size="22" fill="#0ee0cf">C</text>
+      </svg>
+    </div>
+    <span>Traffic <span style="color:#0ee0cf">Craft</span></span>
+  </a>
+  <ul class="nav-links" id="navLinks"><li><a href="#approach" data-section="approach">О нас</a></li><li><a href="#cases" data-section="cases">Кейсы</a></li><li><a href="#reviews" data-section="reviews">Отзывы</a></li><li><a href="#approach" data-section="approach">Подход</a></li></ul>
+  
+  <div class="nav-right">
+    <div class="lang-switcher">
+      <a href="javascript:void(0)" class="active">RU</a><span class="lang-sep">/</span><a href="index-en.html">EN</a>
+    </div>
+    <a href="#cta" class="nav-cta" style="display:none">Оставить заявку</a>
+  </div>
+</div></nav>
+
+<section class="hero" id="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow-1"></div>
+  <div class="hero-glow-2"></div>
+  <div class="ctn"><div class="hero-layout">
+  <div class="hero-content">
+    <div class="hero-eyebrow hero-line"><span class="label">120+ реализованных проектов</span></div>
+    
+    <h1 class="heading hero-h1">
+      <span class="reveal-wrap"><span class="reveal-text" style="animation-delay: 0.1s">Выводим клиники на</span></span>
+      <span class="reveal-wrap"><span class="reveal-text" style="animation-delay: 0.2s"><span class="accent">3 000 заявок</span> и 300 продаж в месяц</span></span>
+    </h1>
+    
+    <p class="hero-desc">Приводим пациентов из рекламы так, чтобы они доходили до записи и&nbsp;оплаты, а&nbsp;не&nbsp;зависали в&nbsp;переписках.</p>
+    
+    <div class="hero-channels">
+      <span class="hero-tag"><span class="tag-dot" style="background:#1877F2;box-shadow:0 0 8px #1877F2"></span>Facebook</span>
+      <span class="hero-tag"><span class="tag-dot" style="background:#E1306C;box-shadow:0 0 8px #E1306C"></span>Instagram</span>
+      <span class="hero-tag"><span class="tag-dot" style="background:#fff;box-shadow:0 0 8px #fff"></span>TikTok</span>
+      <span class="hero-tag"><span class="tag-dot" style="background:#34A853;box-shadow:0 0 8px #34A853"></span>SEO</span>
+      <span class="hero-tag"><span class="tag-dot" style="background:#FF0000;box-shadow:0 0 8px #FF0000"></span>YouTube</span>
+      <span class="hero-tag"><span class="tag-dot" style="background:#4285F4;box-shadow:0 0 8px #4285F4"></span>Google Ads</span>
+      <span class="hero-tag"><span class="tag-dot" style="background:#26A5E4;box-shadow:0 0 8px #26A5E4"></span>Telegram Ads</span>
+    </div>
+    
+    <div class="hero-ctas"><a href="#cta" class="btn-primary"><span>Получить разбор клиники ↗</span></a><a href="#cases" class="btn-secondary">Смотреть кейсы</a></div>
+  </div>
+  <div class="hero-dash-wrap" id="heroDashWrap">
+    <div class="animated-border">
+      <div class="hero-dash">
+        <div class="dash-header">Средние показатели по проектам</div>
+        <div class="dash-metrics"><div class="dash-metric"><div class="dash-metric-num green">200</div><div class="dash-metric-label">записей / мес</div></div><div class="dash-metric"><div class="dash-metric-num gold">1 000%</div><div class="dash-metric-label">окупаемость</div></div><div class="dash-metric"><div class="dash-metric-num">120+</div><div class="dash-metric-label">реализованных<br>проектов</div></div><div class="dash-metric"><div class="dash-metric-num">1,5 г.</div><div class="dash-metric-label">ср. срок работы<br>с проектом</div></div></div>
+        <div class="dash-chart"><svg viewBox="0 0 300 48" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="cg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--accent)" stop-opacity=".4"/><stop offset="100%" stop-color="var(--accent)" stop-opacity="0"/></linearGradient><filter id="glow"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><path id="heroChartLine" d="M0 40 Q30 38 60 35 T120 28 T180 18 T240 10 T300 4" stroke="var(--accent)" stroke-width="2" fill="none" filter="url(#glow)"/><path d="M0 40 Q30 38 60 35 T120 28 T180 18 T240 10 T300 4 L300 48 L0 48Z" fill="url(#cg)"/></svg></div>
+        <div class="dash-badge"><span class="dash-badge-dot"></span> Данные обновлены недавно</div>
+      </div>
+      <div class="beam-overlay"></div>
+    </div>
+  </div>
+</div></div></section>
+
+<section class="stats"><div class="ctn">
+  <div class="stats-grid">
+    <div class="stat-card spotlight-card" data-reveal><div class="stat-ico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentcolor" stroke-width="1.4" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="stat-num" data-count="3000">3 000</div><div class="stat-label">живых заявок в месяц</div></div>
+    <div class="stat-card spotlight-card" data-reveal data-reveal-d="1"><div class="stat-ico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentcolor" stroke-width="1.4" aria-hidden="true"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div class="stat-num" data-count="300">300</div><div class="stat-label">продаж / оплат в месяц</div></div>
+    <div class="stat-card spotlight-card" data-reveal data-reveal-d="2"><div class="stat-ico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentcolor" stroke-width="1.4" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div><div class="stat-num" data-count="120" data-plus="true">120+</div><div class="stat-label">реализованных проектов</div></div>
+    <div class="stat-card spotlight-card" data-reveal data-reveal-d="3"><div class="stat-ico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentcolor" stroke-width="1.4" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="stat-num">1,5<span class="unit"> года</span></div><div class="stat-label">средний срок работы</div></div>
+  </div>
+  <div class="stats-sub" data-reveal><span class="stats-sub-item"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentcolor" stroke-width="1.5" aria-hidden="true"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Международный опыт</span><span class="stats-sub-item"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentcolor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Реклама на 10+ языках</span></div>
+</div></section>
+
+<div class="marquee-wrap"><div class="marquee-track">
+  <div class="marquee-item"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentcolor" stroke-width="1.3" aria-hidden="true"><rect x="3" y="8" width="18" height="13" rx="1"/><path d="M10 8V5a2 2 0 0 1 4 0v3M12 12v3"/></svg>Медцентры</div><div class="marquee-item"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentcolor" stroke-width="1.3" aria-hidden="true"><path d="M8 5c-2 0-3.5 1.5-3.5 3.5C4.5 11 6 14 7 17s1.5 4 2 4 1-1.5 1.5-3l.5-2 .5 2C12 19.5 12.5 21 13 21s1-1 2-4 2.5-6 2.5-8.5C17.5 6.5 16 5 14 5c-1.2 0-2 .6-2.5 1.2C11 5.6 10 5 8 5z"/></svg>Стоматология</div><div class="marquee-item"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentcolor" stroke-width="1.3" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M5 21c0-3.87 3.13-7 7-7s7 3.13 7 7M12 6v4m-2-2h4"/></svg>Косметология</div><div class="marquee-item"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentcolor" stroke-width="1.3" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Пептидная терапия</div><div class="marquee-item"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentcolor" stroke-width="1.3" aria-hidden="true"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2"/></svg>Офтальмология</div><div class="marquee-item"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentcolor" stroke-width="1.3" aria-hidden="true"><path d="M12 3c-2 1-5 5-5 9s2.5 7 5 9c2.5-2 5-5 5-9s-3-8-5-9z"/><circle cx="12" cy="13" r="2.5"/></svg>Остеопатия</div><div class="marquee-item"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentcolor" stroke-width="1.3" aria-hidden="true"><path d="M6 18c0-3 2-6 6-6s6 3 6 6"/><circle cx="12" cy="8" r="4"/></svg>Массаж</div><div class="marquee-item"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentcolor" stroke-width="1.3" aria-hidden="true"><path d="M12 22c5.5 0 10-4.5 10-10S17.5 2 12 2 2 6.5 2 12s4.5 10 10 10z"/><path d="M12 8v4l2 2"/></svg>Гинекология</div><div class="marquee-item"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentcolor" stroke-width="1.3" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6"/></svg>Эндокринология</div><div class="marquee-item"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentcolor" stroke-width="1.3" aria-hidden="true"><path d="M10 2v6m4-6v6M8 8h8a2 2 0 0 1 2 2v2a6 6 0 0 1-12 0v-2a2 2 0 0 1 2-2zM12 18v4"/></svg>Нутрициология</div><div class="marquee-item"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentcolor" stroke-width="1.3" aria-hidden="true"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>Спортивная медицина</div><div class="marquee-item"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentcolor" stroke-width="1.3" aria-hidden="true"><path d="M12 2a4 4 0 0 0-4 4v2a4 4 0 0 0 8 0V6a4 4 0 0 0-4-4z"/><path d="M16 15H8l-2 7h12l-2-7z"/></svg>Пластическая хирургия</div><div class="marquee-item"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentcolor" stroke-width="1.3" aria-hidden="true"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11v6M9 14h6"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>Андрология</div>
+  <div class="marquee-item"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentcolor" stroke-width="1.3" aria-hidden="true"><rect x="3" y="8" width="18" height="13" rx="1"/><path d="M10 8V5a2 2 0 0 1 4 0v3M12 12v3"/></svg>Медцентры</div><div class="marquee-item"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentcolor" stroke-width="1.3" aria-hidden="true"><path d="M8 5c-2 0-3.5 1.5-3.5 3.5C4.5 11 6 14 7 17s1.5 4 2 4 1-1.5 1.5-3l.5-2 .5 2C12 19.5 12.5 21 13 21s1-1 2-4 2.5-6 2.5-8.5C17.5 6.5 16 5 14 5c-1.2 0-2 .6-2.5 1.2C11 5.6 10 5 8 5z"/></svg>Стоматология</div><div class="marquee-item"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentcolor" stroke-width="1.3" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M5 21c0-3.87 3.13-7 7-7s7 3.13 7 7M12 6v4m-2-2h4"/></svg>Косметология</div><div class="marquee-item"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentcolor" stroke-width="1.3" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Пептидная терапия</div><div class="marquee-item"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentcolor" stroke-width="1.3" aria-hidden="true"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2"/></svg>Офтальмология</div><div class="marquee-item"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentcolor" stroke-width="1.3" aria-hidden="true"><path d="M12 3c-2 1-5 5-5 9s2.5 7 5 9c2.5-2 5-5 5-9s-3-8-5-9z"/><circle cx="12" cy="13" r="2.5"/></svg>Остеопатия</div><div class="marquee-item"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentcolor" stroke-width="1.3" aria-hidden="true"><path d="M6 18c0-3 2-6 6-6s6 3 6 6"/><circle cx="12" cy="8" r="4"/></svg>Массаж</div><div class="marquee-item"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentcolor" stroke-width="1.3" aria-hidden="true"><path d="M12 22c5.5 0 10-4.5 10-10S17.5 2 12 2 2 6.5 2 12s4.5 10 10 10z"/><path d="M12 8v4l2 2"/></svg>Гинекология</div><div class="marquee-item"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentcolor" stroke-width="1.3" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6"/></svg>Эндокринология</div><div class="marquee-item"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentcolor" stroke-width="1.3" aria-hidden="true"><path d="M10 2v6m4-6v6M8 8h8a2 2 0 0 1 2 2v2a6 6 0 0 1-12 0v-2a2 2 0 0 1 2-2zM12 18v4"/></svg>Нутрициология</div><div class="marquee-item"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentcolor" stroke-width="1.3" aria-hidden="true"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>Спортивная медицина</div><div class="marquee-item"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentcolor" stroke-width="1.3" aria-hidden="true"><path d="M12 2a4 4 0 0 0-4 4v2a4 4 0 0 0 8 0V6a4 4 0 0 0-4-4z"/><path d="M16 15H8l-2 7h12l-2-7z"/></svg>Пластическая хирургия</div><div class="marquee-item"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentcolor" stroke-width="1.3" aria-hidden="true"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11v6M9 14h6"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>Андрология</div>
+</div></div>
+
+<section class="sec" id="problems"><div class="ctn"><div class="problems-wrap">
+  <div>
+    <div class="sec-header problems-header" data-reveal>
+      <h2 class="heading sec-heading" style="color:var(--accent);margin-top:0;">Узнаёте<br>свою клинику?</h2>
+    </div>
+      <div class="problem-card spotlight-card" data-reveal data-reveal-d="1"><div class="problem-num" data-pain>1</div><div class="problem-txt">Заявки есть, но они не живые — спам и любопытных больше, чем реальных пациентов</div></div>
+      <div class="problem-card spotlight-card" data-reveal data-reveal-d="1"><div class="problem-num" data-pain>2</div><div class="problem-txt">По одному направлению лиды идут, по остальным — тишина</div></div>
+      <div class="problem-card spotlight-card" data-reveal data-reveal-d="1"><div class="problem-num" data-pain>3</div><div class="problem-txt">Админы тонут в сообщениях, а записей на приём — мало</div></div>
+      <div class="problem-card spotlight-card" data-reveal data-reveal-d="1"><div class="problem-num" data-pain>4</div><div class="problem-txt">Реклама красиво выглядит в отчётах, а реальных денег не добавляет</div></div>
+  </div>
+  <div data-reveal data-reveal-d="2"><div class="clinics-card">
+    <div class="clinics-card-title">С кем работаем</div>
+    <div class="clinics-card-sub">Любые медцентры, которые хотят стабильный поток живых заявок</div>
+    <div class="clinic-tag"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentcolor" stroke-width="1.2" aria-hidden="true"><rect x="3" y="8" width="18" height="13" rx="1"/><path d="M10 8V5a2 2 0 0 1 4 0v3M12 12v3"/></svg>Медицинские центры</div>
+    <div class="clinic-tag"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentcolor" stroke-width="1.2" aria-hidden="true"><path d="M8 5c-2 0-3.5 1.5-3.5 3.5C4.5 11 6 14 7 17s1.5 4 2 4 1-1.5 1.5-3l.5-2 .5 2C12 19.5 12.5 21 13 21s1-1 2-4 2.5-6 2.5-8.5C17.5 6.5 16 5 14 5c-1.2 0-2 .6-2.5 1.2C11 5.6 10 5 8 5z"/></svg>Стоматология</div>
+    <div class="clinic-tag"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentcolor" stroke-width="1.2" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M5 21c0-3.87 3.13-7 7-7s7 3.13 7 7M12 6v4m-2-2h4"/></svg>Косметологические центры</div>
+    <div class="clinic-tag"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentcolor" stroke-width="1.2" aria-hidden="true"><path d="M12 3c-2 1-5 5-5 9s2.5 7 5 9c2.5-2 5-5 5-9s-3-8-5-9z"/><circle cx="12" cy="13" r="2.5"/></svg>Остеопатия и массаж</div>
+    <div class="clinic-tag"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentcolor" stroke-width="1.2" aria-hidden="true"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>Лечебная физкультура и спортивная медицина</div>
+    <div class="clinic-tag"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentcolor" stroke-width="1.2" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Лечение спины и позвоночника</div>
+    <div class="clinic-tag"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentcolor" stroke-width="1.2" aria-hidden="true"><path d="M12 2a4 4 0 0 0-4 4v2a4 4 0 0 0 8 0V6a4 4 0 0 0-4-4z"/><path d="M16 15H8l-2 7h12l-2-7z"/></svg>Пластическая хирургия</div>
+    <div class="clinic-tag"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentcolor" stroke-width="1.2" aria-hidden="true"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11v6M9 14h6"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>Мужское здоровье и андрология</div>
+  </div></div>
+</div></div></section>
+
+<div class="divider"><div class="divider-diamond"></div></div>
+
+<section id="cases">
+  <div class="ctn">
+    <div class="cases-ghost cg1"><svg viewBox="0 0 140 140" fill="none" stroke="#fff" stroke-width="1" aria-hidden="true"><circle cx="70" cy="70" r="60"/><path d="M70 30v80M30 70h80"/></svg></div>
+    <div class="cases-ghost cg2"><svg viewBox="0 0 100 60" fill="none" stroke="#fff" stroke-width="1" aria-hidden="true"><polyline points="0,30 15,30 25,30 35,10 45,50 55,20 65,35 75,30 100,30"/></svg></div>
+    <div class="label">Кейсы</div>
+    <h2 class="heading sec-heading" style="margin-top:16px; margin-bottom:12px;">Результаты по проектам</h2>
+    <p class="body-text" style="color:var(--txt2); margin-top:0; margin-bottom:40px;">Без названий — NDA. Цифры настоящие.</p>
+    
+    <div class="cases-grid" id="casesGrid">
+      <div class="case spotlight-card" data-case="0">
+        <div class="case-ico"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentcolor" stroke-width="1.2" aria-hidden="true"><rect x="3" y="8" width="18" height="13" rx="1"/><path d="M10 8V5a2 2 0 0 1 4 0v3M12 12v3"/></svg></div>
+        <div class="case-badge">Многопрофильная клиника</div><h3 class="case-name">Клиника в Израиле</h3>
+        <div class="case-tags"><span class="case-tag">пептиды</span><span class="case-tag">оземпик</span><span class="case-tag">гинекология</span><span class="case-tag">урология</span></div>
+        <div class="case-rows">
+          <div class="case-row"><span class="case-row-label">Месячный бюджет</span><span class="case-row-val" style="text-align:right; line-height:1.3;">55 000 ILS<br><span style="color:var(--txt2);font-weight:500;font-size:13px">($15 000)</span></span></div>
+          <div class="case-row"><span class="case-row-label">Записи</span><span class="case-row-val green">200 в месяц</span></div>
+        </div>
+        <div class="case-roi" data-glow><div class="case-roi-label">Окупаемость</div><div class="case-roi-num">850%</div></div>
+      </div>
+      
+      <div class="case spotlight-card" data-case="1">
+        <div class="case-ico"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentcolor" stroke-width="1.2" aria-hidden="true"><path d="M8 5c-2 0-3.5 1.5-3.5 3.5C4.5 11 6 14 7 17s1.5 4 2 4 1-1.5 1.5-3l.5-2 .5 2C12 19.5 12.5 21 13 21s1-1 2-4 2.5-6 2.5-8.5C17.5 6.5 16 5 14 5c-1.2 0-2 .6-2.5 1.2C11 5.6 10 5 8 5z"/></svg></div>
+        <div class="case-badge">Стоматология</div><h3 class="case-name">Стоматология в Дубае</h3>
+        <div class="case-tags"><span class="case-tag">импланты</span><span class="case-tag">лечение</span><span class="case-tag">виниры</span></div>
+        <div class="case-rows">
+          <div class="case-row"><span class="case-row-label">Месячный бюджет</span><span class="case-row-val" style="text-align:right; line-height:1.3;">75 000 AED<br><span style="color:var(--txt2);font-weight:500;font-size:13px">($20 400)</span></span></div>
+          <div class="case-row"><span class="case-row-label">Записи</span><span class="case-row-val green">180 в месяц</span></div>
+        </div>
+        <div class="case-roi" data-glow><div class="case-roi-label">Окупаемость</div><div class="case-roi-num">от 900%</div></div>
+      </div>
+      
+      <div class="case spotlight-card" data-case="2">
+        <div class="case-ico"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentcolor" stroke-width="1.2" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M5 21c0-3.87 3.13-7 7-7s7 3.13 7 7M12 6v4m-2-2h4"/></svg></div>
+        <div class="case-badge">Косметология</div><h3 class="case-name">Медцентр в Испании</h3>
+        <div class="case-tags"><span class="case-tag">SMAS-лифтинг</span><span class="case-tag">Icoone</span><span class="case-tag">аппаратное омоложение</span><span class="case-tag">ботокс</span></div>
+        <div class="case-rows">
+          <div class="case-row"><span class="case-row-label">Месячный бюджет</span><span class="case-row-val" style="text-align:right; line-height:1.3;">15 000 €<br><span style="color:var(--txt2);font-weight:500;font-size:13px">($16 300)</span></span></div>
+          <div class="case-row"><span class="case-row-label">Записи</span><span class="case-row-val green">250 в месяц</span></div>
+        </div>
+        <div class="case-roi" data-glow><div class="case-roi-label">Окупаемость</div><div class="case-roi-num">от 700%</div></div>
+      </div>
+    </div>
+    
+    <div class="cases-more spotlight-card" data-reveal style="margin-top:40px; text-align:center; padding: 48px 32px; border-radius: 24px; display:flex; flex-direction:column; align-items:center;background:var(--bg2); border:1px solid var(--brd)">
+      <h3 class="heading" style="font-size: clamp(20px, 3vw, 26px); margin-bottom:12px; max-width:800px;">У нас также есть клиенты в Турции, Казахстане, России, Узбекистане, Польше и других странах</h3>
+      <p class="body-text" style="margin: 0 auto 32px; color:var(--txt2); max-width:600px;">Хотите изучить больше кейсов или получить разбор, релевантный вашему проекту?</p>
+      <a href="#cta" class="btn-primary" style="margin:0;"><span>Оставить заявку ↗</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="reviews" style="padding-top:var(--sec-pad)"><div class="ctn">
+  <div class="sec-header" data-reveal><div class="label">Отзывы клиентов</div><h2 class="heading sec-heading">Что говорят владельцы клиник</h2></div>
+  
+  <div class="reviews-row">
+    <div class="review-card spotlight-card main-review" data-reveal>
+      <div class="review-header">
+        <img loading="lazy" src="data:image/jpeg;base64,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" class="review-avatar" alt="А. К.">
+        <div>
+          <div class="review-author-name">А. К.</div>
+          <div class="review-author-role">Многопрофильная клиника, Дубай</div>
+        </div>
+      </div>
+      <div class="review-stars" data-stars>
+        <svg class="review-star" viewBox="0 0 20 20" width="18" height="18" fill="#fbbf24"><path d="M10 1l2.39 4.84L18 6.71l-4 3.9.94 5.5L10 13.39l-4.94 2.72.94-5.5-4-3.9 5.61-.87z"/></svg>
+        <svg class="review-star" viewBox="0 0 20 20" width="18" height="18" fill="#fbbf24"><path d="M10 1l2.39 4.84L18 6.71l-4 3.9.94 5.5L10 13.39l-4.94 2.72.94-5.5-4-3.9 5.61-.87z"/></svg>
+        <svg class="review-star" viewBox="0 0 20 20" width="18" height="18" fill="#fbbf24"><path d="M10 1l2.39 4.84L18 6.71l-4 3.9.94 5.5L10 13.39l-4.94 2.72.94-5.5-4-3.9 5.61-.87z"/></svg>
+        <svg class="review-star" viewBox="0 0 20 20" width="18" height="18" fill="#fbbf24"><path d="M10 1l2.39 4.84L18 6.71l-4 3.9.94 5.5L10 13.39l-4.94 2.72.94-5.5-4-3.9 5.61-.87z"/></svg>
+        <svg class="review-star" viewBox="0 0 20 20" width="18" height="18" fill="#fbbf24"><path d="M10 1l2.39 4.84L18 6.71l-4 3.9.94 5.5L10 13.39l-4.94 2.72.94-5.5-4-3.9 5.61-.87z"/></svg>
+      </div>
+      <p class="review-body">Стартовали с небольшого бюджета, было страшно. До этого работали с другим агентством - заявки вроде шли, но администратор полдня разгребала мусор. С ребятами за первый же месяц почувствовали разницу. Заявок стало меньше, зато пишут люди которые реально хотят записаться.</p>
+    </div>
+    
+    <div class="review-card spotlight-card" data-reveal>
+      <div class="review-header">
+        <img loading="lazy" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCACWAJYDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDNvLWxM6zSXSeahyCCfTFZ2pywLayeVPFMSpUp03A9RnNVNXlmj1S3SEt5LAFlVQR98A5/A1MQpba+QDkfpWy1JaNDw14z1WGJNO0XQ9Mg2rn/AEi/C5wBksx711Nt4k8US2RcxaEyjIZLa5eYnpwMDGRn1/wq/wDDdIT4YsWnGyYlw0hUBmIY98c11V3cWscOzeuc/dLbSR7frXlVX7z0PRiv3auzyjUra/vtF1eLULa2ju5Iygkt8hWU5ALZPP1x0zW9BbGwsEj8wym2xGrMdzYCgZHp24FYFx5FjckSyyR2rtJHJ5ABMkhT93uJ57CtnVr1opT5cRO1Q7Y78DkVpdOFzgk9TOjuAsksPmOskpVdxJ2ls5GOM5NadtKGtYYnLM2cTRMchwOuw+p9hj6Vgz3ri4ZZYEY8ZjfGSB3BHeovt5jhZW3OAWCOxORnAzn6CuV6vQhm9FPGl+MOXVi7R9vlIwOvQ59KbdwRyXQMscQZx8ocbyo44Bz6kVnyXUCzNLGw2ELIpUbwz7QDjj1GfzqK81FFglS6mUTMwYyMuPL44+bPck9+MUL4gua1s2Jo3uZS8kQckt0XI5I9TgflXF+LJ11H9xLbzRbEzcN9xTnJj+bBzjCnHOc1sS+IbDz4TPdoq8fLvGPfdj39K57xDcQR3Ed5Isd9Z3TNCiBzlZcHDBRy2dwGT/StpKSi2VrYzS9pouoh7KGMLbLE7MkxlWRtpJUHsS54rqzdC5e2jiEBvcR3RLHCs57dgPTHfNYKWl4uoJFrnlhXVn2uqLlkKgdgBjqMfieTUi3Ua3CBPPkgSMsgICyn5wrbeo4wTjkYNcVWKkrrcTNTX1udBvJotNlgUTxGWVWdZdjPnO7PTgkfrWBoVqY4JdQSFp7izAmjiZN6SR7tuSB2+mc1qeNVGpQaXcrY3d4+x55QZMt5Sr0bAyuMZz2HFZy2l7cu11pjQX0aIivHZk70wowdjAEL/tDIBJFXS1pq+4XQ3w7NDcatbQXeWi3FfLd1UEthV6MDnJGR/wDXr07T5rTRZo7SBQGRnkuEfgJJ2Lnk4HTJ/IVy3w+sIrnUje2sUcxaPd58m4eW2CvpjJbBOcj+ddFbeNB4YvbxbjZHIVIMJi3yOxzuZWySoPB4yPQVjiYNtxir2GtNyh4o1ya3uAYUlhjB293QdxtI5IOSeeeKKgHnX139q1e1lmMitIginAVdzZxlgQe3T86K0VOUVZBZvWxRu9RiRWc2pCAckh+Kx5tes8kNCFHqVb9K9H0Txr8Q/EOmNPZWNpe2jlonC6ejqSOqkZ9xXtfhCz0nWfDNpeNotjaXMseyeIWyAxSqSrrgjswPWvoJXiTGUZM8P8BavaXnhaSKLcGSdhhh05Bzwfrx7Ve1fU4NVsBBZOft0PztztLMB09/b9aPEWj3HhjxRLHql3I8PMsTiNFWZMjoFUAMMYPpXn/ijV4rvVI77T4njug+6SBVI7fePqDyOOmK86cG5M9FTXIrGjd29092xVHWPGVlkHopB+UnIPPX1NaWsRRTQlpI5GMkaMpVuMgelErw3+j6XdZlWWTiWMrwwIOCD1xlceuRQio9tbyOsrq8cS7hgBDj1zyOOn5ZpSTVK/mcM7c2hzJQPMpM52wuVJYfKG4IGc8DANPkimgmmYqoR2XPz5xnv9eRVq+lS1mWOG3jZyxZs8o6jGRj9ffmpzcxXMv2QxbImiEy5HJGMHafUH1//XzOXYky9e1SPSIVZwUDNthKn5mz1GO/9a5HVGm+1MwMgY8fM2SPXA6Ctq/ha98TaVai3ef7PcfdEoJk43A5PAGa9S8UfDdb/wANrdWMSW2sRIG2KQUkI6g+9bwnGFr9Tso0HUg5RPCrfSLi5ugu0s7E9a7/AEbwn9hsGuLpVEseJYsnOG7HHsec+1Q23i7TbRLWe4tVW7PyyqONj+tY994rnmmOZCYix4z0/wAkV2OzVmYtN6GrqP2fVru2SYtFM1uXaeE5wpzuyOm44PfoKIrSO1L2UAS6+zlWjdgIfN3AnO8nrk+3ANUtN1WaZoYytvtUmBGeL5RHtJy3GC2SRjqR9KZDcNBAjhgXuJWZdpLAhSeOueOn514kqcoe70Rk1YZ4mhuJNT2anbXIlji2tJE+1PlDMxC88HI9M+2ao6ONG02bz7qaDULmNsmKP5oCuMkvkZY89BwMd66Dxzb6jNdQ4aWezuo4wHibKsRzhiOeMnA9PpisLS9FtU1SF9RQfYgFcp9oEJZc8Hdgkk4Jxjjjniuii+emrE7nb6BqMCadHDpUC/aCkomgWA+SGLnoGJxwASDntjrVKy1SBr5/7Qu5vtTgwp5NqDGBj5ghA3HJHI6c4quJ7eO6RXiIikXzRIdkiupIUhG4BH0H8q6GW20yKzkmE90L22bfCsDqAWyTkAYHTO4Ag8jFEqbXvRWppyO10RpcmORppg0Yfgf3l9Ac4x0zj/Cisu/v21m7ea5D5c+Y3lpvA6BRtzxgD1PXv1orVJtK47M958PfDHwfZmNrG7u7hkcSKftuG3Dv8mDXd6fp9rommvb6TaEIpaQRKxy7Mck5Y8knuTXBeK/ADwCW/wBF1CWEKNzxSOQBjuGH9aqeHNc1LStY061vNce+s7qYQiK4iXzNxB+VG6nB578CvUk2+pmkk9ip4l8f6Dq2pWuj+IfD94ZjceTiVCjQliBnOQceuPSvnzxPpn2TXdQg0/LQQTMiec+07d3GM46CvsXxTqujaTprX2uPYwxghI5bocbuwBwT6nivlj4l3WnX3iq+bQDFd2Vxtmt5U6FNuHBBGeGDY9sVzu/U7ak6M7eyhy99b3/A1tLnvZPh/o7y2kctvb3hUzKw+QmUj1zj5vTpVVoUvNMt4gI5J2iQLCWIdhk4CkDgE9TTPCGrWbfDDVtOkv7SPUILkSxW+CrOu+M5HbrkfhW3Z6cH8MW95G0n2mO4CR/u12jsPmxnr2zim43hY5Zas5dnubu0WJU2XCqUB353Eclc9DxVW2S7+1zzxxSeXFEpbepBQ9Tg9Pf6YrQ1fS7zTbmUXVqFmDBcoMlWHIHBxnHfv+FYur6jbTeW8sMrTRjywFcpvHcn15yK4XTtKxJt6DLbLqm6JUzLJHJ5oyBtAK7QOmSeT9BXvWn3ERsot0gYbRznrXyxomsWVhqDowureFlIBeQSRoc5GBt3D/6/Nd3pPij7ZAY7DUoZ1jG544pAWA+nUVFanLoexgakeSzPMviVZNp/iLUY4gpjE7upU9skVzK3RkRcnPfNfRdj4RfVtMuV1C2t50uWNy0u5VeJiOcE/wAIHqe1eEa54cNrrUsWjyNeWhfasgXbz64zwM100KnOmuxz4qnyS5u5u2sqPpOgxtku0rSAZAxg9QRz69eK2rd3js7NVsw9p5hijkRuUOCWCkDJbd09iDUWjabZm202cXMMpt1eJN6NsLY559fvduQBWn9jN/pd1aaddRXPkgMm5jFsBOckYwPw68Vx1feZwNX1N65kuJ7JlEv2WFwQx3FyWAyhYg85x7c5rlNLhvPsdzbwSeZO4VTvK7sE8FST7Vs6LbvLpklkL60Yqo2sPny4OAeOgzjjrmqup6Bf6r5zOqwSsoKr9o3IxVQMHvliPpzSwsXTTixxvFmFBdLAwjllhXJ3EPnpklgCOOf8mrviZrmbVdPHzSNcQo+0xmNT2OM5wPfnFWn8JTIkcJkhubNFLHDpvDFcFRnjrWtbeGUEUovHicXFtHG0bOdyMN3KMehwQcDAyO1dTkjTmexXt7WWO1M99pzZaRl2RoGDejbQCBwOwGc0VowaG9lCLe0u55Ih3VeSfUn/AD1orP2sf6RDnG57/pHiJfGXge0nsNol1BFX5uQnOGz9MGvN/jFqNp4IjsYdPAutfkk8yCYoN0GBglB29PevHPAvjjXtP0C00vRNQigSPlQhy249TwpxXYW/hzxPrGpJqerPZXt+FAga5eSQg9twCDp6ZFek5pCUWzlLy/8AFvxAvvKup725SD96HuGOyNScZUAYz7DmpNasLrSNNWxWSd3AKF0TbuJ52nPbHpXpHhP4bX+k3iT3lvBNtJYLEJ1+Y9wHmK45PG2tLxNo8w1jSIZNPURtuYYKZ3ZUZPPpj86xcrs1UbI8U8G+FRq9xriQXVxaC2iiUs6cMSTkkdwAM16/pv7jwVc2n2mKYLcQnMRbGVkILc9Cc/p7VneBrJG1zxhJLtSH7SsZ2rk4VDmtKzk3eBmG9n/dxuCx5++Dmqu9QcUrG3400rRLeXVre4vJIJisRttyvcsPlGTsHLD8eK8O1pJILJLmK2t5rcIHHm26q27JyxXtnGTXulxpt5rtxeb9dvI5HihbzIURUYYJGVx0GOOc/WvPvEWnL4ftrp7iOC7ubcsoBgB44O4E8gc//rrGrVS2RLpyitTybxnKlo9zaxWlrEzMDEY1IbYQG3dcd8V2ejfCq58IaVpvijU7kT3E8AuYoYFYiNWA4buzEMBgcc964fQ7uPUPGdnHqd1Dbve3EaNNJFvWJS3p78D2zX1d8cvHFj4f8LRwxRRSatdAizV1B8lehlx7dB749K6oQvHXqClyyT7Hi/xG8XPHbf2DpkhCKPLuGU/fI/gz6Dv78djXAWU5QsJRuzyT6VReQrE08hO9ztXPb/PNNgn4469K1pU40o8sSa1V1ZczO48I3sFlJcWsilorltwZW2lWAOAO4z049a1LGex07QZpne+gglYxp5qjzEJfru7+v+FcJblpEG0oiD+I9T9K9Q+HULaxodwsFjHeS2zeXtlTdlW5GfQHB/KuHGYaCvUS33Ji+hn6R9ktL6TD3EwigUj/AEddoypJJcHJJ64461szX0nkRQ/aN23gb4+Ofp+Aq7N4O1O/t5FtrK4ULugaNCAAc4xyeoz1rKbwPrZuk1VbUvYKwnzLKuAvGSo68YP61xqEZO9gdJye35lI3cN6xilu7VsjeyxKw4HOeh5xmlhkKmRIprKdkjZl6g9upx71ZHwx8RaRqj3kD2sdndAx+Wsqqqu+QnHOcEjntmtWz+G+qafqLGa/smW9LRxqZWbYdoY5JHA+U4+tVyQWyGqEukTipbxoZpp5LiweEvtw1yqqjHnGDjnANFdZN8KLieeaxm1fTDNLtui+1to25THTqcj8qKfJT6j+ry/lY/Rfh/4zQAXHjq7hQfw29uAP/Hsfyr0vwbpX9gQyrqWtajqty5GJLmL7g9F2qB/OtRQR61JEcnPPHArpcrnQoJF9b+1BH77H+8CP51xGqaokl/qGqXJkEUKukSuNuFU7Vxn1y7fiPSuxiZgepA+tZHilln8OtFu2pOTuAGcgg8VPNYuME2keZeDY7z7B4lurNlnka+KsvlNJ/ADnIYcAHH4Vn2viXSRAmkQNeyzuwRGlyQCOucn29Kt33h54l1q+i1TUY5LhZJljhlMSRyHndhT82MYwe1ee6Nb7dYsJt2f3inOOvrWtP3k2ia0XGSuep+DvGWnafpqf2hKvnKPsuGySSjPjgA5O0rVH4heNdFPhbV/MXzLi7JNsmxlZsqqkgkcYIz+Fct4c19fDGo6gt5A8khlkPkLgEo2CrZPQcelcX468RzeJfEW+dQAoCQwK27ZkAc+rHjn6URoOUrvYUqqUbdTI8D6fFqniiK81QPHp9r/pNw0XGxV5VR9SBWt4s1+88T61LfXsjtnCRqx/1aA/Ko+mfzzXV+Ok0/wt4M0fw5YQRLqlyv2nUblc7mGflT6Zz0/u+9eenCx8dFGT7k132UVZHG2xl8d+EX7qLx9TwP0qtYTwlPvHqQeOTzU0jhskd2BNZti6x3M0WVDiRgCfr2qW9QOmhIYA84xXoPwrl1b+0b6LRJbOORoFdxcuyKVD4GNvU8155AR5YBGAOuK9J+ChYeINQkSAzYtMEALkZccjP0rOu/3bNKP8RHo9pb+JZGmMWqaZCPOZZd0Mj5fPJHzjg8YzzUM9prEuhwMNYgWzSM5t/sYyVwTjfu74POO9bGmzTi6umSJtnnyBhvC8/KRxz2BqGG4lHh4L5RKtBKmfMz2Y5xj2ry7noWMy9sdRa1gabxDNKqSKDElpGqgsRtYHk8Zzz1ouNEuvMtYn1nVmaVnCylkXadhOVAQAdMd+CelbWpPcHSIi+NhMJGGz/EtJqRf7Xp+9xnzXyCOnyHnrRcLGTbaKP7Qjjur/AF2R2tgzM1ywcMDggEAfLz0+lFabeY2rwGSSMBrUspK9ty+9FJtjSOiLnOB371IpwoA6CqCXasMlTnt9KV7shfkUk+5xXRynPzIvySEQvwDweDWF42kjEFpbqoCAEkHp2H+NLe3V9hFt7WGTc2TmYqeOf7v0rjfF2o6r5oaaxt08tVD7pQwXqTzxQ6bZUKii7jpbK1nikj2xLvUoGCAkZ4zXF+KdO0rwle28enam2oX1s4ZozCvlpjsxB6/7I/HFZ2u+LXMEkUckEER4MqqQfoMnj61w9zrdpDlkuJTnjdtyM100aDhrJmdevGfwosanfwo816VVbh97M2MbieefXmuH0q8EOpQTXLMYvOR5T1JG4Fv0zWnfzS6oYYLYB5Z3woAwD6n2rNv7e1j1NbS2mZolKxvMejN0ZgPTOcew961lLWyOZLqdp8R9Yi1DxrfT28ivaL5ccTKeNoVcY/M1j2ErSTSxOfnX1pNb0qLTvEmo6VBJJJDCzRI8mNxAUYJxUFoxLW9z/ED5Uo/rVXdxMklyk2Dxk1VjiaTUbkxICNwBY9jgVf1RduJOgByawrS7kivnnRd+48oRkMPek9wOkinZUCklwvBYV6d8Di1x4ouY4Wm+a0bPlnB4Zf8AGvNrSe0mQNNCLUnosjABvpXovwa1TTtI8S39y06R+XbeVlidpZ2BwDj0Wpr/AMNmlD+Ij2r+y7q2M0iNc7i+85VTuPHPT2qP+yrnyRDC85gOfvQ8rnIOOnYkfjUTeOtMQBpL+367ceZg5/KrcHjGzldQlzAT04nWvKsz0dO5Vn0y9Nm0Z3fLgruiAyVwRg7vao7kXUlzakyx70kYqDEFwdp/2uR+VaMni6xmtZxa3cQdSVVjMmAR7Z5Gc1lDx9a/Y4POUSXiZMmAuCBkZHPBOOnoamUuXcWnUI474XCXCC1JEZQIFwACQc4/CirPhjxLZ3WjJcynzXeRy+CH2Enhc+wxRVXDTubpSJBnbwPQU5RFTWGTyDikA77STXUcZNDMkdwTtGxU5J7En/61cb8VNHtLjwtqmp3000MqjzbdQSAWAACkd8/pmtR9RaPURGIWMbXBQvkBVCpkk/5715T8UviNb+JZG0nT3/4lluw3s3Sc9j/u56ep/Csoc1SolDS3U63CNGlzz1v0PK5LmS4BFpHFOrEowkk7+mBzXQ+CPAFprBuJvE/iWz0rT+AkMUivLIf+BfdA9eT7VkSWsEZLfZIyB/HHGA6fhjn8KlF7tCszKQfuTJ91vYjsf8j0r1HG/U8xOx6L4x13wF8P/B13p/ga3tLnxBcx/ZhdNmaaNGHzSF2GOnAC8ZPTivnzQzaf21Y/2kH+xecnnbTghM81s+MmWW5t5hwxQowz0IPH8651Dh8+lZKCg9BuVzs/GUsa+Pb+SJg0TTKVYHIKlF5/WqXl+VfzwkfJMN49jWdbpvtFYDJAJz9DW3dDcLe4XqME/Q1pvqIr6qxbSZCOoAB/PmsCxuZLaYtGxAYYYetbuqt5dhcr2YDH5iuZjYLIpIyM8j1FTLcDttMFhfK7KiyHo4lUE/T/APVXofwf8Hxa1Y6xbiW4ie2uEMboobCMpwDn0IrzfQfLAZowNrEYFfQX7OFw1ufEMa8Fvs7nPH98VNdXpl0naRYn+GEflokl3dbtp6wg5YHqOemKp3PwmviSbS6yuPl3wkc+hwf5V7XJcM+AxyMg57g+1J9slBCs3JPDZ6/4GuCzOnmPAb34U6vHbvMJo3EaltojYE47CuVutFvpUW7tr2FAn7pl3NvGBnBGM8nK/UV9RXV75exJ5UXzDsVWP3z6Ad68V+KNkPDUGo3sYeSHU2AllZVLBsg7c8dcdOehJrKqpaOIpM4Wwi8RNb7WsiQTnYsgZwR1zjPHIooW+1HQbWKGyhns7iYtOXbcPNRsYLK20ZGMAjtn1zRVWZCa7n0YQMjB4+tEjiOKR8ZCKW6+gp5OT2x9Kr33zRLCpOZ5Fj/DOW/QGui40eWfGe51DRtHZrOSFPtyLGJGLB43PEhQDg5UDOeg6V4NMb2LEs1rFcALtLxcEDuCvcV7t+0nqQW30DTw2A7y3Lgn0AUf+hNXjCTDHEjD6f8A6q6aEEo37kVqjm0n0M+LUkjVQsjqf4Rux+AJ9PQ1ZiY3TOYyoD8SEjAP1wevuMGq2oLBvV5EDEsDyOTj1NMN/wDLlfuDjjt7e1bepgW7nT7VxE13LJKI8D+4CM9/z9qS40yyby4lgRNu1WI6gHIJ98FlP4VnyX4HEw3wP8rY6j6U+e5KtEZpACyBfMH3Xx0cfUcEdQRRdALpluyJ5UgGQzxn6g1qabaXN3aLDHbyuw+XhT2qbwzcxSzyhPLmZZEnAYcMcfMmfQ8jPrzXqek3WliAtCmGHVG4ZD6EUIHoefx/DzX9atGjt4IY3wD+9kA6dq8ymt5IJdsowVOCPSvph/FKabbFLcZmY5HHSvEfiDp0kd+2opGVgu2LsMYCueT+B6/nSkuokyho7z2U5R0LKyhsD+IeqmvoD9ne/tkv9YtJXb7RPHHLEzcBkQkMD6Ebh+FfPtjctarbi4JksX5RwOV9R9Qe1dNaDZOj2hBhKku4YncKUo80bFp2dz7Hkv7KPiW7tkx13zqP5ms++8SaDbROLnV7CMbT1nUn8MV8pT3UYjjPlKpAOWJzu/woS7/dlWHHt0BrnVFdzR1D0vUPHcS6ivkX226s1lhhuZo1kMxCjDdMgMMjkk/13tX8a6FqHgllvtQtbrXFtHMcbQMV85oynYY6MR6c9q8JuTvcE8d8981GfOW3aQlig6H1x15/pWSpKN2xc7Ot8WNpMfh7SbXQNXmnvLcn7azxyEzuwzvJIxheVXnOD70VyEF0FBZnALAHHpRWkKakrk8x9iiMnmozGTfQZ+5GjOOe545H0BqcIQfU/SorNjLPcvJjh/KG3oQo+nqTWLNzwD9oyXf4206ED/VWAJ57s7H+grzRizbcliegHX8h3NfTus+DNG8U+K57nVbV52jVIARKycKPb3Jrzr48eG/DfhbQLe30WzFtql7OI45TO5KqOWzknA6D8a1p4mKtBLUqeFnyuo3oeLa8jxeQUUHaDuUnOenbv9aylkwfNtmKtj5o254/qP1qyIryO4i02a1jlklfCF2+8T3DHp9a2dE+HniLViWhto4Ig20vcShQPyyT+Vbzmluc0YSlsjn2eKeM7cRSd0J+U/Q9jVbzpFiaIO3lscle2a9evv2efG9rIVjGlXIzjdHebc/gwFT2H7Oni24UG6u9JtCf4WmaQj/vlcfrUuaDlZ5Z4Xn8nVkBYjzE2j69q9XsbZImVNRiLy4BAPG0H3HNWfCfwViHjDxDpOp6jJPd6RZQ3MBtV2JLJIrFc7uQAQPr7Vm6NDrmvanJZ6ZpMwuolDTNOPLCZ4yxbFVGpFLUThJ6Iv3trBNKBGggRuPkdzt9+uTVXxJpNx4h8KafDZxPPJbWpleYudpYdfvfd4Xp616ToHwzuGiDa7rU+88+TYARqPbeRk/gBXVW3gLw1BGySaWl1uBDNdyPKxHf7x4/CspYmCemptHCza10PkLw2xIlt2O6MnOPet/yPJSTyvkG3kg4Ney678AdLnne68M6rc6WWO9YJE82IH0zkNj25rsfDFhHZ2cWh6/oVnG+3asiQK8FxjrtbHX2ODSljIxWiuaU8HKbabsfIUk0rcbnbHbNOLy+WpD8sM4ya9E+MXgmDwr4tSPTY5PsF4gngRhkIckMg74BGfXB/GvPri1eEBDgvtHT35H6c0oz5ldHJUThJxZD5hzsc8scetPS7lgjxEJBjr71CYygyQQRg8nkVpXGmTRWi3UUtvcwnG8wvuMZPQOMAr/L3qm1sxJkdpbXepzMIImmmUZccALz69KKzVmCMwIP1zjNFS4voUpLqj7wLkK8h/gBOM+lQ6dGYbBC2GYJvY+pPJ/nRRWLOlEnh+AeWZWOXfLk+55r5j+PGuzX3j+5tXXdbWwFsqPzzjcW/X9KKKnCr95c7Ma7U7LyOEstSvILhCJ/L8r5o3QHcp6dQQf1rsfDPivUVgnaO8lm2uNwmUnnHuzH9aKK75JS3PNhJx2Z7dJ8X5Z7VDFpaxSlB8xk3DP0wP51QtfizqaSH7XZW00fT5CyEfqaKK09lDsY88u5y8HxJFp4/wDE2prpx/0rSoY1Tzj8rJuAYnHPWvR9VmSTX/B3iG1UpHrFh9jlibr8oDKT24zRRXPXiktDooyfMdNkqc+narHbPrRRXns9FE8BJBGeKHHykNhlPVWGQaKKQHmvxt0mPUNDsJmA2W1wc5Y7gGXBCn3/AMK8l1XRbcCKQxqNyozDOeMDHPXofzooqeZqVkzzMW26jOPu9FzdosMuEmBlBYcqORj9KhjsraBopXu7iIzozBY4g4KDsfmXv9aKK6+Z2OdFyx8Fw6pAZrXVJQCeBNajOO/R/Wiiis/az7hdn//Z" class="review-avatar" alt="M. S.">
+        <div>
+          <div class="review-author-name">M. S.</div>
+          <div class="review-author-role">Косметологический центр, Стамбул</div>
+        </div>
+      </div>
+      <div class="review-stars" data-stars>
+        <svg class="review-star" viewBox="0 0 20 20" width="18" height="18" fill="#fbbf24"><path d="M10 1l2.39 4.84L18 6.71l-4 3.9.94 5.5L10 13.39l-4.94 2.72.94-5.5-4-3.9 5.61-.87z"/></svg>
+        <svg class="review-star" viewBox="0 0 20 20" width="18" height="18" fill="#fbbf24"><path d="M10 1l2.39 4.84L18 6.71l-4 3.9.94 5.5L10 13.39l-4.94 2.72.94-5.5-4-3.9 5.61-.87z"/></svg>
+        <svg class="review-star" viewBox="0 0 20 20" width="18" height="18" fill="#fbbf24"><path d="M10 1l2.39 4.84L18 6.71l-4 3.9.94 5.5L10 13.39l-4.94 2.72.94-5.5-4-3.9 5.61-.87z"/></svg>
+        <svg class="review-star" viewBox="0 0 20 20" width="18" height="18" fill="#fbbf24"><path d="M10 1l2.39 4.84L18 6.71l-4 3.9.94 5.5L10 13.39l-4.94 2.72.94-5.5-4-3.9 5.61-.87z"/></svg>
+        <svg class="review-star" viewBox="0 0 20 20" width="18" height="18" fill="#fbbf24"><path d="M10 1l2.39 4.84L18 6.71l-4 3.9.94 5.5L10 13.39l-4.94 2.72.94-5.5-4-3.9 5.61-.87z"/></svg>
+      </div>
+      <p class="review-body">У нас 6 направлений, а лиды шли только на эпиляцию. Я уже думала что на остальное просто нет спроса здесь. Оказалось проблема была в рекламе. Пересобрали кампании, и через пару месяцев пошли записи на ботокс, Icoone, даже гинекология ожила.</p>
+    </div>
+    
+    <div class="review-card spotlight-card" data-reveal>
+      <div class="review-header">
+        <img loading="lazy" src="data:image/jpeg;base64,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" class="review-avatar" alt="D. R.">
+        <div>
+          <div class="review-author-name">D. R.</div>
+          <div class="review-author-role">Стоматология, Израиль</div>
+        </div>
+      </div>
+      <div class="review-stars" data-stars>
+        <svg class="review-star" viewBox="0 0 20 20" width="18" height="18" fill="#fbbf24"><path d="M10 1l2.39 4.84L18 6.71l-4 3.9.94 5.5L10 13.39l-4.94 2.72.94-5.5-4-3.9 5.61-.87z"/></svg>
+        <svg class="review-star" viewBox="0 0 20 20" width="18" height="18" fill="#fbbf24"><path d="M10 1l2.39 4.84L18 6.71l-4 3.9.94 5.5L10 13.39l-4.94 2.72.94-5.5-4-3.9 5.61-.87z"/></svg>
+        <svg class="review-star" viewBox="0 0 20 20" width="18" height="18" fill="#fbbf24"><path d="M10 1l2.39 4.84L18 6.71l-4 3.9.94 5.5L10 13.39l-4.94 2.72.94-5.5-4-3.9 5.61-.87z"/></svg>
+        <svg class="review-star" viewBox="0 0 20 20" width="18" height="18" fill="#fbbf24"><path d="M10 1l2.39 4.84L18 6.71l-4 3.9.94 5.5L10 13.39l-4.94 2.72.94-5.5-4-3.9 5.61-.87z"/></svg>
+        <svg class="review-star" viewBox="0 0 20 20" width="18" height="18" fill="#fbbf24"><path d="M10 1l2.39 4.84L18 6.71l-4 3.9.94 5.5L10 13.39l-4.94 2.72.94-5.5-4-3.9 5.61-.87z"/></svg>
+      </div>
+      <p class="review-body">Предыдущий маркетолог присылал красивый отчет - клики растут, цена заявки падает. А я смотрю в кассу - ничего не изменилось. Тут первый созвон начался с вопроса как девочки отвечают на звонки. Через пару недель выручка стала линейно расти.</p>
+    </div>
+    
+  </div>
+</div></section>
+
+<div class="divider"><div class="divider-diamond"></div></div>
+
+<section class="sec" style="background:var(--bg2);" id="process"><div class="ctn">
+  <div class="sec-header" data-reveal style="text-align:center"><div class="label" style="justify-content:center">Как мы работаем</div><h2 class="heading sec-heading">От аудита до стабильных продаж</h2></div>
+  <div class="process-grid" data-reveal>
+    <div class="process-step spotlight-card"><div class="process-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentcolor" stroke-width="1.5" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></div><div class="process-num">01</div><div class="process-title">Аудит</div><div class="process-desc">Разбираем клинику: врачи, услуги, цены, конкуренты</div></div>
+    <div class="process-step spotlight-card"><div class="process-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentcolor" stroke-width="1.5" aria-hidden="true"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></div><div class="process-num">02</div><div class="process-title">Стратегия</div><div class="process-desc">Сегменты, каналы, офферы, креативы — под клинику</div></div>
+    <div class="process-step spotlight-card"><div class="process-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentcolor" stroke-width="1.5" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><div class="process-num">03</div><div class="process-title">Запуск</div><div class="process-desc">Тестируем 5+ сегментов, подключаем ретаргет</div></div>
+    <div class="process-step spotlight-card"><div class="process-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentcolor" stroke-width="1.5" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div><div class="process-num">04</div><div class="process-title">Масштаб</div><div class="process-desc">Оптимизируем, масштабируем, чиним цепочку</div></div>
+  </div>
+  
+  <div style="margin-top: 56px;">
+    <div class="sec-header" data-reveal style="text-align:center; margin-bottom: 40px;"><div class="label" style="justify-content:center">Что меняется с нами</div></div>
+    <div class="ba-card spotlight-card" data-reveal>
+      <div class="ba-side"><div class="ba-label before">БЕЗ НАС</div><div class="ba-num before">5</div><div class="ba-desc">записей в неделю</div></div>
+      <div class="ba-arrow">→</div>
+      <div class="ba-side"><div class="ba-label after">С НАМИ</div><div class="ba-num after">50</div><div class="ba-desc">записей в неделю</div></div>
+    </div>
+  </div>
+</div></section>
+
+<div class="divider"><div class="divider-diamond"></div></div>
+
+<section class="sec" id="approach" style="background:var(--bg2)"><div class="ctn">
+  <div class="sec-header" data-reveal><div class="label">Наш подход</div><h2 class="heading sec-heading">Чиним всю цепочку,<br>не только рекламный кабинет</h2></div>
+  <div class="approach-grid">
+    <div data-reveal style="display:flex;flex-direction:column">
+      <div class="metrics-abbr"><span class="metric-tag">EBITDA</span><span class="metric-tag">LTV</span><span class="metric-tag">CPL</span><span class="metric-tag">CRR</span><span class="metric-tag">ER</span></div>
+      <p class="body-text">Большинство агентств запускают рекламу и ждут. <strong>Мы так не работаем.</strong></p>
+      <p class="body-text">Мы разбираем клинику на части: врачи, услуги, цены, сильные и слабые стороны. Потом собираем рекламу <strong>под конкретную клинику</strong> — чтобы пациент увидел свою проблему, узнал себя и записался.</p>
+      <p class="body-text">Если заявки есть, но люди не доходят — разбираемся, где теряются: в переписке, на этапе записи, на ценах.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;justify-content:space-between">
+      <div class="principle-item" data-principle><div class="principle-ico"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentcolor" stroke-width="1.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div class="principle-content">Цель — <strong>выручка и оплаты</strong>, а&nbsp;не CTR и дешёвые заявки</div></div>
+      <div class="principle-item" data-principle><div class="principle-ico"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentcolor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v8m-4-4h8"/></svg></div><div class="principle-content">Минимум <strong>5 сегментов</strong> аудитории — работаем с каждым отдельно</div></div>
+      <div class="principle-item" data-principle><div class="principle-ico"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentcolor" stroke-width="1.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg></div><div class="principle-content"><strong>Ретаргет</strong>, который добирает тех, кто сомневался</div></div>
+      <div class="principle-item" data-principle><div class="principle-ico"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentcolor" stroke-width="1.5"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></div><div class="principle-content">Креативы и офферы <strong>под вашу клинику</strong> и ваших врачей</div></div>
+      <div class="principle-item" data-principle><div class="principle-ico"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentcolor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="principle-content"><strong>Без лимита по креативам</strong> — столько, сколько нужно для стабильности</div></div>
+    </div>
+  </div>
+</div></section>
+
+<div class="divider"><div class="divider-diamond"></div></div>
+
+<section class="sec" style="padding:calc(var(--sec-pad) / 2) 0" id="liveLead"><div class="ctn">
+  <div class="lead-def spotlight-card" data-reveal>
+    <div class="lead-quote left">"</div><div class="lead-quote right">"</div>
+    <div class="label" style="justify-content:center;margin-bottom:24px">Что такое живая заявка</div>
+    <p class="lead-def-text">Контактный человек с понятным запросом, который подходит под услугу, с которым можно связаться и довести до записи</p>
+    <p class="lead-def-note">Не бот, не спам, не случайный клик — реальный пациент, готовый к диалогу</p>
+    <div class="lead-pulse" style="margin-top:32px;display:flex;justify-content:center">
+      <div class="lead-pulse-inner">
+        <svg class="pulse-base" width="300" height="60" viewBox="0 0 200 40" xmlns="http://www.w3.org/2000/svg" style="overflow:visible;">
+          <polyline points="0,20 54,20 74,20 84,5 96,35 106,12 116,28 126,20 156,20 200,20" stroke="#0ee0cf" stroke-width="1.5" fill="none" vector-effect="non-scaling-stroke" opacity="0.12"/>
+        </svg>
+        <div class="pulse-bright">
+          <svg width="300" height="60" viewBox="0 0 200 40" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:auto;overflow:visible;">
+            <defs>
+              <filter id="glowLine" x="-20%" y="-200%" width="140%" height="500%">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="3"/>
+              </filter>
+            </defs>
+            <polyline points="0,20 54,20 74,20 84,5 96,35 106,12 116,28 126,20 156,20 200,20" stroke="#0ee0cf" stroke-width="2.5" fill="none" vector-effect="non-scaling-stroke" filter="url(#glowLine)"/>
+            <polyline points="0,20 54,20 74,20 84,5 96,35 106,12 116,28 126,20 156,20 200,20" stroke="#0ee0cf" stroke-width="1.5" fill="none" vector-effect="non-scaling-stroke"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<section class="cta-sec" id="cta"><div class="ctn">
+  <div class="cta-card" data-reveal>
+    <div class="cta-watermark"><svg viewBox="0 0 180 180" fill="none" stroke="#fff" stroke-width=".6"><rect x="60" y="10" width="60" height="160" rx="10"/><rect x="10" y="60" width="160" height="60" rx="10"/></svg></div>
+    <div class="heading" style="position:relative">Разберём ваш проект<br>и покажем, что мешает деньгам</div>
+    <p class="cta-desc">Проверим всю цепочку — от первого клика до оплаты.</p>
+    
+    <form class="cta-form" id="ctaForm">
+      <div class="cta-input-wrap">
+        <input type="text" id="ctaName" class="cta-input" placeholder=" " required autocapitalize="words" aria-label="Ваше имя" minlength="2">
+        <label for="ctaName" class="cta-label">Ваше имя</label>
+      </div>
+      <div class="cta-input-wrap">
+        <input type="tel" id="ctaPhone" class="cta-input" placeholder=" " required inputmode="tel" aria-label="Телефон или Telegram" pattern="[0-9+@a-zA-Z_\-\s]{3,}">
+        <label for="ctaPhone" class="cta-label">Телефон или Telegram</label>
+      </div>
+      <div class="cta-input-wrap" style="width:100%;">
+        <input type="text" id="ctaProject" class="cta-input" placeholder=" " aria-label="Что у вас за проект?">
+        <label for="ctaProject" class="cta-label">Что у вас за проект?</label>
+      </div>
+      <button type="submit" class="btn-white" id="ctaSubmitBtn">Получить разбор ↗</button>
+    </form>
+    <div class="cta-proof" id="ctaProof">Бесплатный разбор — ответим в течение суток. <span class="cta-proof-dot"></span> Берём ещё 2–3 проекта</div>
+  </div>
+</div></section>
+
+<footer class="footer" id="footer"><div class="ctn">
+  <div class="footer-top">
+    <div class="footer-col">
+      <div class="footer-col-title">Контакты</div>
+      <a href="https://wa.me/77782182305?text=%D0%94%D0%BE%D0%B1%D1%80%D1%8B%D0%B9%20%D0%B4%D0%B5%D0%BD%D1%8C!%20%D0%9F%D0%B8%D1%88%D1%83%20%D0%BF%D0%BE%20%D0%BF%D0%BE%D0%B2%D0%BE%D0%B4%D1%83%20%D1%80%D0%B5%D0%BA%D0%BB%D0%B0%D0%BC%D1%8B%20%D1%81%20%D1%81%D0%B0%D0%B9%D1%82%D0%B0" target="_blank" rel="noopener noreferrer" class="footer-contact-link">
+        <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor;flex-shrink:0;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+        WhatsApp
+      </a>
+      <a href="https://t.me/PPavel_D" target="_blank" rel="noopener noreferrer" class="footer-contact-link">
+        <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor;flex-shrink:0;"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.833.94z"/></svg>
+        Telegram
+      </a>
+      <a href="mailto:pekhapavel@gmail.com" class="footer-contact-link">
+        <svg viewBox="0 0 24 24" style="width:18px;height:18px;flex-shrink:0;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        pekhapavel@gmail.com
+      </a>
+    </div>
+    
+    <div class="footer-col">
+      <div class="footer-col-title">НАВИГАЦИЯ</div>
+      <a href="#approach" class="footer-link">О нас</a>
+      <a href="#cases" class="footer-link">Кейсы</a>
+      <a href="#reviews" class="footer-link">Отзывы</a>
+      <a href="#approach" class="footer-link">Подход</a>
+    </div>
+
+    <div class="footer-col">
+      <div class="footer-col-title">Ещё</div>
+      <a href="https://t.me/pavelpekha" target="_blank" rel="noopener noreferrer" class="footer-contact-link">
+        <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor;flex-shrink:0;"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.833.94z"/></svg>
+        Telegram-канал
+      </a>
+      <a href="https://t.me/PPavel_D_Bot" target="_blank" rel="noopener noreferrer" class="footer-contact-link">
+        <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor;flex-shrink:0;"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.833.94z"/></svg>
+        Чек-листы по рекламе
+      </a>
+      <div style="height:16px"></div>
+      <a href="https://www.instagram.com/pavelpekha/" target="_blank" rel="noopener noreferrer" class="footer-contact-link">
+        <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor;flex-shrink:0;"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.5"/></svg>
+        Instagram
+      </a>
+      <a href="https://www.instagram.com/stories/highlights/17887223508295432/" target="_blank" rel="noopener noreferrer" class="footer-contact-link">
+        <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor;flex-shrink:0;"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.5"/></svg>
+        Кейсы из других ниш
+      </a>
+      <a href="https://www.instagram.com/stories/highlights/18109953571361636/" target="_blank" rel="noopener noreferrer" class="footer-contact-link">
+        <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor;flex-shrink:0;"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.5"/></svg>
+        Кейсы из других ниш ч.2
+      </a>
+    </div>
+
+  </div>
+</div>
+  <div class="footer-bottom">
+    <a href="#hero" class="logo" aria-label="Наверх">
+      <svg viewBox="0 0 40 40" fill="none"><rect x="1" y="1" width="38" height="38" rx="10" fill="#0e0e12" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/><text x="6" y="28" font-family="Inter,sans-serif" font-weight="900" font-size="22" fill="#f4f4f5">T</text><text x="19" y="28" font-family="Inter,sans-serif" font-weight="900" font-size="22" fill="#0ee0cf">C</text></svg>
+      <span>Traffic <span style="color:#0ee0cf">Craft</span></span>
+    </a>
+    <a href="#cta" class="footer-cta">Оставить заявку</a>
+    <div class="footer-legal"><a href="privacy.html" target="_blank" rel="noopener noreferrer">Политика конфиденциальности</a><a href="terms.html" target="_blank" rel="noopener noreferrer">Условия использования</a><div class="footer-copy">© <span id="footerYear"></span> Traffic Craft. Все права защищены.</div></div>
+  </div>
+</footer>
+
+<div class="floating-socials">
+  <a href="https://wa.me/77782182305?text=%D0%94%D0%BE%D0%B1%D1%80%D1%8B%D0%B9%20%D0%B4%D0%B5%D0%BD%D1%8C!%20%D0%9F%D0%B8%D1%88%D1%83%20%D0%BF%D0%BE%20%D0%BF%D0%BE%D0%B2%D0%BE%D0%B4%D1%83%20%D1%80%D0%B5%D0%BA%D0%BB%D0%B0%D0%BC%D1%8B%20%D1%81%20%D1%81%D0%B0%D0%B9%D1%82%D0%B0" target="_blank" rel="noopener noreferrer" class="social-btn wa" aria-label="WhatsApp"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg></a>
+  <a href="https://t.me/PPavel_D" target="_blank" rel="noopener noreferrer" class="social-btn tg" aria-label="Telegram"><svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.833.94z"/></svg></a>
+</div>
+
+<div class="sticky-cta" id="stickyCta"><a href="#cta">Получить разбор клиники</a></div>
+
+<script>
+document.documentElement.classList.add("js");
+const cursorDot = document.getElementById('cursorDot'), cursorOutline = document.getElementById('cursorOutline');
+if (window.matchMedia("(pointer: fine)").matches && cursorDot && cursorOutline) {
+  document.documentElement.classList.add('js-cursor');
+  let mouseX = -100, mouseY = -100, outlineX = -100, outlineY = -100, isCursorActive = false;
+  document.body.classList.add('cursor-hidden');
+  let cursorRafId = null, cursorIdle = null;
+
+  function showCursor() {
+    if (!isCursorActive) { document.body.classList.remove('cursor-hidden'); isCursorActive = true; }
+  }
+  function hideCursor() {
+    document.body.classList.add('cursor-hidden'); isCursorActive = false;
+  }
+
+  window.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX; mouseY = e.clientY;
+    cursorDot.style.transform = 'translate3d(' + mouseX + 'px,' + mouseY + 'px,0) translate(-50%,-50%)';
+    showCursor();
+    if (!cursorRafId) startCursorLoop();
+    clearTimeout(cursorIdle);
+    cursorIdle = setTimeout(() => { if (cursorRafId) { cancelAnimationFrame(cursorRafId); cursorRafId = null; } }, 150);
+  });
+
+  function startCursorLoop() {
+    const step = () => {
+      outlineX += (mouseX - outlineX) * 0.45;
+      outlineY += (mouseY - outlineY) * 0.45;
+      cursorOutline.style.transform = 'translate3d(' + outlineX + 'px,' + outlineY + 'px,0) translate(-50%,-50%)';
+      cursorRafId = requestAnimationFrame(step);
+    };
+    cursorRafId = requestAnimationFrame(step);
+  }
+  startCursorLoop();
+
+  // Hover effect on interactive elements
+  const hoverSelector = 'a, button, input, select, textarea, label, [role="button"], summary, .case, .spotlight-card, .cl-card, .btn';
+  document.querySelectorAll(hoverSelector).forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+  });
+  // Catch dynamically added elements too
+  document.addEventListener('mouseover', (e) => {
+    if (e.target.closest(hoverSelector)) document.body.classList.add('cursor-hover');
+  });
+  document.addEventListener('mouseout', (e) => {
+    if (e.target.closest(hoverSelector) && !e.relatedTarget?.closest(hoverSelector)) document.body.classList.remove('cursor-hover');
+  });
+
+  // Hide when cursor leaves window (Windows: mouseleave fires on document)
+  document.addEventListener('mouseleave', hideCursor);
+  // Show when cursor re-enters (important for Windows alt-tab)
+  document.addEventListener('mouseenter', showCursor);
+  // Hide on blur / show on focus (Windows: alt-tab, taskbar click)
+  window.addEventListener('blur', hideCursor);
+  window.addEventListener('focus', () => { /* don't auto-show — wait for mousemove */ });
+  // Hide when tab becomes hidden (Windows: switch tabs)
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) hideCursor();
+  });
+}
+
+const nav = document.getElementById('nav'), scrollProgress = document.getElementById('scrollProgress');
+let lastScrollY = window.scrollY;
+window.addEventListener('scroll', () => {
+  const currentScrollY = window.scrollY;
+  if(nav) {
+    if(currentScrollY > 60) { nav.classList.add('scrolled'); if (window.innerWidth > 960 && currentScrollY > lastScrollY && currentScrollY > 300) { nav.classList.add('nav-hidden'); } else { nav.classList.remove('nav-hidden'); } }
+    else { nav.classList.remove('scrolled', 'nav-hidden'); }
+  }
+  lastScrollY = currentScrollY;
+  if(scrollProgress) scrollProgress.style.width = (currentScrollY / (document.documentElement.scrollHeight - innerHeight) * 100) + '%';
+});
+
+const cards = document.querySelectorAll('.spotlight-card, .case'), dashWrap = document.getElementById('heroDashWrap');
+let spotlightRAF = null;
+window.addEventListener('mousemove', (e) => {
+  if(window.innerWidth > 960) {
+    if(spotlightRAF) return;
+    spotlightRAF = requestAnimationFrame(() => {
+      cards.forEach(card => {
+        const rect = card.getBoundingClientRect();
+        if(rect.top < window.innerHeight && rect.bottom > 0) {
+          card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+          card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+        }
+      });
+      if(dashWrap && window.scrollY < window.innerHeight) {
+        const rect = dashWrap.getBoundingClientRect(), cx = rect.width/2, cy = rect.height/2;
+        dashWrap.style.transform = `perspective(1000px) rotateX(${((e.clientY - rect.top - cy) / cy) * -6}deg) rotateY(${((e.clientX - rect.left - cx) / cx) * 6}deg)`;
+      }
+      spotlightRAF = null;
+    });
+  }
+});
+if(dashWrap) dashWrap.addEventListener('mouseleave', () => dashWrap.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`);
+
+const ctaForm = document.getElementById('ctaForm');
+if(ctaForm) { ctaForm.addEventListener('submit', function(e) {
+  e.preventDefault(); const btn = document.getElementById('ctaSubmitBtn');
+  const name = document.getElementById('ctaName').value.trim();
+  const phone = document.getElementById('ctaPhone').value.trim();
+  const project = document.getElementById('ctaProject').value.trim();
+  if(!name || name.length < 2 || !phone || phone.length < 5) return;
+
+  btn.textContent = 'Отправляем...'; btn.style.opacity = '0.8'; btn.style.pointerEvents = 'none';
+
+  /* --- Meta Pixel: Advanced Matching + Lead + Dedup + UTM + fbclid --- */
+  /* Ставим флаг ДО отправки Lead, чтобы FormAbandonment не стрельнул */
+  if(typeof window._tcFormSubmitted !== 'undefined') window._tcFormSubmitted = true;
+
+  const phoneClean = phone.replace(/[^0-9]/g, '');
+  const leadUserData = {};
+  if(name) leadUserData.fn = name.toLowerCase();
+  if(phoneClean.length >= 7) leadUserData.ph = phoneClean;
+
+  const eventId = 'lead_' + Date.now() + '_' + Math.random().toString(36).substr(2,9);
+  const urlParams = new URLSearchParams(window.location.search);
+  const leadData = {
+    content_name: project || 'Разбор клиники',
+    content_category: 'form_submit',
+    value: 0,
+    currency: 'KZT'
+  };
+  if(leadUserData.fn) leadData.fn = leadUserData.fn;
+  if(leadUserData.ph) leadData.ph = leadUserData.ph;
+  ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'].forEach(function(k){
+    const v = urlParams.get(k); if(v) leadData[k] = v;
+  });
+  fbq('track', 'Lead', leadData, {eventID: eventId});
+  /* --- End Meta Pixel --- */
+
+  /* --- Telegram Bot: отправляем лид в группу --- */
+  const tgToken = '8787091183:AAGYgVCX2uWjomlP_JJy7hjo0KXuhSQaklo';
+  const tgChatId = '-5190914179';
+  const tgUtm = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term']
+    .map(function(k){ var v = urlParams.get(k); return v ? k.replace('utm_','') + ': ' + v : ''; })
+    .filter(Boolean).join('\n');
+  const tgFbclid = urlParams.get('fbclid');
+  const tgText = '🔥 Новая заявка!\n\n'
+    + '👤 Имя: ' + name + '\n'
+    + '📞 Телефон: ' + phone + '\n'
+    + (project ? '🏥 Проект: ' + project + '\n' : '')
+    + (tgUtm ? '\n📊 UTM:\n' + tgUtm + '\n' : '')
+    + (tgFbclid ? '\n🔗 fbclid: ' + tgFbclid + '\n' : '')
+    + '\n📅 ' + new Date().toLocaleString('ru-RU', {timeZone:'Asia/Almaty'});
+  fetch('https://api.telegram.org/bot' + tgToken + '/sendMessage', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({chat_id: tgChatId, text: tgText, parse_mode: 'HTML'})
+  }).catch(function(){});
+  /* --- End Telegram Bot --- */
+
+  let msg = 'Добрый день! Меня зовут ' + name + '. Мой контакт: ' + phone + '.';
+  if(project) msg += ' Проект: ' + project + '.';
+  msg += ' Хочу разбор клиники.';
+
+  /* Сохраняем fbclid в WhatsApp-ссылку для восстановления атрибуции */
+  const fbclid = urlParams.get('fbclid');
+  if(fbclid) msg += ' [fbclid:' + fbclid + ']';
+  msg = encodeURIComponent(msg);
+
+  setTimeout(() => {
+    window.open('https://wa.me/77782182305?text=' + msg, '_blank', 'noopener,noreferrer');
+    setTimeout(() => {
+      btn.textContent = 'Получить разбор ↗';
+      btn.style.opacity = '1';
+      btn.style.pointerEvents = 'auto';
+    }, 3000);
+  }, 600);
+}); }
+
+const ro=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');x.target.querySelectorAll('[data-pain]').forEach((n,i)=>setTimeout(()=>n.classList.add('revealed'),200+i*350));x.target.querySelectorAll('[data-glow]').forEach(g=>setTimeout(()=>g.classList.add('glow'),600))}})},{threshold:.1,rootMargin:'0px 0px -50px 0px'});
+document.querySelectorAll('[data-reveal]').forEach(el=>ro.observe(el));
+
+const co=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible')})},{threshold:.1});
+document.querySelectorAll('.case').forEach(el=>co.observe(el));
+
+const po=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible')})},{threshold:.2,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('[data-principle]').forEach(el=>po.observe(el));
+
+const sections=document.querySelectorAll('section[id]'),navLinks=document.querySelectorAll('.nav-links a');
+const no2=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){navLinks.forEach(l=>l.classList.remove('active'));const a=document.querySelector('.nav-links a[data-section="'+x.target.id+'"]');if(a)a.classList.add('active')}})},{threshold:.2,rootMargin:'-100px 0px -50% 0px'});
+sections.forEach(s=>no2.observe(s));
+
+const heroChartLine = document.getElementById('heroChartLine');
+if(heroChartLine && typeof heroChartLine.getTotalLength === 'function') {
+  const length = heroChartLine.getTotalLength();
+  heroChartLine.style.strokeDasharray = length; heroChartLine.style.strokeDashoffset = length;
+  setTimeout(() => { heroChartLine.style.transition = 'stroke-dashoffset 2.5s cubic-bezier(0.22, 1, 0.36, 1)'; heroChartLine.style.strokeDashoffset = '0'; }, 1200);
+}
+
+const cntO=new IntersectionObserver(e=>{e.forEach(x=>{if(!x.isIntersecting)return;const el=x.target,t=+el.dataset.count;if(!t||el.dataset.done)return;el.dataset.done='1';el.textContent='0';const dur=2000,s=performance.now();const step=n=>{const p=Math.min((n-s)/dur,1),ease=1-Math.pow(1-p,3);let val=Math.round(ease*t).toLocaleString('ru-RU');if(el.dataset.plus)val+='+';el.textContent=val;if(p<1)requestAnimationFrame(step)};requestAnimationFrame(step)})},{threshold:.5});
+document.querySelectorAll('[data-count]').forEach(el=>cntO.observe(el));
+
+/* pulse animation moved to inline script near SVG */
+
+const stO=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.querySelectorAll('.review-star').forEach((s,i)=>{s.style.animationDelay=(i*.12)+'s';s.style.animationPlayState='running'})})},{threshold:.3});
+document.querySelectorAll('[data-stars]').forEach(el=>stO.observe(el));
+
+const sticky=document.getElementById('stickyCta'), footerEl=document.getElementById('footer');
+let stickyOn=false;
+const scO=new IntersectionObserver(e=>{e.forEach(x=>{
+  if(sticky && x.target===footerEl) x.isIntersecting ? sticky.classList.add('hide-zone') : sticky.classList.remove('hide-zone');
+})},{threshold:.1});
+if(footerEl) scO.observe(footerEl);
+
+const floatSocials=document.querySelector('.floating-socials');
+window.addEventListener('scroll',()=>{
+  if(sticky && scrollY>300 && !stickyOn){stickyOn=true; sticky.classList.add('show'); if(floatSocials)floatSocials.style.transform='translateY(-60px)';}
+  if(sticky && scrollY<200){sticky.classList.remove('show'); stickyOn=false; if(floatSocials)floatSocials.style.transform='';}
+});
+
+const heroEl=document.getElementById('hero');
+const animBorder=document.querySelector('.animated-border');
+const noiseEl=document.querySelector('.noise-overlay');
+if(heroEl&&animBorder){const hO=new IntersectionObserver(e=>{if(!e[0].isIntersecting){animBorder.classList.add('paused');if(noiseEl)noiseEl.style.display='none'}else{animBorder.classList.remove('paused');if(noiseEl)noiseEl.style.display=''}},{threshold:0});hO.observe(heroEl);}
+
+document.querySelectorAll('.case').forEach(c=>{c.style.cursor='pointer';c.addEventListener('click',()=>{document.getElementById('cta').scrollIntoView({behavior:'smooth'})})});
+
+document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth'})})});
+
+const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date().getFullYear();
+
+/* ===== Meta Pixel: Микроконверсии (v3) ===== */
+(function(){
+  /* Fallback: если fbq заблокирован адблокером */
+  if(typeof fbq === 'undefined'){
+    window.fbq = function(){
+      var args = [].slice.call(arguments);
+      if(args[0] === 'track' || args[0] === 'trackCustom'){
+        var ev = args[1], data = args[2] || {};
+        var img = new Image();
+        img.src = 'https://www.facebook.com/tr?id=2342435819568558&ev=' +
+          encodeURIComponent(ev) + '&cd[source]=fallback&cd[data]=' +
+          encodeURIComponent(JSON.stringify(data)) + '&noscript=1';
+      }
+    };
+  }
+
+  /* === Init Pixel (единственный вызов — здесь) === */
+  fbq('init', '2342435819568558');
+  fbq('track', 'PageView');
+
+  /* === Утилиты === */
+  function getCookie(name){
+    var m = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+    return m ? decodeURIComponent(m[1]) : null;
+  }
+  function getUtm(){
+    var p = new URLSearchParams(window.location.search), u = {};
+    ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'].forEach(function(k){
+      var v = p.get(k); if(v) u[k] = v;
+    });
+    return u;
+  }
+
+  /* === fbc / fbp cookies === */
+  var fbc = getCookie('_fbc');
+  var fbp = getCookie('_fbp');
+  /* Если fbc нет в cookie но есть fbclid в URL — формируем fbc вручную */
+  if(!fbc){
+    var fbclid = new URLSearchParams(window.location.search).get('fbclid');
+    if(fbclid){
+      fbc = 'fb.1.' + Date.now() + '.' + fbclid;
+      document.cookie = '_fbc=' + fbc + ';max-age=7776000;path=/;SameSite=Lax';
+    }
+  }
+  /* Сохраняем fbc в localStorage чтобы не терялся между сессиями */
+  try {
+    if(fbc) localStorage.setItem('_fbc', fbc);
+    else fbc = localStorage.getItem('_fbc');
+    if(fbp) localStorage.setItem('_fbp', fbp);
+    else fbp = localStorage.getItem('_fbp');
+  } catch(e){}
+
+  /* === Returning Visitor === */
+  var isReturning = false;
+  try {
+    var visitCount = parseInt(localStorage.getItem('tc_visits') || '0', 10) + 1;
+    localStorage.setItem('tc_visits', visitCount.toString());
+    localStorage.setItem('tc_last_visit', Date.now().toString());
+    isReturning = visitCount > 1;
+    if(isReturning){
+      fbq('trackCustom', 'ReturningVisitor', {visit_number: visitCount, page: 'leadgen'});
+    }
+  } catch(e){}
+
+  /* === Engagement Score (0-100) === */
+  var engagement = {scroll: 0, time: 0, formStart: false, ctaView: false, clicks: 0};
+
+  function calcScore(){
+    var s = 0;
+    s += Math.min(engagement.scroll, 100) * 0.25;         /* скролл: макс 25 */
+    s += Math.min(engagement.time / 120, 1) * 25;          /* время: макс 25 за 120с */
+    if(engagement.ctaView) s += 15;                         /* увидел форму: 15 */
+    if(engagement.formStart) s += 20;                       /* начал заполнять: 20 */
+    s += Math.min(engagement.clicks, 5) * 3;                /* клики: макс 15 за 5 кликов */
+    return Math.round(Math.min(s, 100));
+  }
+
+  /* 1. Scroll Depth — 25%, 50%, 75%, 100% */
+  var scrollFired = {};
+  window.addEventListener('scroll', function(){
+    var pct = Math.round((window.scrollY + window.innerHeight) / document.documentElement.scrollHeight * 100);
+    engagement.scroll = Math.max(engagement.scroll, pct);
+    [25,50,75,100].forEach(function(t){
+      if(pct >= t && !scrollFired[t]){
+        scrollFired[t] = true;
+        fbq('trackCustom', 'ScrollDepth', {percent: t, page: 'leadgen'});
+      }
+    });
+  }, {passive: true});
+
+  /* 2. Видимость CTA-секции */
+  var ctaSec = document.getElementById('cta');
+  if(ctaSec){
+    var ctaObs = new IntersectionObserver(function(entries){
+      if(entries[0].isIntersecting){
+        engagement.ctaView = true;
+        fbq('trackCustom', 'ViewCTA', {page: 'leadgen'});
+        ctaObs.disconnect();
+      }
+    }, {threshold: 0.3});
+    ctaObs.observe(ctaSec);
+  }
+
+  /* 3. Начало заполнения формы */
+  var formStarted = false;
+  var formHasValue = false;
+  document.querySelectorAll('#ctaForm .cta-input').forEach(function(inp){
+    inp.addEventListener('focus', function(){
+      if(!formStarted){
+        formStarted = true;
+        engagement.formStart = true;
+        fbq('trackCustom', 'FormStart', {page: 'leadgen'});
+      }
+    }, {once: true});
+    /* Отслеживаем ввод для Form Abandonment */
+    inp.addEventListener('input', function(){
+      formHasValue = true;
+    });
+  });
+
+  /* 4. Клик по мессенджеру */
+  document.querySelectorAll('a[href*="wa.me"], a[href*="t.me"]').forEach(function(link){
+    link.addEventListener('click', function(){
+      engagement.clicks++;
+      var isWA = link.href.includes('wa.me');
+      fbq('trackCustom', 'MessengerClick', {
+        messenger: isWA ? 'whatsapp' : 'telegram',
+        location: link.closest('.floating-socials') ? 'floating' : 'footer',
+        page: 'leadgen'
+      });
+    });
+  });
+
+  /* Общие клики по интерактивным элементам */
+  document.addEventListener('click', function(e){
+    if(e.target.closest('a, button, .case, .spotlight-card')) engagement.clicks++;
+  });
+
+  /* 5. Время на странице — Visibility API */
+  var activeSeconds = 0;
+  var isVisible = !document.hidden;
+  var timeFired = {};
+  var timeInterval = setInterval(function(){
+    if(isVisible) activeSeconds++;
+    engagement.time = activeSeconds;
+    [30,60,120].forEach(function(t){
+      if(activeSeconds >= t && !timeFired[t]){
+        timeFired[t] = true;
+        fbq('trackCustom', 'TimeOnPage', {seconds: t, active: true, page: 'leadgen'});
+      }
+    });
+    if(timeFired[120]) clearInterval(timeInterval);
+  }, 1000);
+  document.addEventListener('visibilitychange', function(){
+    isVisible = !document.hidden;
+  });
+
+  /* 6. Form Abandonment + Engagement Score — при уходе со страницы */
+  /* formSubmitted доступен через window._tcFormSubmitted (ставится в основном обработчике формы) */
+  window._tcFormSubmitted = false;
+  var ctaFormEl = document.getElementById('ctaForm');
+  if(ctaFormEl){
+    ctaFormEl.addEventListener('submit', function(){ window._tcFormSubmitted = true; });
+  }
+
+  function sendExitEvents(){
+    /* Form Abandonment: начал заполнять, ввёл данные, но не отправил */
+    if(formStarted && formHasValue && !window._tcFormSubmitted){
+      var abandonData = {
+        fields_touched: true,
+        time_in_form: activeSeconds,
+        page: 'leadgen'
+      };
+      if(fbc) abandonData.fbc = fbc;
+      if(fbp) abandonData.fbp = fbp;
+      fbq('trackCustom', 'FormAbandonment', abandonData);
+    }
+
+    /* Engagement Score */
+    var score = calcScore();
+    if(score > 0){
+      var scoreData = {
+        score: score,
+        scroll_max: engagement.scroll,
+        active_time: activeSeconds,
+        returning: isReturning,
+        page: 'leadgen'
+      };
+      if(fbc) scoreData.fbc = fbc;
+      if(fbp) scoreData.fbp = fbp;
+      fbq('trackCustom', 'EngagementScore', scoreData);
+    }
+  }
+
+  /* Используем оба метода — beforeunload (десктоп) и visibilitychange (мобайл) */
+  var exitSent = false;
+  function handleExit(){
+    if(exitSent) return;
+    exitSent = true;
+    sendExitEvents();
+  }
+  window.addEventListener('beforeunload', handleExit);
+  document.addEventListener('visibilitychange', function(){
+    if(document.hidden) handleExit();
+  });
+
+  /* 7. Content Consumption — какие секции реально смотрят 3+ секунд */
+  var sectionTimers = {};
+  var sectionFired = {};
+  var contentObs = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      var id = entry.target.id;
+      if(entry.isIntersecting){
+        if(!sectionTimers[id]){
+          sectionTimers[id] = setTimeout(function(){
+            if(!sectionFired[id]){
+              sectionFired[id] = true;
+              fbq('trackCustom', 'ContentView', {section: id, time_threshold: 3, page: 'leadgen'});
+            }
+          }, 3000);
+        }
+      } else {
+        if(sectionTimers[id]){
+          clearTimeout(sectionTimers[id]);
+          sectionTimers[id] = null;
+        }
+      }
+    });
+  }, {threshold: 0.4});
+  document.querySelectorAll('section[id]').forEach(function(sec){
+    contentObs.observe(sec);
+  });
+
+  /* 8. Rage Click Detection — 3+ клика за 800мс в радиусе 50px */
+  var clickLog = [];
+  document.addEventListener('click', function(e){
+    var now = Date.now();
+    clickLog.push({x: e.clientX, y: e.clientY, t: now});
+    /* Чистим старые записи */
+    clickLog = clickLog.filter(function(c){ return now - c.t < 800; });
+    if(clickLog.length >= 3){
+      /* Проверяем что все клики в радиусе 50px друг от друга */
+      var first = clickLog[0];
+      var allClose = clickLog.every(function(c){
+        return Math.abs(c.x - first.x) < 50 && Math.abs(c.y - first.y) < 50;
+      });
+      if(allClose){
+        var target = e.target.closest('[class]');
+        fbq('trackCustom', 'RageClick', {
+          element: target ? target.className.split(' ')[0] : 'unknown',
+          x: e.clientX,
+          y: e.clientY,
+          clicks: clickLog.length,
+          page: 'leadgen'
+        });
+        clickLog = []; /* Сброс чтобы не спамить */
+      }
+    }
+  });
+
+  /* 9. Exit Intent (десктоп) — курсор улетает к верхней границе */
+  var exitIntentFired = false;
+  if(window.matchMedia('(hover:hover)').matches){
+    document.addEventListener('mouseout', function(e){
+      if(exitIntentFired) return;
+      if(e.clientY <= 5 && e.relatedTarget === null){
+        exitIntentFired = true;
+        fbq('trackCustom', 'ExitIntent', {
+          active_time: activeSeconds,
+          scroll_max: engagement.scroll,
+          form_started: formStarted,
+          page: 'leadgen'
+        });
+      }
+    });
+  }
+
+})();
+/* ===== End Микроконверсии ===== */
+
+</script>
+</body>
+</html>
