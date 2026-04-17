@@ -107,7 +107,7 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 .scroll-progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg, var(--accent), var(--blue));z-index:1001;width:0%;pointer-events:none;box-shadow:0 0 12px var(--accent)}
 
 .nav{position:fixed;top:0;left:0;right:0;z-index:999;padding:22px 0;padding-top:calc(22px + env(safe-area-inset-top));transition:transform .4s cubic-bezier(.22,1,.36,1), background .4s, padding .4s, border .4s}
-.nav.scrolled{padding:14px 0;padding-top:calc(14px + env(safe-area-inset-top));background:rgba(0, 0, 0, .6);backdrop-filter:blur(24px) saturate(1.8);border-bottom:1px solid var(--brd)}
+.nav.scrolled{padding:14px 0;padding-top:calc(14px + env(safe-area-inset-top));background:rgba(0, 0, 0, .6);backdrop-filter:blur(24px) saturate(1.8)}
 .nav.nav-hidden{transform:translateY(-100%)}
 .nav-in{display:flex;align-items:center;justify-content:space-between}
 
@@ -512,7 +512,7 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
   .nav-links { display: none !important; }
   
   .nav { padding-top: 24px !important; }
-  .nav.scrolled { background: rgba(0,0,0,.85) !important; backdrop-filter: blur(24px) saturate(1.8) !important; border-bottom: 1px solid var(--brd) !important; }
+  .nav.scrolled { background: rgba(0,0,0,.85) !important; backdrop-filter: blur(24px) saturate(1.8) !important; }
   .hero{padding-top:100px; padding-bottom:60px; min-height:auto}
   
   .hero-layout{grid-template-columns:1fr;gap:48px}
