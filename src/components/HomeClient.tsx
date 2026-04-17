@@ -145,7 +145,7 @@ export default function HomeClient({ children }: HomeClientProps) {
     };
 
     if (heroDash) {
-      document.addEventListener('mousemove', handleDashParallax);
+      heroDash.addEventListener('mousemove', handleDashParallax);
       heroDash.addEventListener('mouseleave', handleDashLeave);
     }
 
@@ -392,7 +392,7 @@ export default function HomeClient({ children }: HomeClientProps) {
       window.removeEventListener('scroll', handleStickyScroll);
       window.removeEventListener('resize', handleStickyScroll);
       if (heroDash) {
-        document.removeEventListener('mousemove', handleDashParallax);
+        heroDash.removeEventListener('mousemove', handleDashParallax);
         heroDash.removeEventListener('mouseleave', handleDashLeave);
       }
       spotlightCards.forEach((card) => card.removeEventListener('mousemove', handleSpotlight));
