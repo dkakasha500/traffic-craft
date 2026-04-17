@@ -595,7 +595,7 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
   .hero-h1{font-size:28px !important}
 }
 
-@media(max-height:500px)and(orientation:landscape){
+@media (max-height: 500px) and (orientation: landscape) {
   .hero{min-height:auto;padding:60px 0 40px}
   :root{--sec-pad:60px;--sec-pad-sm:40px}
   .sticky-cta{display:none!important}
