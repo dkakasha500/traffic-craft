@@ -1,7 +1,7 @@
 User-agent: *
 Allow: /
-Disallow: /thanks
-Disallow: /404
+Disallow: /thanks.html
+Disallow: /404.html
 Disallow: /*.ico
 Disallow: /site.webmanifest
 Crawl-delay: 10
@@ -9,21 +9,21 @@ Crawl-delay: 10
 # Google
 User-agent: Googlebot
 Allow: /
-Disallow: /thanks
-Disallow: /404
+Disallow: /thanks.html
+Disallow: /404.html
 
 # Yandex
 User-agent: YandexBot
 Allow: /
-Disallow: /thanks
-Disallow: /404
+Disallow: /thanks.html
+Disallow: /404.html
 Crawl-delay: 5
 
 # Bing
 User-agent: bingbot
 Allow: /
-Disallow: /thanks
-Disallow: /404
+Disallow: /thanks.html
+Disallow: /404.html
 
 # Facebook — разрешаем для OG-превью
 User-agent: FacebookBot

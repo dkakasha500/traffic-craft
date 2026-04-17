@@ -4,13 +4,25 @@
   <!-- Главная (лидген) -->
   <url>
     <loc>https://traffic-craft.com/</loc>
-    <lastmod>2026-04-16</lastmod>
+    <lastmod>2026-04-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 
-  <!--
-    /privacy и /terms исключены: metadata robots.index = false
-  -->
+  <!-- Политика конфиденциальности -->
+  <url>
+    <loc>https://traffic-craft.com/privacy.html</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <!-- Условия использования -->
+  <url>
+    <loc>https://traffic-craft.com/terms.html</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
 
 </urlset>
