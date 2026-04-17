@@ -1191,12 +1191,7 @@ if(ctaForm) { ctaForm.addEventListener('submit', function(e) {
   msg = encodeURIComponent(msg);
 
   setTimeout(() => {
-    window.open('https://wa.me/77782182305?text=' + msg, '_blank', 'noopener,noreferrer');
-    setTimeout(() => {
-      btn.textContent = 'Получить разбор ↗';
-      btn.style.opacity = '1';
-      btn.style.pointerEvents = 'auto';
-    }, 3000);
+    window.location.href = '/thanks.html';
   }, 600);
 }); }
 
