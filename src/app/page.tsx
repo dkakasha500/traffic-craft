@@ -133,8 +133,7 @@ function ProcessStepIcon({ num }: { num: string }) {
 
 /* principles and metricAbbrs are now in siteConfig.approach */
 
-/* Chart bar heights for the dashboard */
-const chartBars = [30, 45, 35, 60, 50, 75, 65, 85, 78, 95, 88, 100];
+/* Chart bar heights removed — using SVG curve instead */
 
 /* ============================================================
    PAGE COMPONENT
@@ -275,48 +274,15 @@ export default function HomePage() {
                   {/* Header */}
                   <div
                     style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      marginBottom: 20,
+                      fontSize: 11,
+                      fontWeight: 600,
+                      color: 'var(--txt2)',
+                      textTransform: 'uppercase',
+                      letterSpacing: '2px',
+                      marginBottom: 16,
                     }}
                   >
-                    <span
-                      style={{
-                        fontSize: 12,
-                        fontWeight: 700,
-                        color: 'var(--txt2)',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.08em',
-                      }}
-                    >
-                      {siteConfig.dashboard.header}
-                    </span>
-                    <span
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: 5,
-                        fontSize: 10,
-                        fontWeight: 600,
-                        color: 'var(--green)',
-                        background: 'rgba(74, 222, 128, 0.1)',
-                        border: '1px solid rgba(74, 222, 128, 0.2)',
-                        padding: '3px 8px',
-                        borderRadius: 100,
-                      }}
-                    >
-                      <span
-                        style={{
-                          width: 5,
-                          height: 5,
-                          borderRadius: '50%',
-                          background: 'var(--green)',
-                          display: 'inline-block',
-                        }}
-                      />
-                      LIVE
-                    </span>
+                    {siteConfig.dashboard.header}
                   </div>
 
                   {/* Metrics grid (2×2) */}
@@ -331,10 +297,16 @@ export default function HomePage() {
                           style={{
                             color:
                               m.color === 'green'
-                                ? 'var(--green)'
+                                ? 'var(--accent)'
                                 : m.color === 'gold'
                                 ? 'var(--gold)'
                                 : 'var(--heading)',
+                            textShadow:
+                              m.color === 'green'
+                                ? '0 0 20px rgba(14,224,207,0.4)'
+                                : m.color === 'gold'
+                                ? '0 0 20px rgba(251,191,36,0.3)'
+                                : undefined,
                           }}
                         >
                           {m.value}
@@ -346,23 +318,33 @@ export default function HomePage() {
                     ))}
                   </div>
 
-                  {/* Chart */}
+                  {/* Chart — smooth SVG curve like original */}
                   <div className="dash-chart" aria-label="График записей">
-                    {chartBars.map((h, i) => (
-                      <div
-                        key={i}
-                        className="dash-bar"
-                        style={{ height: `${h}%` }}
-                        title={`Месяц ${i + 1}`}
-                      />
-                    ))}
+                    <svg viewBox="0 0 300 48" preserveAspectRatio="none" aria-hidden="true">
+                      <defs>
+                        <linearGradient id="cg" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="var(--accent)" stopOpacity=".4" />
+                          <stop offset="100%" stopColor="var(--accent)" stopOpacity="0" />
+                        </linearGradient>
+                        <filter id="glow">
+                          <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+                          <feMerge>
+                            <feMergeNode in="coloredBlur" />
+                            <feMergeNode in="SourceGraphic" />
+                          </feMerge>
+                        </filter>
+                      </defs>
+                      <path d="M0 40 Q30 38 60 35 T120 28 T180 18 T240 10 T300 4" stroke="var(--accent)" strokeWidth="2" fill="none" filter="url(#glow)" />
+                      <path d="M0 40 Q30 38 60 35 T120 28 T180 18 T240 10 T300 4 L300 48 L0 48Z" fill="url(#cg)" />
+                    </svg>
+                  </div>
+
+                  {/* Badge at bottom */}
+                  <div className="dash-badge">
+                    <span className="dash-badge-dot" />
+                    {' '}{siteConfig.dashboard.badge}
                   </div>
                 </div>
-              </div>
-
-              {/* Badge */}
-              <div className="dash-badge" aria-hidden="true">
-                ✓ {siteConfig.dashboard.badge}
               </div>
             </div>
           </div>

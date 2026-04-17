@@ -104,8 +104,8 @@ ol {
   max-width: 1140px;
   margin-left: auto;
   margin-right: auto;
-  padding-left: 24px;
-  padding-right: 24px;
+  padding-left: 32px;
+  padding-right: 32px;
   width: 100%;
 }
 
@@ -268,17 +268,16 @@ ol {
 }
 
 .logo-mark {
-  width: 32px;
-  height: 32px;
-  background: linear-gradient(135deg, var(--accent), #06b6d4);
-  border-radius: 8px;
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  border: none;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
-  font-weight: 800;
-  color: #000;
   flex-shrink: 0;
+  transition: transform 0.4s cubic-bezier(.22,1,.36,1), filter 0.4s;
 }
 
 .nav-links {
@@ -350,8 +349,8 @@ ol {
   color: #000;
   font-size: 13px;
   font-weight: 700;
-  padding: 9px 18px;
-  border-radius: 8px;
+  padding: 10px 24px;
+  border-radius: 60px;
   transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
   letter-spacing: 0.01em;
 }
@@ -566,7 +565,7 @@ ol {
 }
 
 .hero-h1 {
-  font-size: clamp(38px, 5.5vw, 64px);
+  font-size: clamp(32px, 4.5vw, 56px);
   font-weight: 900;
   color: var(--heading);
   letter-spacing: -0.04em;
@@ -659,7 +658,7 @@ ol {
     var(--accent) 60deg,
     transparent 120deg
   );
-  animation: spinBorder 4s linear infinite;
+  animation: spinBorder 6s linear infinite;
 }
 
 .animated-border::before {
@@ -683,22 +682,21 @@ ol {
 
 .dash-metrics {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr 1fr;
   gap: 12px;
-  margin-bottom: 20px;
 }
 
 .dash-metric {
-  background: var(--glass-bg);
+  background: rgba(255,255,255,0.02);
   border: 1px solid var(--brd);
-  border-radius: 12px;
-  padding: 14px;
+  border-radius: 14px;
+  padding: 16px 12px;
   text-align: center;
 }
 
 .dash-metric-val {
-  font-size: 22px;
-  font-weight: 800;
+  font-size: 26px;
+  font-weight: 700;
   color: var(--heading);
   letter-spacing: -0.03em;
   line-height: 1;
@@ -707,48 +705,42 @@ ol {
 
 .dash-metric-lbl {
   font-size: 11px;
-  color: var(--txt2);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  font-weight: 500;
+  color: var(--txt);
+  text-wrap: balance;
+  line-height: 1.4;
 }
 
 .dash-chart {
-  background: var(--glass-bg);
-  border: 1px solid var(--brd);
-  border-radius: 12px;
-  padding: 16px;
-  height: 120px;
-  display: flex;
-  align-items: flex-end;
-  gap: 6px;
-  overflow: hidden;
+  margin-top: 16px;
+  padding: 16px 0 0;
+  border-top: 1px solid var(--brd);
 }
 
-.dash-bar {
-  flex: 1;
-  border-radius: 4px 4px 0 0;
-  background: linear-gradient(180deg, var(--accent) 0%, var(--accent-mid) 100%);
-  min-width: 0;
-  transition: opacity 0.2s;
-}
-
-.dash-bar:hover {
-  opacity: 0.8;
+.dash-chart svg {
+  width: 100%;
+  height: 40px;
+  overflow: visible;
 }
 
 .dash-badge {
-  position: absolute;
-  top: -10px;
-  right: -10px;
-  background: linear-gradient(135deg, var(--accent), #06b6d4);
-  color: #000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
   font-size: 11px;
-  font-weight: 800;
-  padding: 6px 12px;
-  border-radius: 100px;
-  letter-spacing: 0.05em;
-  box-shadow: 0 4px 16px var(--accent-mid);
-  animation: floatOrb 3s ease-in-out infinite;
+  color: var(--accent);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.dash-badge-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+  box-shadow: 0 0 10px var(--accent);
 }
 
 /* ============================================================

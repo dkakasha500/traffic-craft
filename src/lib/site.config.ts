@@ -403,18 +403,17 @@ export const siteConfig = {
 
   /* ─── Навигация ─── */
   nav: [
+    { label: 'О нас', href: '#approach', section: 'approach' },
     { label: 'Кейсы', href: '#cases', section: 'cases' },
     { label: 'Отзывы', href: '#reviews', section: 'reviews' },
     { label: 'Подход', href: '#approach', section: 'approach' },
-    { label: 'Процесс', href: '#process', section: 'process' },
   ],
 
   /* ─── Футер навигация ─── */
   footerNav: [
+    { label: 'О нас', href: '#approach' },
     { label: 'Кейсы', href: '#cases' },
     { label: 'Отзывы', href: '#reviews' },
-    { label: 'Подход', href: '#approach' },
-    { label: 'Процесс', href: '#process' },
   ],
 } as const;
 
