@@ -286,32 +286,13 @@ export default function HomePage() {
                   </div>
 
                   {/* Metrics grid (2×2) */}
-                  <div
-                    className="dash-metrics"
-                    style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}
-                  >
+                  <div className="dash-metrics">
                     {siteConfig.dashboard.metrics.map((m) => (
                       <div key={m.label} className="dash-metric">
-                        <div
-                          className="dash-metric-val"
-                          style={{
-                            color:
-                              m.color === 'green'
-                                ? 'var(--accent)'
-                                : m.color === 'gold'
-                                ? 'var(--gold)'
-                                : 'var(--heading)',
-                            textShadow:
-                              m.color === 'green'
-                                ? '0 0 20px rgba(14,224,207,0.4)'
-                                : m.color === 'gold'
-                                ? '0 0 20px rgba(251,191,36,0.3)'
-                                : undefined,
-                          }}
-                        >
+                        <div className={`dash-metric-num${m.color ? ` ${m.color}` : ''}`}>
                           {m.value}
                         </div>
-                        <div className="dash-metric-lbl">
+                        <div className="dash-metric-label">
                           {m.label.replace('\n', ' ')}
                         </div>
                       </div>
