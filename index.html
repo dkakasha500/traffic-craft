@@ -153,8 +153,8 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 @media(hover:hover){.btn-secondary:hover{color:var(--white);background:var(--glass-hover);border-color:var(--brd2)}}
 
 .hero{min-height:100vh; min-height:100svh; display:flex;align-items:center;padding:110px 0 60px;position:relative;overflow:hidden;background:radial-gradient(ellipse at 50% -20%, rgba(14,224,207,0.1) 0%, var(--bg) 60%)}
-.hero-glow-1{position:absolute;top:0%;left:-10%;width:600px;height:600px;background:radial-gradient(circle,rgba(59,130,246,.15) 0%,transparent 60%);pointer-events:none;filter:blur(60px);animation:floatOrb 15s ease-in-out infinite alternate}
-.hero-glow-2{position:absolute;bottom:-10%;right:-5%;width:700px;height:700px;background:radial-gradient(circle,rgba(14,224,207,.1) 0%,transparent 60%);pointer-events:none;filter:blur(80px);animation:floatOrb 20s ease-in-out infinite alternate-reverse}
+.hero-glow-1{position:absolute;top:-10%;left:-20%;width:900px;height:900px;background:radial-gradient(circle,rgba(59,130,246,.12) 0%,transparent 50%);pointer-events:none;animation:floatOrb 15s ease-in-out infinite alternate;will-change:transform}
+.hero-glow-2{position:absolute;bottom:-15%;right:-15%;width:1000px;height:1000px;background:radial-gradient(circle,rgba(14,224,207,.08) 0%,transparent 50%);pointer-events:none;animation:floatOrb 20s ease-in-out infinite alternate-reverse;will-change:transform}
 @keyframes floatOrb { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(50px, 50px) scale(1.1); } }
 .hero-grid-bg {position:absolute;inset:0;background-image:linear-gradient(var(--brd) 1px, transparent 1px), linear-gradient(90deg, var(--brd) 1px, transparent 1px);background-size:60px 60px;opacity:0.3;mask-image:radial-gradient(circle at center, black, transparent 80%);-webkit-mask-image:radial-gradient(circle at center, black, transparent 80%);pointer-events:none}
 
@@ -170,7 +170,7 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 
 .hero-desc{font-size:16px;color:var(--txt);line-height:1.6;margin-bottom:24px;animation:fadeUp .8s .5s ease forwards; opacity:0}
 .hero-channels{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px;animation:fadeUp .8s .6s ease forwards; opacity:0}
-.hero-tag{padding:6px 14px 6px 12px;border-radius:100px;font-size:12px;font-weight:500;color:var(--txt);background:var(--glass-bg);border:1px solid var(--brd);display:inline-flex;align-items:center;gap:6px;backdrop-filter:blur(10px); transition:all 0.3s;}
+.hero-tag{padding:6px 14px 6px 12px;border-radius:100px;font-size:12px;font-weight:500;color:var(--txt);background:rgba(255,255,255,0.04);border:1px solid var(--brd);display:inline-flex;align-items:center;gap:6px;transition:all 0.3s;}
 .tag-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
 @media(hover:hover){.hero-tag:hover{border-color:var(--accent);color:var(--white);background:rgba(14,224,207,0.1)}}
 .hero-ctas{display:flex;gap:12px;flex-wrap:wrap;animation:fadeUp .8s .8s ease forwards; opacity:0}
@@ -181,7 +181,7 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 .animated-border::before {
   content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
   background: conic-gradient(transparent, rgba(14,224,207,0.1), var(--accent), transparent 15%);
-  animation: spinBorder 6s linear infinite; z-index: 0;
+  animation: spinBorder 6s linear infinite; z-index: 0; will-change: transform;
 }
 @keyframes spinBorder { 100% { transform: rotate(360deg); } }
 .animated-border.paused::before{animation-play-state:paused}
@@ -197,7 +197,7 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
   animation: spinBorder 6s linear infinite;
 }
 .animated-border.paused .beam-overlay::before{animation-play-state:paused}
-.hero-dash{background:rgba(10, 10, 10, 0.85);backdrop-filter:blur(30px);border-radius:22px;padding:24px;position:relative;z-index:2;}
+.hero-dash{background:rgba(10, 10, 10, 0.92);border-radius:22px;padding:24px;position:relative;z-index:2;}
 .dash-header{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--txt2);margin-bottom:16px}
 .dash-metrics{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .dash-metric{background:rgba(255,255,255,0.02);border-radius:14px;padding:16px 12px;text-align:center;border:1px solid var(--brd)}
