@@ -1216,7 +1216,7 @@ if(heroChartLine && typeof heroChartLine.getTotalLength === 'function') {
   setTimeout(() => { heroChartLine.style.transition = 'stroke-dashoffset 2.5s cubic-bezier(0.22, 1, 0.36, 1)'; heroChartLine.style.strokeDashoffset = '0'; }, 1200);
 }
 
-const cntO=new IntersectionObserver(e=>{e.forEach(x=>{if(!x.isIntersecting)return;const el=x.target,t=+el.dataset.count;if(!t||el.dataset.done)return;el.dataset.done='1';el.textContent='0';const dur=2000,s=performance.now();const step=n=>{const p=Math.min((n-s)/dur,1),ease=1-Math.pow(1-p,3);let val=Math.round(ease*t).toLocaleString('ru-RU');if(el.dataset.plus)val+='+';el.textContent=val;if(p<1)requestAnimationFrame(step)};requestAnimationFrame(step)})},{threshold:.15});
+const cntO=new IntersectionObserver(e=>{e.forEach(x=>{if(!x.isIntersecting)return;const el=x.target,t=+el.dataset.count;if(!t||el.dataset.done)return;el.dataset.done='1';el.textContent='0';const dur=2000,s=performance.now();const step=n=>{const p=Math.min((n-s)/dur,1),ease=p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;let val=Math.round(ease*t).toLocaleString('ru-RU');if(el.dataset.plus)val+='+';el.textContent=val;if(p<1)requestAnimationFrame(step)};requestAnimationFrame(step)})},{threshold:.15});
 document.querySelectorAll('[data-count]').forEach(el=>cntO.observe(el));
 
 /* pulse animation moved to inline script near SVG */
