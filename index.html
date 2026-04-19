@@ -265,6 +265,7 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 .process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
 .process-step{text-align:center;position:relative;border-radius:24px;padding:32px 20px}
 .process-step:not(:last-child)::after{content:'';position:absolute;top:56px;left:calc(50% + 40px);width:calc(100% - 80px);height:1px;border-top:1.5px dashed var(--brd)}
+.process-step:not(:first-child)::before{content:'';position:absolute;top:56px;right:calc(50% + 40px);width:calc(100% - 80px);height:1px;border-top:1.5px dashed var(--brd)}
 .process-icon{width:64px;height:64px;border-radius:18px;background:rgba(255,255,255,0.03);border:1px solid var(--brd2);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(0,0,0,0.5)}
 .process-icon svg{width:28px;height:28px;stroke:var(--accent);stroke-width:1.5;fill:none}
 .process-num{font-weight:700;font-size:16px;color:var(--accent);opacity:.6;margin-bottom:6px;letter-spacing:-0.02em}
