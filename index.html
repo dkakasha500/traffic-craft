@@ -263,7 +263,7 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 @media(hover:hover){.clinic-tag:hover{border-color:var(--brd2);background:var(--glass-hover);transform:translateX(6px)}}
 
 .process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
-.process-step{text-align:center;position:relative;border-radius:24px;padding:32px 20px}
+.process-step{text-align:center;position:relative;border-radius:24px;padding:32px 20px;overflow:visible}
 .process-step:not(:last-child)::after{content:'';position:absolute;top:56px;left:calc(50% + 40px);width:calc(100% - 56px);height:1px;border-top:1.5px dashed var(--brd)}
 .process-icon{width:64px;height:64px;border-radius:18px;background:rgba(255,255,255,0.03);border:1px solid var(--brd2);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(0,0,0,0.5)}
 .process-icon svg{width:28px;height:28px;stroke:var(--accent);stroke-width:1.5;fill:none}
