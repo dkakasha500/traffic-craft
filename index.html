@@ -193,11 +193,11 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 }
 .beam-overlay::before {
   content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-  background: conic-gradient(transparent, rgba(14,224,207,0.07), rgba(14,224,207,0.20), transparent 15%);
-  animation: spinBorder 6s linear infinite;
+  background: conic-gradient(transparent, rgba(14,224,207,0.12), rgba(14,224,207,0.35), transparent 15%);
+  animation: spinBorder 6s linear infinite; will-change: transform;
 }
 .animated-border.paused .beam-overlay::before{animation-play-state:paused}
-.hero-dash{background:rgba(10, 10, 10, 0.92);border-radius:22px;padding:24px;position:relative;z-index:2;}
+.hero-dash{background:rgba(10, 10, 10, 0.82);border-radius:22px;padding:24px;position:relative;z-index:2;}
 .dash-header{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--txt2);margin-bottom:16px}
 .dash-metrics{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .dash-metric{background:rgba(255,255,255,0.02);border-radius:14px;padding:16px 12px;text-align:center;border:1px solid var(--brd)}
