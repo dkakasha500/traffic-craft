@@ -120,19 +120,17 @@ header{
 }
 
 /* Floating particles */
-.particles{position:absolute;inset:0;overflow:hidden;z-index:3}
+.particles{position:absolute;inset:0;overflow:hidden;z-index:3;pointer-events:none}
 .particle{
-  position:absolute;border-radius:50%;
+  position:absolute;bottom:0;
+  border-radius:50%;
   background:var(--accent);
-  opacity:0;
-  animation:floatUp linear infinite;
-  will-change:transform;
 }
 @keyframes floatUp{
-  0%{opacity:0;transform:translateY(100vh) scale(0)}
-  10%{opacity:.6}
-  90%{opacity:.6}
-  100%{opacity:0;transform:translateY(-10vh) scale(1)}
+  0%{opacity:0;transform:translate3d(0,0,0) scale(0.4)}
+  8%{opacity:.7}
+  85%{opacity:.5}
+  100%{opacity:0;transform:translate3d(0,-1200px,0) scale(1)}
 }
 
 /* Content card */
@@ -484,21 +482,18 @@ if (window.matchMedia("(pointer: fine)").matches && cursorDot && cursorOutline) 
 
 /* ===== Generate particles ===== */
 (function(){
-  const c=document.getElementById('particles');
-  const isMobile=window.innerWidth<=768;
-  const count=isMobile?25:35;
-  for(let i=0;i<count;i++){
-    const p=document.createElement('div');
+  var c=document.getElementById('particles');
+  if(!c)return;
+  var isMobile=window.innerWidth<=768;
+  var count=isMobile?25:35;
+  for(var i=0;i<count;i++){
+    var p=document.createElement('div');
     p.className='particle';
-    const size=isMobile?Math.random()*6+4:Math.random()*4+2;
-    const dur=Math.random()*8+6;
-    const delay=i<(count-10)?-(Math.random()*dur):Math.random()*2;
-    p.style.cssText=`
-      width:${size}px;height:${size}px;
-      left:${Math.random()*100}%;
-      animation-duration:${dur}s;
-      animation-delay:${delay}s;
-    `;
+    var size=isMobile?Math.random()*6+4:Math.random()*4+2;
+    var dur=Math.random()*8+6;
+    var delay=i<(count-10)?-(Math.random()*dur):Math.random()*2;
+    p.style.cssText='width:'+size+'px;height:'+size+'px;left:'+Math.random()*100+'%;opacity:0;animation:floatUp '+dur+'s '+delay+'s linear infinite;';
+    if(isMobile)p.style.boxShadow='0 0 6px var(--accent)';
     c.appendChild(p);
   }
 })();
