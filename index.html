@@ -1178,19 +1178,24 @@ if(ctaForm) { ctaForm.addEventListener('submit', function(e) {
     + (tgUtm ? '\n📊 UTM:\n' + tgUtm + '\n' : '')
     + (tgFbclid ? '\n🔗 fbclid: ' + tgFbclid + '\n' : '')
     + '\n📅 ' + new Date().toLocaleString('ru-RU', {timeZone:'Asia/Almaty'});
-  const tgBody = JSON.stringify({chat_id: tgChatId, text: tgText, parse_mode: 'HTML'});
-  /* sendBeacon гарантирует доставку даже при уходе со страницы */
+  /* URLSearchParams = Content-Type: application/x-www-form-urlencoded
+     Это CORS-safelisted тип → браузер НЕ шлёт preflight OPTIONS,
+     sendBeacon доставляет запрос надёжно даже при уходе со страницы */
+  var tgParams = new URLSearchParams();
+  tgParams.append('chat_id', tgChatId);
+  tgParams.append('text', tgText);
+  tgParams.append('parse_mode', 'HTML');
   var tgSent = false;
   if(navigator.sendBeacon){
     tgSent = navigator.sendBeacon(
-      'https://api.telegram.org/bot' + tgToken + '/sendMessage',
-      new Blob([tgBody], {type: 'application/json'})
+      'https://api.telegram.org/bot' + tgToken + '/sendMessage', tgParams
     );
   }
   if(!tgSent){
     fetch('https://api.telegram.org/bot' + tgToken + '/sendMessage', {
-      method: 'POST', headers: {'Content-Type': 'application/json'},
-      body: tgBody, keepalive: true
+      method: 'POST',
+      body: tgParams.toString(),
+      keepalive: true
     }).catch(function(){});
   }
   /* --- End Telegram Bot --- */
