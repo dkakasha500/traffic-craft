@@ -1207,12 +1207,13 @@ if(ctaForm) { ctaForm.addEventListener('submit', function(e) {
       date: new Date().toISOString(),
       eventId: eventId
     });
+    /* text/plain обходит CORS preflight для Google Apps Script */
     var gsSent = false;
     if(navigator.sendBeacon){
-      gsSent = navigator.sendBeacon(gsUrl, new Blob([gsData], {type: 'application/json'}));
+      gsSent = navigator.sendBeacon(gsUrl, new Blob([gsData], {type: 'text/plain'}));
     }
     if(!gsSent){
-      fetch(gsUrl, {method:'POST', headers:{'Content-Type':'application/json'}, body:gsData, keepalive:true}).catch(function(){});
+      fetch(gsUrl, {method:'POST', body:gsData, mode:'no-cors', keepalive:true}).catch(function(){});
     }
   }
   /* --- End Google Sheets Backup --- */
