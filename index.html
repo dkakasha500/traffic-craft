@@ -1028,6 +1028,8 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 <div class="sticky-cta" id="stickyCta"><a href="#cta">Получить разбор клиники</a></div>
 
 <script>
+/* Google Sheets backup URL — вставь сюда URL из Apps Script после деплоя */
+window._TC_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbz7E1kCsb5xbmCZQVOyNB3IvKE18QwEgh1FBg9efC2rT_0WANFDROqQqUvr4hta-nVC/exec';
 document.documentElement.classList.add("js");
 const cursorDot = document.getElementById('cursorDot'), cursorOutline = document.getElementById('cursorOutline');
 if (window.matchMedia("(pointer: fine)").matches && cursorDot && cursorOutline) {
@@ -1192,6 +1194,28 @@ if(ctaForm) { ctaForm.addEventListener('submit', function(e) {
     }).catch(function(){});
   }
   /* --- End Telegram Bot --- */
+
+  /* --- Google Sheets Backup: дублируем лид в таблицу --- */
+  var gsUrl = window._TC_SHEETS_URL;
+  if(gsUrl){
+    var gsData = JSON.stringify({
+      name: name, phone: phone, project: project || '',
+      utm_source: urlParams.get('utm_source') || '',
+      utm_medium: urlParams.get('utm_medium') || '',
+      utm_campaign: urlParams.get('utm_campaign') || '',
+      fbclid: urlParams.get('fbclid') || '',
+      date: new Date().toISOString(),
+      eventId: eventId
+    });
+    var gsSent = false;
+    if(navigator.sendBeacon){
+      gsSent = navigator.sendBeacon(gsUrl, new Blob([gsData], {type: 'application/json'}));
+    }
+    if(!gsSent){
+      fetch(gsUrl, {method:'POST', headers:{'Content-Type':'application/json'}, body:gsData, keepalive:true}).catch(function(){});
+    }
+  }
+  /* --- End Google Sheets Backup --- */
 
   setTimeout(() => {
     window.location.href = '/thanks';
