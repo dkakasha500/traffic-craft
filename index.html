@@ -1163,32 +1163,35 @@ if(ctaForm) { ctaForm.addEventListener('submit', function(e) {
   /* --- Telegram Bot: отправляем лид в группу --- */
   const tgToken = '8787091183:AAGYgVCX2uWjomlP_JJy7hjo0KXuhSQaklo';
   const tgChatId = '-5190914179';
+  /* Экранируем HTML-спецсимволы чтобы Telegram не ломал сообщение */
+  function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
   const tgUtm = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term']
-    .map(function(k){ var v = urlParams.get(k); return v ? k.replace('utm_','') + ': ' + v : ''; })
+    .map(function(k){ var v = urlParams.get(k); return v ? k.replace('utm_','') + ': ' + escHtml(v) : ''; })
     .filter(Boolean).join('\n');
   const tgFbclid = urlParams.get('fbclid');
   const tgText = '🔥 Новая заявка!\n\n'
-    + '👤 Имя: ' + name + '\n'
-    + '📞 Телефон: ' + phone + '\n'
-    + (project ? '🏥 Проект: ' + project + '\n' : '')
+    + '👤 Имя: ' + escHtml(name) + '\n'
+    + '📞 Телефон: ' + escHtml(phone) + '\n'
+    + (project ? '🏥 Проект: ' + escHtml(project) + '\n' : '')
     + (tgUtm ? '\n📊 UTM:\n' + tgUtm + '\n' : '')
     + (tgFbclid ? '\n🔗 fbclid: ' + tgFbclid + '\n' : '')
     + '\n📅 ' + new Date().toLocaleString('ru-RU', {timeZone:'Asia/Almaty'});
-  fetch('https://api.telegram.org/bot' + tgToken + '/sendMessage', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({chat_id: tgChatId, text: tgText, parse_mode: 'HTML'})
-  }).catch(function(){});
+  const tgBody = JSON.stringify({chat_id: tgChatId, text: tgText, parse_mode: 'HTML'});
+  /* sendBeacon гарантирует доставку даже при уходе со страницы */
+  var tgSent = false;
+  if(navigator.sendBeacon){
+    tgSent = navigator.sendBeacon(
+      'https://api.telegram.org/bot' + tgToken + '/sendMessage',
+      new Blob([tgBody], {type: 'application/json'})
+    );
+  }
+  if(!tgSent){
+    fetch('https://api.telegram.org/bot' + tgToken + '/sendMessage', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: tgBody, keepalive: true
+    }).catch(function(){});
+  }
   /* --- End Telegram Bot --- */
-
-  let msg = 'Добрый день! Меня зовут ' + name + '. Мой контакт: ' + phone + '.';
-  if(project) msg += ' Проект: ' + project + '.';
-  msg += ' Хочу разбор клиники.';
-
-  /* Сохраняем fbclid в WhatsApp-ссылку для восстановления атрибуции */
-  const fbclid = urlParams.get('fbclid');
-  if(fbclid) msg += ' [fbclid:' + fbclid + ']';
-  msg = encodeURIComponent(msg);
 
   setTimeout(() => {
     window.location.href = '/thanks';
