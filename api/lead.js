@@ -44,6 +44,10 @@ module.exports = async (req, res) => {
   /* --- Telegram --- */
   const tgToken = process.env.TG_BOT_TOKEN;
   const tgChatId = process.env.TG_CHAT_ID;
+  if (!tgToken || !tgChatId) {
+    // Заявка не потеряется молча: причина будет видна в Vercel → Logs
+    console.error('lead: TG_BOT_TOKEN / TG_CHAT_ID не заданы в Environment Variables');
+  }
   if (tgToken && tgChatId) {
     const utmText = Object.keys(utm)
       .map((k) => k.replace('utm_', '') + ': ' + esc(utm[k]))
@@ -71,6 +75,9 @@ module.exports = async (req, res) => {
 
   /* --- Google Sheets backup --- */
   const sheetsUrl = process.env.SHEETS_URL;
+  if (!sheetsUrl) {
+    console.error('lead: SHEETS_URL не задан в Environment Variables');
+  }
   if (sheetsUrl) {
     tasks.push(
       fetch(sheetsUrl, {
