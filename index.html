@@ -1028,8 +1028,6 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 <div class="sticky-cta" id="stickyCta"><a href="#cta">Получить разбор клиники</a></div>
 
 <script>
-/* Google Sheets backup URL — вставь сюда URL из Apps Script после деплоя */
-window._TC_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbz7E1kCsb5xbmCZQVOyNB3IvKE18QwEgh1FBg9efC2rT_0WANFDROqQqUvr4hta-nVC/exec';
 document.documentElement.classList.add("js");
 const cursorDot = document.getElementById('cursorDot'), cursorOutline = document.getElementById('cursorOutline');
 if (window.matchMedia("(pointer: fine)").matches && cursorDot && cursorOutline) {
@@ -1162,66 +1160,29 @@ if(ctaForm) { ctaForm.addEventListener('submit', function(e) {
   fbq('track', 'Lead', leadData, {eventID: eventId});
   /* --- End Meta Pixel --- */
 
-  /* --- Telegram Bot: отправляем лид в группу --- */
-  const tgToken = '8787091183:AAGYgVCX2uWjomlP_JJy7hjo0KXuhSQaklo';
-  const tgChatId = '-5190914179';
-  /* Экранируем HTML-спецсимволы чтобы Telegram не ломал сообщение */
-  function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
-  const tgUtm = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term']
-    .map(function(k){ var v = urlParams.get(k); return v ? k.replace('utm_','') + ': ' + escHtml(v) : ''; })
-    .filter(Boolean).join('\n');
-  const tgFbclid = urlParams.get('fbclid');
-  const tgText = '🔥 Новая заявка!\n\n'
-    + '👤 Имя: ' + escHtml(name) + '\n'
-    + '📞 Телефон: ' + escHtml(phone) + '\n'
-    + (project ? '🏥 Проект: ' + escHtml(project) + '\n' : '')
-    + (tgUtm ? '\n📊 UTM:\n' + tgUtm + '\n' : '')
-    + (tgFbclid ? '\n🔗 fbclid: ' + tgFbclid + '\n' : '')
-    + '\n📅 ' + new Date().toLocaleString('ru-RU', {timeZone:'Asia/Almaty'});
-  /* URLSearchParams = Content-Type: application/x-www-form-urlencoded
-     Это CORS-safelisted тип → браузер НЕ шлёт preflight OPTIONS,
+  /* --- Отправка лида на свой бэкенд: /api/lead ---
+     Токен бота, chat_id и URL таблицы хранятся в env-переменных Vercel,
+     в клиентском коде их больше нет. Функция сама шлёт в Telegram и Sheets.
+     URLSearchParams = application/x-www-form-urlencoded → без preflight,
      sendBeacon доставляет запрос надёжно даже при уходе со страницы */
-  var tgParams = new URLSearchParams();
-  tgParams.append('chat_id', tgChatId);
-  tgParams.append('text', tgText);
-  tgParams.append('parse_mode', 'HTML');
-  var tgSent = false;
+  var leadParams = new URLSearchParams();
+  leadParams.append('name', name);
+  leadParams.append('phone', phone);
+  if(project) leadParams.append('project', project);
+  leadParams.append('eventId', eventId);
+  ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'].forEach(function(k){
+    var v = urlParams.get(k); if(v) leadParams.append(k, v);
+  });
+  var leadFbclid = urlParams.get('fbclid');
+  if(leadFbclid) leadParams.append('fbclid', leadFbclid);
+  var leadSent = false;
   if(navigator.sendBeacon){
-    tgSent = navigator.sendBeacon(
-      'https://api.telegram.org/bot' + tgToken + '/sendMessage', tgParams
-    );
+    leadSent = navigator.sendBeacon('/api/lead', leadParams);
   }
-  if(!tgSent){
-    fetch('https://api.telegram.org/bot' + tgToken + '/sendMessage', {
-      method: 'POST',
-      body: tgParams.toString(),
-      keepalive: true
-    }).catch(function(){});
+  if(!leadSent){
+    fetch('/api/lead', {method:'POST', body:leadParams, keepalive:true}).catch(function(){});
   }
-  /* --- End Telegram Bot --- */
-
-  /* --- Google Sheets Backup: дублируем лид в таблицу --- */
-  var gsUrl = window._TC_SHEETS_URL;
-  if(gsUrl){
-    var gsData = JSON.stringify({
-      name: name, phone: phone, project: project || '',
-      utm_source: urlParams.get('utm_source') || '',
-      utm_medium: urlParams.get('utm_medium') || '',
-      utm_campaign: urlParams.get('utm_campaign') || '',
-      fbclid: urlParams.get('fbclid') || '',
-      date: new Date().toISOString(),
-      eventId: eventId
-    });
-    /* text/plain обходит CORS preflight для Google Apps Script */
-    var gsSent = false;
-    if(navigator.sendBeacon){
-      gsSent = navigator.sendBeacon(gsUrl, new Blob([gsData], {type: 'text/plain'}));
-    }
-    if(!gsSent){
-      fetch(gsUrl, {method:'POST', body:gsData, mode:'no-cors', keepalive:true}).catch(function(){});
-    }
-  }
-  /* --- End Google Sheets Backup --- */
+  /* --- End отправка лида --- */
 
   setTimeout(() => {
     window.location.href = '/thanks';

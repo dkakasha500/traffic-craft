@@ -24,12 +24,11 @@
 //
 // 5. Скопируй URL веб-приложения
 //
-// 6. В index.html найди строку:
-//    window._TC_SHEETS_URL = '';
-//    Вставь URL между кавычек:
-//    window._TC_SHEETS_URL = 'https://script.google.com/macros/s/XXXXX/exec';
+// 6. Вставь URL в переменную окружения SHEETS_URL на Vercel:
+//    Project → Settings → Environment Variables
+//    (в клиентский код URL больше не кладём — заявки идут через /api/lead)
 //
-// 7. Закоммить и запушь index.html
+// 7. Сделай Redeploy на Vercel, чтобы функция подхватила переменную
 //
 // Готово! Все заявки будут дублироваться в таблицу.
 // ==============================================
