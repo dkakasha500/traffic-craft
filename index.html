@@ -951,6 +951,10 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
         <input type="text" id="ctaProject" class="cta-input" placeholder=" " aria-label="Что у вас за проект?">
         <label for="ctaProject" class="cta-label">Что у вас за проект?</label>
       </div>
+      <!-- Honeypot: люди это поле не видят и не заполняют, боты — заполняют -->
+      <div style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden" aria-hidden="true">
+        <input type="text" id="ctaWebsite" name="website" tabindex="-1" autocomplete="off">
+      </div>
       <button type="submit" class="btn-white" id="ctaSubmitBtn">Получить разбор ↗</button>
     </form>
     <div class="cta-proof" id="ctaProof">Бесплатный разбор — ответим в течение суток. <span class="cta-proof-dot"></span> Берём ещё 2–3 проекта</div>
@@ -1131,6 +1135,10 @@ if(ctaForm) { ctaForm.addEventListener('submit', function(e) {
   const name = document.getElementById('ctaName').value.trim();
   const phone = document.getElementById('ctaPhone').value.trim();
   const project = document.getElementById('ctaProject').value.trim();
+  /* Honeypot: заполнено скрытое поле → бот. Тихо изображаем успех,
+     не отправляя ничего и не трогая пиксель */
+  const hpEl = document.getElementById('ctaWebsite');
+  if(hpEl && hpEl.value){ window.location.href = '/thanks'; return; }
   if(!name || name.length < 2 || !phone || phone.length < 3) return;
 
   btn.textContent = 'Отправляем...'; btn.style.opacity = '0.8'; btn.style.pointerEvents = 'none';
@@ -1175,6 +1183,11 @@ if(ctaForm) { ctaForm.addEventListener('submit', function(e) {
   });
   var leadFbclid = urlParams.get('fbclid');
   if(leadFbclid) leadParams.append('fbclid', leadFbclid);
+  /* Для серверного Meta Conversions API: куки пикселя и адрес страницы */
+  function tcCookie(n){var m=document.cookie.match(new RegExp('(?:^|; )'+n+'=([^;]*)'));return m?decodeURIComponent(m[1]):''}
+  var fbpC = tcCookie('_fbp'); if(fbpC) leadParams.append('fbp', fbpC);
+  var fbcC = tcCookie('_fbc'); if(fbcC) leadParams.append('fbc', fbcC);
+  leadParams.append('pageUrl', location.href.split('#')[0].slice(0, 500));
   var leadSent = false;
   if(navigator.sendBeacon){
     leadSent = navigator.sendBeacon('/api/lead', leadParams);

@@ -10,11 +10,23 @@
 //   TG_CHAT_ID   — id группы (отрицательное число)
 //   SHEETS_URL   — URL веб-приложения Google Apps Script
 //
+// Опциональные (Meta Conversions API — серверный дубль события Lead,
+// доходит даже при блокировщиках рекламы, дедуплицируется по event_id):
+//   META_CAPI_TOKEN      — Events Manager → пиксель → Настройки →
+//                          Conversions API → «Создать токен доступа»
+//   META_PIXEL_ID        — id пикселя (по умолчанию текущий, 2342435819568558)
+//   META_TEST_EVENT_CODE — код из вкладки «Тестовые события» Events Manager;
+//                          задать на время проверки, потом удалить переменную
+//
 // В клиентский код (index.html) секреты больше не попадают.
 // ==============================================
 
+const crypto = require('crypto');
+
 const esc = (s) =>
   String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+const sha256 = (s) => crypto.createHash('sha256').update(s, 'utf8').digest('hex');
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
@@ -23,11 +35,22 @@ module.exports = async (req, res) => {
   }
 
   const b = req.body || {};
+
+  /* Honeypot: скрытое поле формы. Люди его не заполняют — если пришло
+     со значением, это бот. Отвечаем «ок», ничего никуда не отправляя. */
+  if (b.website) {
+    console.log('lead: honeypot triggered, silently dropped');
+    return res.status(200).json({ ok: true });
+  }
+
   const name = String(b.name || '').trim().slice(0, 120);
   const phone = String(b.phone || '').trim().slice(0, 120);
   const project = String(b.project || '').trim().slice(0, 500);
   const eventId = String(b.eventId || '').slice(0, 64);
   const fbclid = String(b.fbclid || '').slice(0, 256);
+  const fbp = String(b.fbp || '').slice(0, 128);
+  const fbc = String(b.fbc || '').slice(0, 512);
+  const pageUrl = String(b.pageUrl || '').slice(0, 500);
 
   const utm = {};
   ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'].forEach((k) => {
@@ -98,6 +121,63 @@ module.exports = async (req, res) => {
         signal: AbortSignal.timeout(8000),
       }).then((r) => {
         if (!r.ok) return Promise.reject(new Error('sheets: HTTP ' + r.status));
+      })
+    );
+  }
+
+  /* --- Meta Conversions API: серверный дубль Lead --- */
+  // Тот же event_id, что у клиентского fbq('track','Lead') → Meta
+  // дедуплицирует: событие засчитывается один раз, но серверное доходит
+  // даже когда пиксель порезан блокировщиком рекламы или Safari ITP
+  const capiToken = process.env.META_CAPI_TOKEN;
+  const pixelId = process.env.META_PIXEL_ID || '2342435819568558';
+  if (capiToken && eventId) {
+    let ph = phone.replace(/\D/g, '');
+    if (ph.length === 11 && ph[0] === '8') ph = '7' + ph.slice(1); // 8xxx → 7xxx (KZ/RU)
+
+    const userData = {};
+    if (ph.length >= 7) userData.ph = [sha256(ph)];
+    if (name) userData.fn = [sha256(name.toLowerCase())];
+    const ua = String(req.headers['user-agent'] || '').slice(0, 512);
+    if (ua) userData.client_user_agent = ua;
+    const ip = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim();
+    if (ip) userData.client_ip_address = ip;
+    if (fbp) userData.fbp = fbp;
+    const fbcVal = fbc || (fbclid ? 'fb.1.' + Date.now() + '.' + fbclid : '');
+    if (fbcVal) userData.fbc = fbcVal;
+
+    const event = {
+      event_name: 'Lead',
+      event_time: Math.floor(Date.now() / 1000),
+      event_id: eventId,
+      action_source: 'website',
+      user_data: userData,
+      custom_data: Object.assign(
+        {
+          content_name: project || 'Разбор клиники',
+          content_category: 'form_submit',
+          value: 0,
+          currency: 'KZT',
+        },
+        utm
+      ),
+    };
+    if (pageUrl) event.event_source_url = pageUrl;
+
+    const capiBody = { data: [event] };
+    if (process.env.META_TEST_EVENT_CODE) capiBody.test_event_code = process.env.META_TEST_EVENT_CODE;
+
+    tasks.push(
+      fetch(
+        'https://graph.facebook.com/v22.0/' + pixelId + '/events?access_token=' + encodeURIComponent(capiToken),
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(capiBody),
+          signal: AbortSignal.timeout(8000),
+        }
+      ).then((r) => {
+        if (!r.ok) return r.text().then((t) => Promise.reject(new Error('meta_capi: ' + t.slice(0, 200))));
       })
     );
   }
