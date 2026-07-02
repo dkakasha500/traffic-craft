@@ -9,6 +9,9 @@
 //   TG_BOT_TOKEN — токен бота из @BotFather
 //   TG_CHAT_ID   — id группы (отрицательное число)
 //   SHEETS_URL   — URL веб-приложения Google Apps Script
+//   SHEETS_SECRET — (опц.) общий секрет с Apps Script: защищает таблицу
+//                   от мусорных строк, если URL скрипта утечёт (тот же
+//                   секрет прописать в SECRET внутри google-sheets-script.js)
 //
 // Опциональные (Meta Conversions API — серверный дубль события Lead,
 // доходит даже при блокировщиках рекламы, дедуплицируется по event_id):
@@ -27,6 +30,22 @@ const esc = (s) =>
   String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 const sha256 = (s) => crypto.createHash('sha256').update(s, 'utf8').digest('hex');
+
+/* Простейший анти-флуд: не больше RATE_LIMIT заявок с одного IP за окно.
+   Память живёт в пределах тёплого инстанса Vercel — от распределённой
+   атаки не спасёт, но конвейерный спам с одного адреса режет. */
+const RATE_LIMIT = 5;
+const RATE_WINDOW_MS = 10 * 60 * 1000;
+const rateMap = new Map(); // ip -> [timestamps]
+function rateLimited(ip) {
+  if (!ip) return false;
+  const now = Date.now();
+  const arr = (rateMap.get(ip) || []).filter((t) => now - t < RATE_WINDOW_MS);
+  arr.push(now);
+  if (rateMap.size > 5000) rateMap.clear(); // защита памяти инстанса
+  rateMap.set(ip, arr);
+  return arr.length > RATE_LIMIT;
+}
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
@@ -60,6 +79,13 @@ module.exports = async (req, res) => {
   // Та же валидация, что и на клиенте
   if (name.length < 2 || phone.length < 3) {
     return res.status(400).json({ ok: false, error: 'invalid_payload' });
+  }
+
+  const clientIp = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim();
+  if (rateLimited(clientIp)) {
+    // Тихий дроп: спамеру отвечаем «ок», в логах видно реальную причину
+    console.log('lead: rate limit exceeded for ' + clientIp + ', silently dropped');
+    return res.status(200).json({ ok: true });
   }
 
   const tasks = [];
@@ -107,6 +133,7 @@ module.exports = async (req, res) => {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain' }, // GAS читает postData.contents; CORS сервер-серверу не мешает
         body: JSON.stringify({
+          secret: process.env.SHEETS_SECRET || '',
           name,
           phone,
           project,
@@ -140,8 +167,7 @@ module.exports = async (req, res) => {
     if (name) userData.fn = [sha256(name.toLowerCase())];
     const ua = String(req.headers['user-agent'] || '').slice(0, 512);
     if (ua) userData.client_user_agent = ua;
-    const ip = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim();
-    if (ip) userData.client_ip_address = ip;
+    if (clientIp) userData.client_ip_address = clientIp;
     if (fbp) userData.fbp = fbp;
     const fbcVal = fbc || (fbclid ? 'fb.1.' + Date.now() + '.' + fbclid : '');
     if (fbcVal) userData.fbc = fbcVal;
@@ -169,7 +195,7 @@ module.exports = async (req, res) => {
 
     tasks.push(
       fetch(
-        'https://graph.facebook.com/v22.0/' + pixelId + '/events?access_token=' + encodeURIComponent(capiToken),
+        'https://graph.facebook.com/v25.0/' + pixelId + '/events?access_token=' + encodeURIComponent(capiToken),
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

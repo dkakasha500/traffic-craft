@@ -22,6 +22,11 @@
 //    - Доступ: Все
 //    - Нажми "Развернуть"
 //
+// 4а. (Рекомендуется) Задай SECRET ниже — любая случайная строка —
+//     и продублируй её в переменную SHEETS_SECRET на Vercel.
+//     Тогда писать в таблицу сможет только наша функция /api/lead,
+//     даже если URL скрипта где-то засветится.
+//
 // 5. Скопируй URL веб-приложения
 //
 // 6. Вставь URL в переменную окружения SHEETS_URL на Vercel:
@@ -33,9 +38,19 @@
 // Готово! Все заявки будут дублироваться в таблицу.
 // ==============================================
 
+// Общий секрет с /api/lead (переменная SHEETS_SECRET на Vercel).
+// Пустая строка = проверка выключена (совместимо со старым поведением).
+var SECRET = '';
+
 function doPost(e) {
   try {
     var data = JSON.parse(e.postData.contents);
+
+    if (SECRET && data.secret !== SECRET) {
+      return ContentService
+        .createTextOutput(JSON.stringify({status: 'forbidden'}))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
 
     var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
 
