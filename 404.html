@@ -555,22 +555,8 @@ var ec=document.querySelector('.error-code');if(ec) ec.addEventListener('click',
 <script>document.querySelectorAll(".js-year").forEach(el=>el.textContent=new Date().getFullYear())</script>
 
 <script>
-/* ===== Meta Pixel: Микроконверсии (404) ===== */
+/* ===== Meta Pixel: захват fbc/fbp для CAPI ===== */
 (function(){
-  if(typeof fbq === 'undefined'){
-    window.fbq = function(){
-      var args = [].slice.call(arguments);
-      if(args[0] === 'track' || args[0] === 'trackCustom'){
-        var ev = args[1], data = args[2] || {};
-        var img = new Image();
-        img.src = 'https://www.facebook.com/tr?id=2342435819568558&ev=' +
-          encodeURIComponent(ev) + '&cd[source]=fallback&cd[data]=' +
-          encodeURIComponent(JSON.stringify(data)) + '&noscript=1';
-      }
-    };
-  }
-
-  /* fbc / fbp cookies */
   function getCookie(name){
     var m = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
     return m ? decodeURIComponent(m[1]) : null;
@@ -587,27 +573,6 @@ var ec=document.querySelector('.error-code');if(ec) ec.addEventListener('click',
     if(fbc) localStorage.setItem('_fbc', fbc); else fbc = localStorage.getItem('_fbc');
     if(fbp) localStorage.setItem('_fbp', fbp); else fbp = localStorage.getItem('_fbp');
   } catch(e){}
-
-  /* Returning Visitor */
-  try {
-    var visitCount = parseInt(localStorage.getItem('tc_visits') || '0', 10) + 1;
-    localStorage.setItem('tc_visits', visitCount.toString());
-    if(visitCount > 1) fbq('trackCustom', 'ReturningVisitor', {visit_number: visitCount, page: '404'});
-  } catch(e){}
-
-  /* Время на странице с Visibility API */
-  var activeSeconds = 0, isVisible = !document.hidden, timeFired = {};
-  var ti = setInterval(function(){
-    if(isVisible) activeSeconds++;
-    [30,60].forEach(function(t){
-      if(activeSeconds >= t && !timeFired[t]){
-        timeFired[t] = true;
-        fbq('trackCustom', 'TimeOnPage', {seconds: t, active: true, page: '404'});
-      }
-    });
-    if(timeFired[60]) clearInterval(ti);
-  }, 1000);
-  document.addEventListener('visibilitychange', function(){ isVisible = !document.hidden; });
 })();
 </script>
 </body>

@@ -16,7 +16,10 @@ s.parentNode.insertBefore(t,s)}(window, document,'script',
 var w=function(){var a=[].slice.call(arguments);if((a[0]==='track'||a[0]==='trackCustom')&&(!(a[3]&&typeof a[3]==='object')||!a[3].eventID)){a[3]=Object.assign({},(a[3]&&typeof a[3]==='object')?a[3]:null,{eventID:E(a[1])});}
 w.callMethod?w.callMethod.apply(w,a):w.queue.push(a);};
 w.push=w;w.loaded=f?f.loaded:!0;w.version=f?f.version:'2.0';w.queue=(f&&f.queue)?f.queue:[];window.fbq=window._fbq=w;}();
-/* init вызывается ниже в микроконверсиях — здесь только загрузка SDK */
+/* init + PageView сразу в шапке (единый источник pixel id) */
+window.TC_PIXEL='2342435819568558';
+fbq('init', TC_PIXEL);
+fbq('track', 'PageView');
 </script>
 <noscript><img height="1" width="1" style="display:none"
 src="https://www.facebook.com/tr?id=2342435819568558&ev=PageView&noscript=1"
@@ -1148,15 +1151,7 @@ if(ctaForm) { ctaForm.addEventListener('submit', function(e) {
 
   btn.textContent = 'Отправляем...'; btn.style.opacity = '0.8'; btn.style.pointerEvents = 'none';
 
-  /* --- Meta Pixel: Advanced Matching + Lead + Dedup + UTM + fbclid --- */
-  /* Ставим флаг ДО отправки Lead, чтобы FormAbandonment не стрельнул */
-  if(typeof window._tcFormSubmitted !== 'undefined') window._tcFormSubmitted = true;
-
-  const phoneClean = phone.replace(/[^0-9]/g, '');
-  const leadUserData = {};
-  if(name) leadUserData.fn = name.toLowerCase();
-  if(phoneClean.length >= 7) leadUserData.ph = phoneClean;
-
+  /* --- Meta Pixel: Lead + Dedup + UTM + fbclid (без PII) --- */
   const eventId = 'lead_' + Date.now() + '_' + Math.random().toString(36).substr(2,9);
   const urlParams = new URLSearchParams(window.location.search);
   const leadData = {
@@ -1165,8 +1160,8 @@ if(ctaForm) { ctaForm.addEventListener('submit', function(e) {
     value: 0,
     currency: 'KZT'
   };
-  if(leadUserData.fn) leadData.fn = leadUserData.fn;
-  if(leadUserData.ph) leadData.ph = leadUserData.ph;
+  /* PII (имя/телефон) в пиксель НЕ кладем: они уходят хэшированными через
+     серверный CAPI (api/lead.js) с тем же eventID. В браузере - только не-PII. */
   ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'].forEach(function(k){
     const v = urlParams.get(k); if(v) leadData[k] = v;
   });
@@ -1259,43 +1254,15 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click'
 
 const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date().getFullYear();
 
-/* ===== Meta Pixel: Микроконверсии (v3) ===== */
+/* ===== Meta Pixel: сигналы воронки (fbc/fbp, FormStart, MessengerClick) ===== */
 (function(){
-  /* Fallback: если fbq заблокирован адблокером */
-  if(typeof fbq === 'undefined'){
-    window.fbq = function(){
-      var args = [].slice.call(arguments);
-      if(args[0] === 'track' || args[0] === 'trackCustom'){
-        var ev = args[1], data = args[2] || {};
-        var img = new Image();
-        img.src = 'https://www.facebook.com/tr?id=2342435819568558&ev=' +
-          encodeURIComponent(ev) + '&cd[source]=fallback&cd[data]=' +
-          encodeURIComponent(JSON.stringify(data)) + '&noscript=1';
-      }
-    };
-  }
-
-  /* === Init Pixel (единственный вызов — здесь) === */
-  fbq('init', '2342435819568558');
-  fbq('track', 'PageView');
-
-  /* === Утилиты === */
   function getCookie(name){
     var m = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
     return m ? decodeURIComponent(m[1]) : null;
   }
-  function getUtm(){
-    var p = new URLSearchParams(window.location.search), u = {};
-    ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'].forEach(function(k){
-      var v = p.get(k); if(v) u[k] = v;
-    });
-    return u;
-  }
-
-  /* === fbc / fbp cookies === */
-  var fbc = getCookie('_fbc');
-  var fbp = getCookie('_fbp');
-  /* Если fbc нет в cookie но есть fbclid в URL — формируем fbc вручную */
+  /* fbc/fbp: ловим клик из рекламы (fbclid -> _fbc) и мируем в localStorage,
+     чтобы серверный CAPI получил их при отправке заявки. */
+  var fbc = getCookie('_fbc'), fbp = getCookie('_fbp');
   if(!fbc){
     var fbclid = new URLSearchParams(window.location.search).get('fbclid');
     if(fbclid){
@@ -1303,241 +1270,32 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
       document.cookie = '_fbc=' + fbc + ';max-age=7776000;path=/;SameSite=Lax';
     }
   }
-  /* Сохраняем fbc в localStorage чтобы не терялся между сессиями */
   try {
-    if(fbc) localStorage.setItem('_fbc', fbc);
-    else fbc = localStorage.getItem('_fbc');
-    if(fbp) localStorage.setItem('_fbp', fbp);
-    else fbp = localStorage.getItem('_fbp');
+    if(fbc) localStorage.setItem('_fbc', fbc); else fbc = localStorage.getItem('_fbc');
+    if(fbp) localStorage.setItem('_fbp', fbp); else fbp = localStorage.getItem('_fbp');
   } catch(e){}
 
-  /* === Returning Visitor === */
-  var isReturning = false;
-  try {
-    var visitCount = parseInt(localStorage.getItem('tc_visits') || '0', 10) + 1;
-    localStorage.setItem('tc_visits', visitCount.toString());
-    localStorage.setItem('tc_last_visit', Date.now().toString());
-    isReturning = visitCount > 1;
-    if(isReturning){
-      fbq('trackCustom', 'ReturningVisitor', {visit_number: visitCount, page: 'leadgen'});
-    }
-  } catch(e){}
-
-  /* === Engagement Score (0-100) === */
-  var engagement = {scroll: 0, time: 0, formStart: false, ctaView: false, clicks: 0};
-
-  function calcScore(){
-    var s = 0;
-    s += Math.min(engagement.scroll, 100) * 0.25;         /* скролл: макс 25 */
-    s += Math.min(engagement.time / 120, 1) * 25;          /* время: макс 25 за 120с */
-    if(engagement.ctaView) s += 15;                         /* увидел форму: 15 */
-    if(engagement.formStart) s += 20;                       /* начал заполнять: 20 */
-    s += Math.min(engagement.clicks, 5) * 3;                /* клики: макс 15 за 5 кликов */
-    return Math.round(Math.min(s, 100));
-  }
-
-  /* 1. Scroll Depth — 25%, 50%, 75%, 100% */
-  var scrollFired = {};
-  window.addEventListener('scroll', function(){
-    var pct = Math.round((window.scrollY + window.innerHeight) / document.documentElement.scrollHeight * 100);
-    engagement.scroll = Math.max(engagement.scroll, pct);
-    [25,50,75,100].forEach(function(t){
-      if(pct >= t && !scrollFired[t]){
-        scrollFired[t] = true;
-        fbq('trackCustom', 'ScrollDepth', {percent: t, page: 'leadgen'});
-      }
-    });
-  }, {passive: true});
-
-  /* 2. Видимость CTA-секции */
-  var ctaSec = document.getElementById('cta');
-  if(ctaSec){
-    var ctaObs = new IntersectionObserver(function(entries){
-      if(entries[0].isIntersecting){
-        engagement.ctaView = true;
-        fbq('trackCustom', 'ViewCTA', {page: 'leadgen'});
-        ctaObs.disconnect();
-      }
-    }, {threshold: 0.3});
-    ctaObs.observe(ctaSec);
-  }
-
-  /* 3. Начало заполнения формы */
+  /* FormStart: человек начал заполнять форму. Теплая аудитория ретаргета -
+     тех, кто начал, но не оставил заявку, догоняем через FormStart AND NOT Lead. */
   var formStarted = false;
-  var formHasValue = false;
   document.querySelectorAll('#ctaForm .cta-input').forEach(function(inp){
     inp.addEventListener('focus', function(){
-      if(!formStarted){
-        formStarted = true;
-        engagement.formStart = true;
-        fbq('trackCustom', 'FormStart', {page: 'leadgen'});
-      }
+      if(!formStarted){ formStarted = true; fbq('trackCustom', 'FormStart', {page: 'leadgen'}); }
     }, {once: true});
-    /* Отслеживаем ввод для Form Abandonment */
-    inp.addEventListener('input', function(){
-      formHasValue = true;
-    });
   });
 
-  /* 4. Клик по мессенджеру */
+  /* MessengerClick: клик в WhatsApp/Telegram - намерение связаться. */
   document.querySelectorAll('a[href*="wa.me"], a[href*="t.me"]').forEach(function(link){
     link.addEventListener('click', function(){
-      engagement.clicks++;
-      var isWA = link.href.includes('wa.me');
       fbq('trackCustom', 'MessengerClick', {
-        messenger: isWA ? 'whatsapp' : 'telegram',
+        messenger: link.href.includes('wa.me') ? 'whatsapp' : 'telegram',
         location: link.closest('.floating-socials') ? 'floating' : 'footer',
         page: 'leadgen'
       });
     });
   });
-
-  /* Общие клики по интерактивным элементам */
-  document.addEventListener('click', function(e){
-    if(e.target.closest('a, button, .case, .spotlight-card')) engagement.clicks++;
-  });
-
-  /* 5. Время на странице — Visibility API */
-  var activeSeconds = 0;
-  var isVisible = !document.hidden;
-  var timeFired = {};
-  var timeInterval = setInterval(function(){
-    if(isVisible) activeSeconds++;
-    engagement.time = activeSeconds;
-    [30,60,120].forEach(function(t){
-      if(activeSeconds >= t && !timeFired[t]){
-        timeFired[t] = true;
-        fbq('trackCustom', 'TimeOnPage', {seconds: t, active: true, page: 'leadgen'});
-      }
-    });
-    if(timeFired[120]) clearInterval(timeInterval);
-  }, 1000);
-  document.addEventListener('visibilitychange', function(){
-    isVisible = !document.hidden;
-  });
-
-  /* 6. Form Abandonment + Engagement Score — при уходе со страницы */
-  /* formSubmitted доступен через window._tcFormSubmitted (ставится в основном обработчике формы) */
-  window._tcFormSubmitted = false;
-  var ctaFormEl = document.getElementById('ctaForm');
-  if(ctaFormEl){
-    ctaFormEl.addEventListener('submit', function(){ window._tcFormSubmitted = true; });
-  }
-
-  function sendExitEvents(){
-    /* Form Abandonment: начал заполнять, ввёл данные, но не отправил */
-    if(formStarted && formHasValue && !window._tcFormSubmitted){
-      var abandonData = {
-        fields_touched: true,
-        time_in_form: activeSeconds,
-        page: 'leadgen'
-      };
-      if(fbc) abandonData.fbc = fbc;
-      if(fbp) abandonData.fbp = fbp;
-      fbq('trackCustom', 'FormAbandonment', abandonData);
-    }
-
-    /* Engagement Score */
-    var score = calcScore();
-    if(score > 0){
-      var scoreData = {
-        score: score,
-        scroll_max: engagement.scroll,
-        active_time: activeSeconds,
-        returning: isReturning,
-        page: 'leadgen'
-      };
-      if(fbc) scoreData.fbc = fbc;
-      if(fbp) scoreData.fbp = fbp;
-      fbq('trackCustom', 'EngagementScore', scoreData);
-    }
-  }
-
-  /* Используем оба метода — beforeunload (десктоп) и visibilitychange (мобайл) */
-  var exitSent = false;
-  function handleExit(){
-    if(exitSent) return;
-    exitSent = true;
-    sendExitEvents();
-  }
-  window.addEventListener('beforeunload', handleExit);
-  document.addEventListener('visibilitychange', function(){
-    if(document.hidden) handleExit();
-  });
-
-  /* 7. Content Consumption — какие секции реально смотрят 3+ секунд */
-  var sectionTimers = {};
-  var sectionFired = {};
-  var contentObs = new IntersectionObserver(function(entries){
-    entries.forEach(function(entry){
-      var id = entry.target.id;
-      if(entry.isIntersecting){
-        if(!sectionTimers[id]){
-          sectionTimers[id] = setTimeout(function(){
-            if(!sectionFired[id]){
-              sectionFired[id] = true;
-              fbq('trackCustom', 'ContentView', {section: id, time_threshold: 3, page: 'leadgen'});
-            }
-          }, 3000);
-        }
-      } else {
-        if(sectionTimers[id]){
-          clearTimeout(sectionTimers[id]);
-          sectionTimers[id] = null;
-        }
-      }
-    });
-  }, {threshold: 0.4});
-  document.querySelectorAll('section[id]').forEach(function(sec){
-    contentObs.observe(sec);
-  });
-
-  /* 8. Rage Click Detection — 3+ клика за 800мс в радиусе 50px */
-  var clickLog = [];
-  document.addEventListener('click', function(e){
-    var now = Date.now();
-    clickLog.push({x: e.clientX, y: e.clientY, t: now});
-    /* Чистим старые записи */
-    clickLog = clickLog.filter(function(c){ return now - c.t < 800; });
-    if(clickLog.length >= 3){
-      /* Проверяем что все клики в радиусе 50px друг от друга */
-      var first = clickLog[0];
-      var allClose = clickLog.every(function(c){
-        return Math.abs(c.x - first.x) < 50 && Math.abs(c.y - first.y) < 50;
-      });
-      if(allClose){
-        var target = e.target.closest('[class]');
-        fbq('trackCustom', 'RageClick', {
-          element: target ? target.className.split(' ')[0] : 'unknown',
-          x: e.clientX,
-          y: e.clientY,
-          clicks: clickLog.length,
-          page: 'leadgen'
-        });
-        clickLog = []; /* Сброс чтобы не спамить */
-      }
-    }
-  });
-
-  /* 9. Exit Intent (десктоп) — курсор улетает к верхней границе */
-  var exitIntentFired = false;
-  if(window.matchMedia('(hover:hover)').matches){
-    document.addEventListener('mouseout', function(e){
-      if(exitIntentFired) return;
-      if(e.clientY <= 5 && e.relatedTarget === null){
-        exitIntentFired = true;
-        fbq('trackCustom', 'ExitIntent', {
-          active_time: activeSeconds,
-          scroll_max: engagement.scroll,
-          form_started: formStarted,
-          page: 'leadgen'
-        });
-      }
-    });
-  }
-
 })();
-/* ===== End Микроконверсии ===== */
+/* ===== End сигналы воронки ===== */
 
 </script>
 </body>
