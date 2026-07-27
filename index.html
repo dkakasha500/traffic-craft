@@ -11,7 +11,8 @@ n.queue=[];t=b.createElement(e);t.async=!0;
 t.src=v;s=b.getElementsByTagName(e)[0];
 s.parentNode.insertBefore(t,s)}(window, document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
-/* Дедупликация: каждому событию — уникальный eventID (браузер+сервер схлопываются) */
+/* Дедупликация: каждому событию — уникальный eventID, чтобы браузерная и
+   серверная копии схлопывались (у Lead свой eventID — не трогаем). */
 !function(){var f=window.fbq;function E(n){return String(n||'ev')+'.'+Date.now()+'.'+Math.random().toString(36).slice(2,10);}
 var w=function(){var a=[].slice.call(arguments);if((a[0]==='track'||a[0]==='trackCustom')&&(!(a[3]&&typeof a[3]==='object')||!a[3].eventID)){a[3]=Object.assign({},(a[3]&&typeof a[3]==='object')?a[3]:null,{eventID:E(a[1])});}
 w.callMethod?w.callMethod.apply(w,a):w.queue.push(a);};

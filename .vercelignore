@@ -1,0 +1,12 @@
+# внутренние документы и тесты - не для публичного сайта
+*.md
+calc.test.js
+calc.numbers.test.js
+calc.calibration.js
+calc.screenshot.js
+calc.screenshot-audit.js
+calc.screenshot-states.js
+faq-preview.html
+google-sheets-script.js
+insta/
+.env.local

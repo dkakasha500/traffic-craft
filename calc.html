@@ -1,0 +1,1711 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+/* Дедупликация: каждому событию - уникальный eventID (браузер+сервер схлопываются) */
+!function(){var f=window.fbq;function E(n){return String(n||'ev')+'.'+Date.now()+'.'+Math.random().toString(36).slice(2,10);}
+var w=function(){var a=[].slice.call(arguments);if((a[0]==='track'||a[0]==='trackCustom')&&(!(a[3]&&typeof a[3]==='object')||!a[3].eventID)){a[3]=Object.assign({},(a[3]&&typeof a[3]==='object')?a[3]:null,{eventID:E(a[1])});}
+w.callMethod?w.callMethod.apply(w,a):w.queue.push(a);};
+w.push=w;w.loaded=f?f.loaded:!0;w.version=f?f.version:'2.0';w.queue=(f&&f.queue)?f.queue:[];window.fbq=window._fbq=w;}();
+fbq('init', '2342435819568558');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=2342435819568558&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>Калькулятор заявок и продаж - Traffic Craft</title>
+<meta name="description" content="Посчитайте, сколько заявок, записей и продаж даст реклама вашей клиники: страна, ниша, направления, бюджет.">
+<meta property="og:title" content="Калькулятор заявок и продаж для клиник">
+<meta property="og:description" content="Прогноз на цифрах реальных кампаний: заявки → записи → продажи → выручка. Израиль, ОАЭ, Испания, Турция, Казахстан.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://traffic-craft.com/calc">
+<meta property="og:image" content="https://traffic-craft.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Калькулятор заявок и продаж для клиник">
+<meta name="twitter:description" content="Прогноз на цифрах реальных кампаний: заявки → записи → продажи → выручка.">
+<meta name="twitter:image" content="https://traffic-craft.com/og-image.png">
+<meta name="robots" content="index, follow">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<!-- Шрифты не подключаем извне: опираемся на системный стек (San Francisco / Segoe UI / Roboto),
+     Inter используется, только если уже установлен у пользователя. Файл самодостаточный. -->
+
+<style>
+/* ===== база ===== */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#000000; --bg2:#030303; --white:#ffffff; --dark:#000000;
+  --accent:#0ee0cf; --accent-soft:rgba(14,224,207,.15); --accent-mid:rgba(14,224,207,.3);
+  --blue:#3b82f6; --gold:#fbbf24; --green:#4ade80;
+  --txt:#a1a1aa; --txt2:#8a8a93; --txt3:#71717a; --heading:#f4f4f5;
+  --brd:rgba(255,255,255,.08); --brd2:rgba(255,255,255,.15);
+  --glass:rgba(255,255,255,.02);
+}
+html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%;touch-action:manipulation}
+body{font-family:-apple-system,BlinkMacSystemFont,'Inter',system-ui,sans-serif;background:var(--bg);color:var(--txt);line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden}
+/* фоновые слои как на главной: черный фон + свечения-орбы по углам + сетка, центр чистый */
+.bg-grid{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(var(--brd) 1px, transparent 1px), linear-gradient(90deg, var(--brd) 1px, transparent 1px);background-size:60px 60px;opacity:.25;mask-image:radial-gradient(circle at 50% 30%, black, transparent 75%);-webkit-mask-image:radial-gradient(circle at 50% 30%, black, transparent 75%)}
+.bg-orb1{position:fixed;top:-12%;left:-18%;width:820px;height:820px;z-index:0;pointer-events:none;background:radial-gradient(circle,rgba(59,130,246,.07) 0%,transparent 55%);animation:floatOrb 16s ease-in-out infinite alternate;will-change:transform}
+.bg-orb2{position:fixed;bottom:-18%;right:-16%;width:900px;height:900px;z-index:0;pointer-events:none;background:radial-gradient(circle,rgba(14,224,207,.05) 0%,transparent 55%);animation:floatOrb 22s ease-in-out infinite alternate-reverse;will-change:transform}
+@keyframes floatOrb{0%{transform:translate(0,0)}100%{transform:translate(40px,40px)}}
+.ctn,nav,main,header,footer,.sticky-res{position:relative;z-index:1}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit}
+.ctn{max-width:1140px;margin:0 auto;padding:0 20px}
+/* мобайл: чуть больше воздуха по бокам, контент не липнет к краям экрана */
+@media(max-width:760px){.ctn{padding:0 24px}}
+
+/* ===== профили быстрого старта ===== */
+.presets{margin-top:24px}
+.presets-label{font-size:13.5px;color:var(--txt);margin-bottom:11px;font-weight:500}
+.presets-row{display:flex;gap:8px;flex-wrap:wrap}
+.preset-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:14px;font-size:14px;font-weight:600;color:var(--txt);background:var(--bg2);border:1px solid var(--brd);cursor:pointer;transition:all .25s;font-family:inherit}
+@media(hover:hover){.preset-btn:hover{border-color:var(--accent-mid);color:var(--white);transform:translateY(-1px)}}
+.preset-btn:active{transform:scale(.98)}
+.preset-btn .pdot{width:8px;height:8px;border-radius:50%;flex-shrink:0;box-shadow:0 0 6px currentColor}
+.preset-btn.on{border-color:var(--accent);background:var(--accent-soft);color:var(--white)}
+.preset-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+/* рандомайзер оформлен как явный "быстрый способ увидеть механику": крупнее, две строки, стрелка */
+.preset-rand{color:var(--accent);background:var(--accent-soft);border-color:var(--accent);gap:12px;font-weight:700;padding:13px 20px;border-radius:16px;align-items:center}
+.preset-rand .rand-txt{display:flex;flex-direction:column;align-items:flex-start;line-height:1.2;text-align:left}
+.preset-rand .rand-txt b{font-size:14.5px;font-weight:700;color:var(--white)}
+.preset-rand .rand-txt small{font-size:12px;font-weight:500;color:var(--txt2);margin-top:2px}
+.preset-rand .rand-arrow{font-size:16px;opacity:.85;margin-left:auto;padding-left:8px}
+@media(hover:hover){.preset-rand:hover{background:var(--accent-mid);border-color:var(--accent);box-shadow:0 6px 18px rgba(14,224,207,.16);transform:translateY(-1px)}.preset-rand:hover .rand-txt small{color:var(--white)}}
+/* на мобиле рандомайзер - одна кнопка на всю ширину, стрелка справа */
+@media(max-width:760px){
+  .preset-rand{width:100%}
+}
+@media print{.presets{display:none}}
+
+/* ===== двухколоночный layout: настройки слева, результат справа ===== */
+.layout{display:grid;grid-template-columns:1fr 420px;gap:20px;align-items:start;margin-top:20px}
+.left-col{display:flex;flex-direction:column;gap:16px}
+.layout .card{margin-top:0}
+.layout .res-border{margin-top:0;position:sticky;top:16px}
+/* «что входит в разбор» - заполняет левую колонку и добавляет ценность */
+.calc-includes{max-width:640px;margin:24px auto 0;padding:0}
+.ci-title{font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--txt3);margin-bottom:12px;text-align:center}
+.ci-list{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:12px 28px}
+.ci-list.cta-gets{grid-template-columns:1fr;gap:9px;max-width:340px;margin:0 auto 22px;text-align:left}
+.ci-list.cta-gets li{font-size:13.5px}
+.ci-list li{position:relative;padding-left:28px;font-size:14.5px;color:var(--txt);line-height:1.5}
+@media(max-width:620px){.ci-list{grid-template-columns:1fr;gap:11px}}
+.ci-list li::before{content:'';position:absolute;left:0;top:3px;width:18px;height:18px;border-radius:50%;background:var(--accent-soft);border:1px solid var(--accent-mid)}
+.ci-list li::after{content:'';position:absolute;left:6px;top:8px;width:6px;height:3px;border-left:2px solid var(--accent);border-bottom:2px solid var(--accent);transform:rotate(-45deg)}
+@media(max-width:999px){
+  .layout{grid-template-columns:1fr;gap:0}
+  .left-col{gap:0}
+  .layout .card{margin-top:26px}
+  .layout .res-border{position:static;margin-top:26px}
+}
+@media print{.calc-includes{display:none}}
+
+/* ===== шапка (логотип как на главной) ===== */
+.nav{padding:20px 0}
+.nav-in{display:flex;align-items:center;justify-content:space-between}
+.logo{font-weight:700;font-size:26px;letter-spacing:-0.03em;color:var(--heading);display:flex;align-items:center;gap:14px}
+.logo-mark{width:44px;height:44px;background:transparent;border:none;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .4s cubic-bezier(.22,1,.36,1), filter .4s}
+.logo-mark svg{width:100%;height:100%}
+@media(hover:hover){.logo:hover .logo-mark{transform:scale(1.1);filter:drop-shadow(0 0 8px rgba(14,224,207,.3))}}
+@media(max-width:480px){.logo{font-size:20px;gap:10px}.logo-mark{width:36px;height:36px}}
+.back{font-size:13px;color:var(--txt2);border:1px solid var(--brd);padding:10px 18px;border-radius:60px;transition:all .3s;min-height:40px;display:inline-flex;align-items:center;white-space:nowrap}
+.back:hover{color:var(--white);border-color:var(--brd2)}
+
+.head{padding:14px 0 0;text-align:center}
+.label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent)}
+h1{font-size:clamp(25px,3.6vw,38px);font-weight:700;letter-spacing:-.03em;line-height:1.12;color:var(--heading);margin:12px 0 10px}
+.sub{font-size:15px;color:var(--txt);max-width:540px;margin:0 auto;position:relative;z-index:2;line-height:1.5}
+/* спец-строка: что учитывает калькулятор - короткие пилюли доверия под подзаголовком */
+.spec-row{text-align:center;font-size:12.5px;color:var(--txt3);margin:14px auto 0;max-width:560px;line-height:1.5}
+.spec{display:inline-flex;align-items:center;gap:7px;padding:8px 15px;border-radius:100px;font-size:13px;font-weight:500;color:var(--txt);background:var(--bg2);border:1px solid var(--brd);white-space:nowrap}
+.spec svg{width:13px;height:13px;flex-shrink:0;color:var(--accent)}
+/* честная строка: снимаем скепсис - это прогноз, а не гарантия */
+.head-note{max-width:600px;margin:18px auto 0;font-size:13px;line-height:1.6;color:var(--txt3)}
+.head-note b{color:var(--txt2);font-weight:600}
+@media(max-width:520px){.spec{font-size:12px;padding:7px 12px;gap:6px}.spec-row{gap:6px;margin-top:18px}.head-note{font-size:12.5px}}
+
+/* ===== карточка шагов ===== */
+.card{background:var(--bg2);border:1px solid var(--brd);border-radius:24px;padding:24px;margin-top:26px}
+.step{margin-bottom:20px}
+.step:last-child{margin-bottom:0}
+.step-title{font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--txt2);margin-bottom:7px;display:flex;align-items:center;gap:8px}
+.step-title .num{color:var(--accent)}
+/* короткая подсказка под заголовком шага - всегда видна, снимает вопросы без перегруза */
+.step-sub{font-size:12.5px;color:var(--txt3);line-height:1.45;margin:0 0 12px}
+/* индикатор живого пересчета: результат обновляется сразу */
+.live-badge{display:inline-flex;align-items:center;gap:8px;font-size:12px;color:var(--txt2);font-weight:500;margin-bottom:18px}
+.live-badge .dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2s infinite;flex-shrink:0}
+/* строка рекомендованного бюджета для рынка */
+.rec-budget{margin-top:11px;font-size:12.5px;color:var(--txt3);line-height:1.5}
+.rec-budget b{color:var(--accent);font-weight:600}
+.rec-budget button{background:none;border:none;color:var(--accent);font:inherit;font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:3px;padding:0}
+.rec-budget button:hover{color:var(--white)}
+/* мягкая подсказка о приближении к потолку рынка - до жесткого предупреждения */
+.cap-soft{margin-top:11px;padding:9px 13px;border-radius:12px;background:var(--accent-soft);border:1px solid var(--accent-mid);font-size:12.5px;line-height:1.5;color:var(--txt)}
+.cap-soft b{color:var(--accent)}
+/* контролы мультивыбора направлений: счетчик + выбрать все */
+.dir-controls{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;font-size:12.5px;color:var(--txt3)}
+.dir-controls .count b{color:var(--txt);font-weight:600}
+.dir-controls button{background:none;border:none;color:var(--accent);font:inherit;font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:3px;min-height:32px}
+.dir-controls button:hover{color:var(--white)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+/* направления - ровная сетка одинаковой ширины вместо рваного flex-wrap */
+#dirChips{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+#dirChips .chip{width:100%;justify-content:flex-start}
+@media(max-width:520px){#dirChips{grid-template-columns:1fr}}
+.chip{min-height:44px;padding:10px 18px;border-radius:100px;font-size:15px;font-weight:500;color:var(--txt);background:var(--glass);border:1px solid var(--brd);cursor:pointer;transition:all .25s;user-select:none;display:inline-flex;align-items:center;gap:6px}
+@media(hover:hover){.chip:hover{border-color:var(--brd2);color:var(--white)}}
+.chip.on{background:var(--accent-soft);border-color:var(--accent);color:var(--white);box-shadow:inset 0 0 0 1px var(--accent-mid)}
+.chip:active{transform:scale(.97)}
+.cdot{width:9px;height:9px;border-radius:50%;flex-shrink:0;box-shadow:0 0 6px currentColor}
+.cflag{width:20px;height:14px;border-radius:2px;overflow:hidden;flex-shrink:0;display:inline-flex;box-shadow:0 0 0 1px rgba(255,255,255,.14);margin-right:2px}
+.cflag svg{display:block;width:100%;height:100%}
+.preset-btn .cflag,.res-tag .cflag{margin-right:4px}
+/* подселектор региона США */
+.subrow{margin-top:12px;padding-top:12px;border-top:1px dashed var(--brd)}
+.subrow-label{font-size:12px;color:var(--txt2);margin-bottom:8px;font-weight:500}
+.chips-sm .chip{min-height:38px;padding:8px 14px;font-size:13.5px}
+.hint{font-size:12.5px;color:var(--txt3);margin-top:8px}
+
+/* ===== бюджет: слайдер + пресеты ===== */
+.budget-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px}
+.budget-val{font-weight:700;font-size:26px;color:var(--heading);letter-spacing:-.02em;cursor:text;border-bottom:1px dashed var(--brd2)}
+.budget-val:hover{border-bottom-color:var(--accent)}
+.budget-presets{display:flex;gap:6px;flex-wrap:wrap}
+.preset{min-height:36px;padding:6px 13px;border-radius:100px;font-size:13px;font-weight:600;color:var(--txt2);background:var(--glass);border:1px solid var(--brd);cursor:pointer;transition:all .25s}
+@media(hover:hover){.preset:hover{color:var(--white);border-color:var(--brd2)}}
+.preset.on{color:var(--accent);border-color:var(--accent-mid);background:var(--accent-soft)}
+.slider-wrap{position:relative;padding:6px 0 2px}
+input[type=range]{width:100%;height:34px;background:transparent;cursor:pointer;-webkit-appearance:none;appearance:none}
+input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:3px;background:linear-gradient(90deg,var(--accent) var(--fill,17%),rgba(255,255,255,.09) var(--fill,17%))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:26px;height:26px;border-radius:50%;background:var(--white);border:3px solid var(--accent);margin-top:-10px;box-shadow:0 0 14px rgba(14,224,207,.45);transition:transform .15s}
+input[type=range]:active::-webkit-slider-thumb{transform:scale(1.15)}
+input[type=range]::-moz-range-track{height:6px;border-radius:3px;background:rgba(255,255,255,.09)}
+input[type=range]::-moz-range-progress{height:6px;border-radius:3px;background:var(--accent)}
+input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--white);border:3px solid var(--accent);box-shadow:0 0 14px rgba(14,224,207,.45)}
+.slider-marks{display:flex;justify-content:space-between;font-size:12px;color:var(--txt3);margin-top:2px}
+.cap-warn{margin-top:10px;padding:10px 12px;border-radius:12px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.28);font-size:12.5px;line-height:1.5;color:var(--txt)}
+.cap-warn b{color:var(--gold)}
+
+/* ===== бюджет + чек в одну строку ===== */
+.bc-grid{display:grid;grid-template-columns:1fr 175px;gap:20px;align-items:start}
+@media(max-width:560px){.bc-grid{grid-template-columns:1fr}}
+.mini-label{font-size:11px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.tip{width:16px;height:16px;border-radius:50%;border:1px solid var(--brd2);color:var(--txt2);font-size:10px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;cursor:help;position:relative;text-transform:none;letter-spacing:0}
+.tip-pop{position:absolute;bottom:130%;left:50%;transform:translateX(-50%);width:220px;background:#0b0f14;border:1px solid var(--accent-mid);border-radius:10px;padding:10px 12px;font-size:12px;font-weight:500;color:var(--txt);line-height:1.5;text-transform:none;letter-spacing:0;opacity:0;visibility:hidden;transition:all .2s;z-index:20;box-shadow:0 8px 24px rgba(0,0,0,.6)}
+.tip:hover .tip-pop,.tip:focus .tip-pop{opacity:1;visibility:visible}
+.check-side .hint{margin-top:6px}
+.check-box{position:relative;max-width:210px}
+.check-box .cur{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--txt2);font-weight:600;font-size:16px;pointer-events:none}
+.check-input{background:var(--glass);border:1px solid var(--brd);border-radius:14px;color:var(--heading);font-size:17px;font-weight:600;padding:13px 14px 13px 32px;width:100%;font-family:inherit;min-height:48px}
+.check-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+
+/* ===== результат (фирменная вращающаяся рамка, как на главной) ===== */
+/* статичная тонкая акцентная рамка вместо вращающейся: спокойнее и дороже */
+.res-border{position:relative;z-index:1;padding:1px;border-radius:24px;overflow:hidden;margin-top:26px;box-shadow:0 20px 45px rgba(0,0,0,.5);background:linear-gradient(150deg,rgba(14,224,207,.4),rgba(255,255,255,.05) 42%)}
+.res{position:relative;z-index:1;border-radius:23px;padding:30px;background:linear-gradient(180deg,#0a1016,#070b0f)}
+.res-title{font-size:11.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--txt2);margin-bottom:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.res-tag{font-size:11px;font-weight:600;letter-spacing:.5px;text-transform:none;color:var(--txt2);background:rgba(255,255,255,.04);border:1px solid var(--brd);border-radius:100px;padding:3px 10px}
+/* переключатель сценария */
+.scen{display:flex;gap:4px;background:rgba(255,255,255,.04);border:1px solid var(--brd);border-radius:100px;padding:4px;margin-bottom:18px;width:100%}
+.scen button{flex:1;border:none;background:transparent;color:var(--txt2);font-size:12.5px;font-weight:600;padding:9px 8px;border-radius:100px;cursor:pointer;transition:all .25s;white-space:nowrap;min-height:38px;overflow:hidden;text-overflow:ellipsis}
+.scen button.on{background:var(--accent-soft);color:var(--white);box-shadow:inset 0 0 0 1px var(--accent-mid)}
+.scen-hint{font-size:12px;color:var(--txt3);margin:-10px 0 16px}
+.big2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;margin-bottom:20px}
+.big-item{background:rgba(255,255,255,.015);border:1px solid var(--brd);border-radius:16px;padding:22px 12px;text-align:center;overflow:hidden}
+.res-num{font-weight:700;letter-spacing:-.02em;color:var(--heading);line-height:1.12;overflow-wrap:break-word}
+.res-num.xl{font-size:clamp(20px,3vw,29px);letter-spacing:-.03em}
+.res-num.acc{color:var(--accent)}
+.res-num.gold{color:var(--gold)}
+.res-label{font-size:12px;color:var(--txt2);margin-top:6px;font-weight:500}
+/* воронка */
+.funnel{display:grid;gap:12px;margin-bottom:16px}
+.frow .f-top{display:flex;justify-content:space-between;align-items:baseline;font-size:13.5px;margin-bottom:6px;gap:10px}
+.frow .f-top b{white-space:nowrap;flex-shrink:0}
+.frow .f-name{color:var(--txt2);font-weight:500}
+.frow .f-top b{color:var(--heading);font-weight:600;font-size:14.5px}
+.f-track{height:10px;border-radius:5px;background:rgba(255,255,255,.05);overflow:hidden}
+.fbar{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--accent),var(--blue));width:0%;transition:width .6s cubic-bezier(.22,1,.36,1)}
+.fbar.gold{background:linear-gradient(90deg,var(--gold),#f59e0b)}
+/* вердикт */
+.verdict{margin:16px 0 18px;padding:1px 0 1px 14px;border-left:2px solid var(--accent-mid);color:var(--txt);font-size:13.5px;line-height:1.5;text-align:left}
+.verdict b{color:var(--accent)}
+.verdict .gold{color:var(--gold)}
+.res-sub{display:flex;justify-content:center;gap:22px;flex-wrap:wrap;font-size:13.5px;color:var(--txt2)}
+.res-sub b{color:var(--txt)}
+/* похожий кейс из практики */
+.proof{margin-top:16px;padding:16px 18px;border-radius:14px;background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.18)}
+.proof .p-badge{font-size:10.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.proof .p-title{font-size:15px;font-weight:700;color:var(--heading)}
+.proof .p-tags{font-size:12.5px;color:var(--txt2);margin:2px 0 8px}
+.proof .p-nums{font-size:13.5px;color:var(--txt);line-height:1.5}
+.proof .p-nums b{color:var(--gold)}
+.proof a{display:inline-block;margin-top:8px;font-size:13px;color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+.proof.fallback{font-size:13.5px;color:var(--txt2)}
+.res-go{width:100%;margin-top:16px;background:transparent;color:var(--accent);border:1px solid var(--accent-mid);font-weight:600}
+@media(hover:hover){.res-go:hover{background:var(--accent-soft);color:var(--white);border-color:var(--accent);box-shadow:none}}
+.assume{margin-top:16px;font-size:12.5px;color:var(--txt3);line-height:1.6}
+.assume summary{cursor:pointer;color:var(--txt2);font-weight:600;min-height:32px;display:flex;align-items:center}
+.assume ul{margin:8px 0 0 18px}
+.assume p{margin:8px 0 0}
+/* ===== усиленный блок результата ===== */
+/* мини-резюме расчета в одну строку */
+.res-summary{text-align:center;font-size:13px;color:var(--txt2);line-height:1.5;margin:-4px 0 16px}
+.res-summary b{color:var(--heading);font-weight:600}
+/* конверсия между ступенями воронки */
+.f-name em{font-style:normal;color:var(--txt3);font-weight:400;font-size:12px;margin-left:2px}
+/* метрики: CPL / цена пациента / окупаемость */
+.res-metrics{display:flex;border:1px solid var(--brd);border-radius:14px;background:rgba(255,255,255,.015);overflow:hidden;margin:2px 0 16px}
+.metric{flex:1;text-align:center;padding:14px 8px}
+.metric+.metric{border-left:1px solid var(--brd)}
+.metric .m-val{font-size:18px;font-weight:700;color:var(--heading);letter-spacing:-.02em;white-space:nowrap}
+.metric .m-lbl{font-size:10.5px;color:var(--txt3);margin-top:5px;text-transform:uppercase;letter-spacing:.5px}
+/* компактные пояснительные блоки: что значит / где погрешность */
+.res-block{margin-top:14px;padding:13px 15px;border-radius:12px;background:rgba(255,255,255,.02);border:1px solid var(--brd)}
+.res-block .rb-title{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+.res-block p{font-size:13px;line-height:1.55;color:var(--txt)}
+.res-block p b{color:var(--heading);font-weight:600}
+/* спокойное предупреждение о выжигании внутри результата - заметно, но без тревоги */
+.res-burn{margin:14px 0 4px;padding:11px 14px;border-radius:12px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.3);font-size:12.5px;line-height:1.5;color:var(--txt)}
+.res-burn b{color:var(--gold);font-weight:600}
+
+/* ===== CTA ===== */
+.cta{margin-top:26px;text-align:center;border:1px solid var(--brd);border-radius:24px;padding:30px 24px;background:var(--bg2)}
+.cta h2{font-size:clamp(20px,3vw,26px);color:var(--heading);font-weight:700;letter-spacing:-.02em;margin-bottom:8px}
+.cta p{font-size:14px;color:var(--txt2);margin-bottom:20px}
+.cta-form{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.cta-form input{background:var(--glass);border:1px solid var(--brd);border-radius:60px;color:var(--heading);font-size:16px;padding:14px 20px;width:240px;font-family:inherit;min-height:50px}
+.cta-form input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.cta-form input.err{border-color:#ef4444;box-shadow:0 0 0 1px rgba(239,68,68,.4)}
+.msg-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+.btn-msg{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 22px;border-radius:60px;font-weight:600;font-size:14.5px;cursor:pointer;transition:all .3s;min-height:48px;font-family:inherit;border:1px solid}
+.btn-msg svg{width:18px;height:18px;fill:currentColor;flex-shrink:0}
+.btn-wa{background:rgba(37,211,102,.12);color:#4ade80;border-color:rgba(37,211,102,.35)}
+@media(hover:hover){.btn-wa:hover{background:rgba(37,211,102,.18);box-shadow:0 6px 16px rgba(37,211,102,.15)}}
+.btn-tg{background:rgba(38,165,228,.12);color:#4cc0f0;border-color:rgba(38,165,228,.35)}
+@media(hover:hover){.btn-tg:hover{background:rgba(38,165,228,.18);box-shadow:0 6px 16px rgba(38,165,228,.15)}}
+.btn-msg:active{transform:scale(.98)}
+@media(max-width:600px){.msg-row{flex-direction:column}.btn-msg{width:100%}}
+.tg-copied{margin-top:10px;font-size:13px;color:#4cc0f0;font-weight:600}
+.speed-note{margin-top:12px;font-size:13px;color:var(--txt2);display:flex;align-items:center;justify-content:center;gap:7px}
+.speed-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.privacy-note{margin-top:8px;font-size:12px;color:var(--txt3)}
+/* микротекст под кнопкой: снимает давление, без фейковой срочности */
+.form-note{margin-top:12px;font-size:12.5px;color:var(--txt3);line-height:1.45}
+/* состояния формы: ошибка и успех - спокойные, без тревоги */
+.form-status{margin-top:14px;font-size:13.5px;font-weight:600;border-radius:12px;padding:11px 14px;line-height:1.4}
+.form-status.err{color:#fca5a5;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.28)}
+.form-status.done{color:var(--green);background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.28)}
+/* мягкий переход к мессенджерам как альтернативе форме */
+.msg-or{margin:22px 0 12px;font-size:12.5px;color:var(--txt3)}
+.btn{display:inline-flex;align-items:center;justify-content:center;background:var(--white);color:var(--dark);padding:14px 30px;border-radius:60px;font-weight:600;font-size:15px;border:none;cursor:pointer;transition:all .3s;min-height:50px}
+@media(hover:hover){.btn:hover{background:var(--accent);box-shadow:0 8px 22px rgba(14,224,207,.22)}}
+.btn:active{transform:scale(.98)}
+.share{margin-top:14px}
+.share button{background:none;border:none;color:var(--txt2);font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:3px;min-height:36px}
+.share button:hover{color:var(--accent)}
+/* десктоп: больше воздуха в CTA-блоке, текст дышит и легче сканируется */
+@media(min-width:1000px){
+  /* воздух по всей странице: сетка, карточки, шаги, панель результата */
+  .layout{gap:28px;margin-top:28px}
+  .card{padding:34px 32px}
+  .step{margin-bottom:28px}
+  .step-title{margin-bottom:10px}
+  .res{padding:36px 34px}
+  .head{padding-top:10px}
+  /* CTA-блок */
+  .cta{padding:56px 48px;margin-top:40px}
+  .cta h2{margin-bottom:10px}
+  .cta p{margin-bottom:28px}
+  .ci-list.cta-gets{gap:13px;margin:0 auto 32px}
+  .cta-form{gap:12px}
+  .msg-row{margin-top:20px}
+  .speed-note{margin-top:22px}
+  .privacy-note{margin-top:10px}
+  .share{margin-top:26px}
+}
+.calc-disclaimer{padding:32px 0 8px;text-align:center;font-size:12.5px;color:var(--txt3)}
+
+/* ===== подвал - копия главной ===== */
+.footer{padding:64px 0 40px;background:var(--bg);border-top:1px solid var(--brd);position:relative;z-index:2;line-height:normal;font-family:'Inter',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:auto;-moz-osx-font-smoothing:auto;text-rendering:auto;margin-top:40px}
+.footer-top{display:grid;grid-template-columns:1fr 1fr 1fr;gap:40px;padding-bottom:32px;border-bottom:1px solid var(--brd)}
+@media(max-width:760px){.footer-top{grid-template-columns:1fr;gap:28px}}
+.footer-col-title{font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--heading);margin-bottom:16px}
+.footer-contact-link{display:flex;align-items:center;gap:10px;font-size:15px;color:var(--txt2);margin:0 0 12px;transition:color .3s;font-weight:500}
+.footer-contact-link:hover{color:var(--white)}
+.footer-contact-link svg{width:18px;height:18px;fill:currentColor;flex-shrink:0}
+.footer-col p,.footer-link{display:block;font-size:15px;color:var(--txt2);margin-bottom:12px;transition:color .3s;font-weight:500}
+@media(hover:hover){.footer-link:hover{color:var(--white)}}
+.footer-bottom{max-width:1140px;margin:32px auto 0;padding:0 32px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px}
+.footer-bottom .logo{display:flex;align-items:center;gap:14px;text-decoration:none;transition:opacity .3s;color:var(--heading);font-size:16px;font-weight:normal;letter-spacing:normal}
+.footer-bottom .logo:hover{opacity:.8}
+.footer-bottom .logo svg{width:44px;height:44px}
+.footer-bottom .logo span{font-size:26px;font-weight:700;color:var(--heading);letter-spacing:-0.03em}
+.footer-copy{font-size:14px;color:var(--txt3)}
+.footer-legal{display:flex;gap:20px;flex-wrap:wrap;align-items:center;width:100%}
+.footer-legal a{font-size:13px;color:var(--txt3);text-decoration:underline;transition:color .3s}
+.footer-legal a:hover{color:var(--txt)}
+.footer-cta{background:var(--glass);border:1px solid var(--brd);color:var(--white);padding:12px 28px;border-radius:60px;font-size:14px;font-weight:600;transition:all .3s;text-decoration:none}
+
+/* ===== появление секций + фирменный noise ===== */
+.head,.card,.res-border,.cta{opacity:0;transform:translateY(24px);animation:fadeUp .8s cubic-bezier(.22,1,.36,1) forwards}
+.card{animation-delay:.1s}
+.res-border{animation-delay:.22s}
+.cta{animation-delay:.34s}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+.noise{position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.03;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* ===== печать / сохранение в PDF ===== */
+.print-head{display:none}
+.print-cta{display:none}
+@media print{
+  @page{margin:14mm}
+  :root{--bg:#fff;--bg2:#fff;--white:#111;--dark:#fff;--accent:#0a8f85;--accent-soft:#e6f7f5;--accent-mid:#9adcd6;--gold:#8a6d00;--green:#1a7f37;--txt:#333;--txt2:#555;--txt3:#777;--heading:#111;--brd:#ccc;--brd2:#aaa;--glass:#f6f6f6}
+  html,body{background:#fff !important;padding-bottom:0 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  /* прячем интерактив и декор: ввод суммируется в шапке печати, свечения и фоны не печатаем */
+  .nav,.noise,.bg-grid,.bg-orb1,.bg-orb2,.head,.presets,.calc-includes,.card,.sticky-res,.cta,.footer,.share,.res-go,.scen,.scen-hint,.budget-presets,.assume summary{display:none !important}
+  .res-border{animation:none;opacity:1;transform:none}
+  .layout{display:block;margin-top:0}
+  .res-border{padding:0;box-shadow:none;position:static;margin:0;background:none}
+  .res{background:#fff;box-shadow:none;border:1px solid #ccc;padding:16px}
+  /* блоки не рвем между страницами */
+  .big2,.funnel,.res-metrics,.verdict,.proof,.res-block,.res-burn,.print-cta{break-inside:avoid}
+  .verdict{background:#f0faf9;border-left:2px solid #0a8f85;color:#111;padding:10px 14px;border-radius:6px}
+  .proof{background:#fdf8ec;border-color:#e5d9a8}
+  .assume{display:block}
+  .assume ul,.assume p,.assume .proof{display:block !important}
+  .assume .res-metrics{display:flex !important}
+  .assume[open] ul,.assume ul{margin-left:18px}
+  .print-head{display:block;font-size:12px;color:#333;margin:0 0 12px;border-bottom:1px solid #ccc;padding-bottom:10px;line-height:1.55}
+  .print-head b{color:#111;font-size:14px}
+  .fbar{box-shadow:none;background:#0a8f85}
+  .fbar.gold{background:#b8860b}
+  .res-num.acc,.res-num.gold{text-shadow:none}
+  .calc-disclaimer{display:block;text-align:left;padding:12px 0 0;color:#777;font-size:11px}
+  /* печатный CTA вместо интерактивной формы */
+  .print-cta{display:block;margin-top:14px;padding:12px 14px;border:1px solid #9adcd6;border-radius:8px;background:#f0faf9}
+  .print-cta .pc-title{font-weight:700;font-size:14px;color:#0a5f58;margin-bottom:4px}
+  .print-cta .pc-body{font-size:12px;color:#333;margin-bottom:6px;line-height:1.5}
+  .print-cta .pc-contacts{font-size:12.5px;color:#111;font-weight:600}
+}
+
+/* уважение reduced-motion */
+@media(prefers-reduced-motion: reduce){
+  .head,.card,.res-border,.cta{animation:none;opacity:1;transform:none}
+  .bg-orb1,.bg-orb2{animation:none}
+  .speed-dot,.live-badge .dot{animation:none}
+  .fbar{transition:none}
+  .sticky-res{transition:none}
+  .preset-btn:active,.chip:active,.btn:active,.btn-msg:active{transform:none}
+  html{scroll-behavior:auto}
+}
+
+/* ===== sticky-бар результата (мобайл) ===== */
+.sticky-res{position:fixed;left:0;right:0;bottom:0;z-index:50;background:rgba(5,8,10,.92);backdrop-filter:blur(18px) saturate(1.6);border-top:1px solid var(--accent-mid);padding:10px 16px calc(10px + env(safe-area-inset-bottom));display:none;align-items:center;justify-content:space-between;gap:12px;transform:translateY(110%);transition:transform .35s cubic-bezier(.22,1,.36,1)}
+.sticky-res.show{transform:translateY(0)}
+.sticky-nums{display:flex;align-items:center;gap:16px;min-width:0;cursor:pointer}
+.sticky-item{line-height:1.2;white-space:nowrap}
+.sticky-item .v{font-weight:700;font-size:16px;color:var(--heading)}
+.sticky-item .v.acc{color:var(--accent)}
+.sticky-item .v.gold{color:var(--gold)}
+.sticky-item .l{font-size:10px;color:var(--txt2);text-transform:uppercase;letter-spacing:.5px}
+.sticky-more{font-size:11px;color:var(--txt3);white-space:nowrap}
+.sticky-cta{display:flex;gap:8px;flex-shrink:0;align-items:center}
+.sticky-go{display:inline-flex;align-items:center;height:44px;padding:0 16px;border-radius:12px;background:var(--accent);color:#04211e;font-weight:700;font-size:13.5px;white-space:nowrap;flex-shrink:0}
+@media(max-width:374px){.sticky-go{display:none}}
+.sticky-msg{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid}
+.sticky-msg svg{width:21px;height:21px;fill:currentColor}
+.sticky-wa{background:rgba(37,211,102,.16);border-color:rgba(37,211,102,.45);color:#4ade80}
+.sticky-tg{background:rgba(38,165,228,.14);border-color:rgba(38,165,228,.4);color:#4cc0f0}
+@media(max-width:760px){
+  .sticky-res{display:flex}
+  body{padding-bottom:74px}
+  .res-grid{grid-template-columns:repeat(2,1fr)}
+  .card{padding:22px 18px}
+  .res{padding:22px 18px}
+  .cta-form input{width:100%}
+  .cta-form .btn{width:100%}
+  .budget-top{flex-direction:column;align-items:flex-start;gap:8px}
+}
+/* мобильный hero короче: быстрее до самого калькулятора */
+@media(max-width:560px){
+  .head{padding:8px 0 0}
+  h1{font-size:22px;margin:8px 0 8px;line-height:1.2}
+  h1 br{display:none}
+  .sub{font-size:13.5px;max-width:none;line-height:1.45}
+  .spec-row{display:none}
+  .presets{margin-top:16px}
+  .presets-label{font-size:13px}
+  .card{padding:18px 15px}
+  .res{padding:18px 15px}
+  .step{margin-bottom:18px}
+  .step-title{margin-bottom:6px}
+}
+/* на телефоне сводка результата (2 числа) + быстрые мессенджеры всегда видны;
+   тап по числам открывает полный прогноз */
+@media(max-width:560px){
+  .sticky-more{display:none}
+}
+@media(max-width:380px){
+  .sticky-res{padding-left:12px;padding-right:12px;gap:10px}
+  .sticky-nums{gap:12px}
+  .sticky-item .v{font-size:15px}
+  .sticky-msg{width:42px;height:42px}
+}
+@media(max-width:360px){
+  /* узкие телефоны: цифры и табы влезают целиком, без переносов и обрезки */
+  .res-num.xl{font-size:18px}
+  .big-item{padding:16px 8px}
+  .scen button{font-size:11px;padding:9px 6px;letter-spacing:-.01em;flex:1 1 auto}
+  .cta-form input{font-size:15px;padding:14px 16px}
+  .btn-msg{font-size:13px;padding:13px 12px;gap:6px}
+}
+@media(max-width:340px){
+  .chip{font-size:14px;padding:8px 14px}
+  .sticky-nums{gap:10px}
+  .sticky-item .v{font-size:14px}
+  .sticky-btn{padding:11px 14px;font-size:12px}
+  .metric .m-val{font-size:14.5px}
+  .metric .m-lbl{font-size:9.5px}
+  .res-summary{font-size:12px}
+}
+</style>
+</head>
+<body>
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-orb1" aria-hidden="true"></div>
+<div class="bg-orb2" aria-hidden="true"></div>
+<div class="noise" aria-hidden="true"></div>
+
+<nav class="nav"><div class="ctn nav-in">
+  <a class="logo" href="/">
+    <div class="logo-mark">
+      <svg viewBox="0 0 40 40" fill="none">
+        <rect x="1" y="1" width="38" height="38" rx="10" fill="#0e0e12" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
+        <text x="6" y="28" font-family="Inter, sans-serif" font-weight="900" font-size="22" fill="#f4f4f5">T</text>
+        <text x="19" y="28" font-family="Inter, sans-serif" font-weight="900" font-size="22" fill="#0ee0cf">C</text>
+      </svg>
+    </div>
+    <span>Traffic <span style="color:#0ee0cf">Craft</span></span>
+  </a>
+  <a class="back" href="/">← На главную</a>
+</div></nav>
+
+<header class="head ctn">
+  <span class="label">Бесплатный инструмент для клиник</span>
+  <h1>Сколько заявок и выручки <br>может дать реклама вашей клиники?</h1>
+</header>
+
+<main class="ctn">
+  <div class="print-head" id="printHead"></div>
+
+  <div class="presets" id="presets">
+    <div class="presets-row" id="presetsRow"></div>
+  </div>
+
+  <div class="layout">
+  <div class="left-col">
+  <div class="card">
+    <div class="live-badge"><span class="dot"></span>Расчет обновляется сразу</div>
+    <div class="step">
+      <div class="step-title"><span class="num">01</span> Страна</div>
+      <div class="chips" id="countryChips"></div>
+      <div class="subrow" id="usRegionRow" hidden>
+        <div class="subrow-label">Регион США:</div>
+        <div class="chips chips-sm" id="usRegionChips"></div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-title"><span class="num">02</span> Ниша</div>
+      <div class="chips" id="nicheChips"></div>
+    </div>
+    <div class="step">
+      <div class="step-title"><span class="num">03</span> Направления</div>
+      <div class="step-sub">Можно выбрать несколько</div>
+      <div class="chips" id="dirChips"></div>
+      <div class="dir-controls">
+        <span class="count">Выбрано: <b id="dirCount">1</b></span>
+        <button type="button" id="dirAll">Выбрать все</button>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-title"><span class="num">04</span> Бюджет</div>
+      <div class="budget-top">
+        <div class="budget-val" id="budgetVal" role="button" tabindex="0" title="Нажмите, чтобы ввести точную сумму">$5 000</div>
+        <div class="budget-presets" id="budgetPresets"></div>
+      </div>
+      <div class="slider-wrap">
+        <input type="range" id="budget" min="1000" max="30000" step="500" value="5000" aria-label="Месячный бюджет на рекламу">
+        <div class="slider-marks"><span>$1 000</span><span>$30 000</span></div>
+      </div>
+      <div class="rec-budget" id="recBudget"></div>
+      <div class="cap-soft" id="capSoft" hidden></div>
+      <div class="cap-warn" id="capWarn" hidden></div>
+    </div>
+    <div class="step">
+      <div class="step-title"><span class="num">05</span> Средний чек</div>
+      <div class="step-sub">Выручка с пациента за курс, а не цена процедуры. Можно поправить.</div>
+      <div class="check-box"><span class="cur">$</span><input type="number" id="check" class="check-input" min="1" step="10" inputmode="numeric" aria-label="Средний чек - выручка с одного оплатившего пациента за курс"></div>
+    </div>
+  </div>
+
+  </div><!-- /left-col -->
+
+  <div class="res-border"><div class="res" id="res" role="region" aria-label="Результаты расчета">
+    <div class="res-title">Прогноз в месяц <span class="res-tag" id="resTag"></span></div>
+    <div class="scen" id="scenToggle" role="group" aria-label="Сценарий прогноза"></div>
+    <div class="scen-hint" id="scenHint"></div>
+    <!-- Уровень 1: ответ за 1 секунду -->
+    <div class="big2">
+      <div class="big-item"><div class="res-num acc xl" id="rLeads">-</div><div class="res-label">живых заявок</div></div>
+      <div class="big-item"><div class="res-num gold xl" id="rRevenue">-</div><div class="res-label">потенциальной выручки</div></div>
+    </div>
+    <!-- Уровень 2: как это выходит (воронка + окупаемость в вердикте) -->
+    <div class="funnel">
+      <div class="frow"><div class="f-top"><span class="f-name">Заявки</span><b id="fLeads">-</b></div><div class="f-track"><div class="fbar" id="bLeads" style="width:100%"></div></div></div>
+      <div class="frow"><div class="f-top"><span class="f-name">Записи на прием <em id="fL2B"></em></span><b id="rBookings">-</b></div><div class="f-track"><div class="fbar" id="bBookings"></div></div></div>
+      <div class="frow"><div class="f-top"><span class="f-name">Продажи <em id="fB2S"></em></span><b id="rSales">-</b></div><div class="f-track"><div class="fbar gold" id="bSales"></div></div></div>
+      <div class="frow"><div class="f-top"><span class="f-name">Выручка</span><b class="gold" id="fRev">-</b></div><div class="f-track"><div class="fbar gold" id="bRev" style="width:100%"></div></div></div>
+    </div>
+    <div class="verdict" id="verdict" aria-live="polite">-</div>
+    <!-- критичное предупреждение: показываем всегда, когда бюджет выше потолка рынка -->
+    <div class="res-burn" id="resBurn" hidden></div>
+    <a class="btn res-go" href="#cta">Получить разбор под вашу клинику ↗</a>
+  </div></div>
+  </div><!-- /layout -->
+
+  <!-- CTA только для печати/PDF: вместо интерактивной формы - контакты -->
+  <div class="print-cta" aria-hidden="true">
+    <div class="pc-title">Бесплатный разбор под вашу клинику</div>
+    <div class="pc-body">Разберем вашу воронку и покажем, с чего начать. Напишите нам:</div>
+    <div class="pc-contacts">WhatsApp +7 778 218 23 05 &nbsp;·&nbsp; Telegram @PPavel_D &nbsp;·&nbsp; traffic-craft.com</div>
+  </div>
+
+  <div class="cta" id="cta">
+    <h2>Хотите получить скорректированный прогноз под вашу клинику?</h2>
+    <p>Бесплатный разбор. Расчет приложим к заявке.</p>
+    <ul class="ci-list cta-gets">
+      <li>Где в воронке теряются заявки и деньги</li>
+      <li>План рекламы под нишу, бюджет и город</li>
+      <li>Аудит текущей рекламы, если она есть</li>
+    </ul>
+    <form class="cta-form" id="calcForm">
+      <input type="text" id="cName" placeholder="Как к вам обращаться" required minlength="2" aria-label="Как к вам обращаться" autocomplete="name" enterkeyhint="next">
+      <input type="text" id="cPhone" placeholder="Телефон или Telegram" required minlength="3" aria-label="Телефон или Telegram" autocomplete="tel" enterkeyhint="send">
+      <!-- Honeypot: люди это поле не видят, боты заполняют -->
+      <div style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden" aria-hidden="true">
+        <input type="text" id="cWebsite" name="website" tabindex="-1" autocomplete="off">
+      </div>
+      <button type="submit" class="btn" id="cBtn">Получить разбор под клинику ↗</button>
+    </form>
+    <div class="form-status" id="formStatus" role="alert" aria-live="polite" hidden></div>
+    <div class="msg-row">
+      <a class="btn-msg btn-tg" id="tgBtn" href="https://t.me/PPavel_D" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.833.94z"/></svg>
+        Написать в Telegram
+      </a>
+      <a class="btn-msg btn-wa" id="waBtn" href="#" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+        Обсудить в WhatsApp
+      </a>
+    </div>
+    <div class="tg-copied" id="tgCopied" hidden>Расчет скопирован - вставьте его в чат ✓</div>
+    <div class="speed-note"><span class="speed-dot"></span>Обычно отвечаем за 15 минут в рабочее время</div>
+    <div class="privacy-note">Данные не передаем третьим лицам. Это не оферта.</div>
+    <div class="share">
+      <button type="button" id="shareBtn">Поделиться расчетом</button>
+      <span style="color:var(--txt3);margin:0 6px">·</span>
+      <button type="button" id="printBtn">Распечатать / PDF</button>
+      <span style="color:var(--txt3);margin:0 6px">·</span>
+      <button type="button" id="resetBtn">Сбросить</button>
+    </div>
+  </div>
+</main>
+
+<!-- sticky-бар: ключевые цифры всегда на виду на мобиле -->
+<div class="sticky-res" id="stickyRes">
+  <div class="sticky-nums" id="stickyNums" role="button" tabindex="0" aria-label="Показать полный прогноз">
+    <div class="sticky-item"><div class="v acc" id="sLeads">-</div><div class="l">заявок</div></div>
+    <div class="sticky-item"><div class="v gold" id="sRevenue">-</div><div class="l">выручки</div></div>
+    <span class="sticky-more" aria-hidden="true">детали ↓</span>
+  </div>
+  <div class="sticky-cta">
+    <a class="sticky-go" id="stickyGo" href="#cta">Разбор ↗</a>
+    <a class="sticky-msg sticky-wa" id="stickyWa" href="#" target="_blank" rel="noopener noreferrer" aria-label="Обсудить в WhatsApp">
+      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+    </a>
+    <a class="sticky-msg sticky-tg" id="stickyTg" href="https://t.me/PPavel_D" target="_blank" rel="noopener noreferrer" aria-label="Написать в Telegram">
+      <svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.833.94z"/></svg>
+    </a>
+  </div>
+</div>
+
+<noscript><div style="max-width:880px;margin:20px auto;padding:16px 20px;border:1px solid rgba(255,255,255,.15);border-radius:14px;text-align:center;color:#a1a1aa">Для работы калькулятора нужен JavaScript. Или просто напишите нам - посчитаем вручную: <a href="https://wa.me/77782182305" style="color:#0ee0cf">WhatsApp</a></div></noscript>
+
+<div class="calc-disclaimer ctn">Прогноз - по средним данным наших кампаний, не оферта. Точные цифры зависят от города, конкуренции и креативов.</div>
+
+<footer class="footer" id="footer"><div class="ctn">
+  <div class="footer-top">
+    <div class="footer-col">
+      <div class="footer-col-title">Контакты</div>
+      <a href="https://wa.me/77782182305?text=%D0%94%D0%BE%D0%B1%D1%80%D1%8B%D0%B9%20%D0%B4%D0%B5%D0%BD%D1%8C!%20%D0%9F%D0%B8%D1%88%D1%83%20%D0%BF%D0%BE%20%D0%BF%D0%BE%D0%B2%D0%BE%D0%B4%D1%83%20%D1%80%D0%B5%D0%BA%D0%BB%D0%B0%D0%BC%D1%8B%20%D1%81%20%D1%81%D0%B0%D0%B9%D1%82%D0%B0" target="_blank" rel="noopener noreferrer" class="footer-contact-link">
+        <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor;flex-shrink:0;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+        WhatsApp
+      </a>
+      <a href="https://t.me/PPavel_D" target="_blank" rel="noopener noreferrer" class="footer-contact-link">
+        <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor;flex-shrink:0;"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.833.94z"/></svg>
+        Telegram
+      </a>
+      <a href="mailto:pekhapavel@gmail.com" class="footer-contact-link">
+        <svg viewBox="0 0 24 24" style="width:18px;height:18px;flex-shrink:0;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        pekhapavel@gmail.com
+      </a>
+    </div>
+
+    <div class="footer-col">
+      <div class="footer-col-title">НАВИГАЦИЯ</div>
+      <a href="/#approach" class="footer-link">О нас</a>
+      <a href="/#cases" class="footer-link">Кейсы</a>
+      <a href="/#reviews" class="footer-link">Отзывы</a>
+      <a href="/#approach" class="footer-link">Подход</a>
+    </div>
+
+    <div class="footer-col">
+      <div class="footer-col-title">Еще</div>
+      <a href="https://t.me/pavelpekha" target="_blank" rel="noopener noreferrer" class="footer-contact-link">
+        <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor;flex-shrink:0;"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.833.94z"/></svg>
+        Telegram-канал
+      </a>
+      <a href="https://t.me/PPavel_D_Bot" target="_blank" rel="noopener noreferrer" class="footer-contact-link">
+        <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor;flex-shrink:0;"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.833.94z"/></svg>
+        Чек-листы по рекламе
+      </a>
+      <div style="height:16px"></div>
+      <a href="https://www.instagram.com/pavelpekha/" target="_blank" rel="noopener noreferrer" class="footer-contact-link">
+        <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor;flex-shrink:0;"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.5"/></svg>
+        Instagram
+      </a>
+      <a href="https://www.instagram.com/stories/highlights/17887223508295432/" target="_blank" rel="noopener noreferrer" class="footer-contact-link">
+        <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor;flex-shrink:0;"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.5"/></svg>
+        Кейсы из других ниш
+      </a>
+      <a href="https://www.instagram.com/stories/highlights/18109953571361636/" target="_blank" rel="noopener noreferrer" class="footer-contact-link">
+        <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor;flex-shrink:0;"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.5"/></svg>
+        Кейсы из других ниш ч.2
+      </a>
+    </div>
+
+  </div>
+</div>
+  <div class="footer-bottom">
+    <a href="/" class="logo" aria-label="На главную">
+      <svg viewBox="0 0 40 40" fill="none"><rect x="1" y="1" width="38" height="38" rx="10" fill="#0e0e12" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/><text x="6" y="28" font-family="Inter,sans-serif" font-weight="900" font-size="22" fill="#f4f4f5">T</text><text x="19" y="28" font-family="Inter,sans-serif" font-weight="900" font-size="22" fill="#0ee0cf">C</text></svg>
+      <span>Traffic <span style="color:#0ee0cf">Craft</span></span>
+    </a>
+    <a href="#cta" class="footer-cta">Оставить заявку</a>
+    <div class="footer-legal"><a href="/privacy" target="_blank" rel="noopener noreferrer">Политика конфиденциальности</a><a href="/terms" target="_blank" rel="noopener noreferrer">Условия использования</a><div class="footer-copy">© <span id="footerYear"></span> Traffic Craft. Все права защищены.</div></div>
+  </div>
+</footer>
+
+<script>
+/*CORE-START*/
+/* ============================================================
+   ЦИФРЫ КАЛИБРОВАНЫ ПО ОТКРЫТЫМ БЕНЧМАРКАМ + ПУБЛИЧНЫМ КЕЙСАМ TC.
+   ⚠️ ЗАМЕНИ НА СВОИ РЕАЛЬНЫЕ ДАННЫЕ ИЗ КАБИНЕТОВ - это оценки,
+      выведенные из открытых источников, а не факт по твоим кампаниям.
+
+   Методология (полностью - в benchmark-reference.md):
+   • cpl - цена заявки $. База: Meta CPL медвертикали США - стоматология
+     ~$77, эстетика ~$22-50, healthcare ~$42-54 (LocaliQ, Pennock, Foundry
+     2025). Масштаб по стране - через Meta CPM: KZ $1.77 < TR $3.08 <
+     IL $6.09 < ES $9.41 ≈ AE $8.98 (worldpopulationreview, подтв. Adligator).
+   • l2b «заявка→запись», b2s «запись→оплата». Case acceptance имплантов
+     40-55%, виниров 35-50% (Dentx, Henry Schein 2026); no-show 5-15%
+     (MGMA, PMC). Заложены с поправкой на обработку по скриптам TC.
+   • check - средний чек $ (курс лечения, не одна процедура). Порядок:
+     TR≈KZ < ES < IL≈AE (Bookimed, flymedi 2025-26). mult - индекс цены страны.
+   • Сверка с публичными кейсами TC (Израиль ~850%, Дубай ~900%, Испания
+     ~700%): модель держит окупаемость в этом коридоре и специально
+     откалибрована консервативно - базовый ROAS не превышает ~x9.6,
+     смелый ~x12.7, чтобы не рисовать неправдоподобные x14+.
+   ⚠️ ЗАМЕНИТЬ НА РЕАЛЬНЫЕ ДАННЫЕ TC (по приоритету):
+     1) cpl по каждой стране/нише - из Ads Manager (фактический CPL);
+     2) l2b/b2s - из CRM (заявка->запись->оплата по факту);
+     3) check по направлениям - из кассы (выручка за курс);
+     4) cap - реальный потолок открутки по городам.
+   ============================================================ */
+var DATA = {
+  /* dot - цвет флага страны; надежнее эмодзи-флагов (их нет на Windows) */
+  /* cap - практический потолок месячной открутки на одну клинику в этом
+     рынке, выше которого аудитория «выжигается» и CPL растет. Оценка по
+     размеру рынка/охвату Meta; правь под свой опыт по городам. */
+  /* === ЗАМЕНИТЬ НА РЕАЛЬНЫЕ ДАННЫЕ: cpl.<ниша> ниже - оценка по бенчмаркам,
+     подставь фактический CPL из своего Ads Manager по стране и нише === */
+  countries: {
+    il: {name:'Израиль',   dot:'#3b82f6', mult:1.30, cap:16000, cpl:{dental:44, cosmo:28, multi:22, plastic:62,  hair:51,  rehab:29, ophthalmo:42, pediatric:26}},
+    ae: {name:'ОАЭ',       dot:'#16a34a', mult:1.35, cap:20000, cpl:{dental:64, cosmo:42, multi:31, plastic:90,  hair:74,  rehab:40, ophthalmo:61, pediatric:36}},
+    es: {name:'Испания',   dot:'#ef4444', mult:1.05, cap:18000, cpl:{dental:62, cosmo:40, multi:31, plastic:87,  hair:71,  rehab:40, ophthalmo:59, pediatric:35}},
+    de: {name:'Германия',  dot:'#facc15', mult:1.25, cap:22000, cpl:{dental:72, cosmo:46, multi:48, plastic:101, hair:83,  rehab:62, ophthalmo:68, pediatric:42}},
+    cy: {name:'Кипр',      dot:'#fb923c', mult:1.08, cap:2500,  cpl:{dental:40, cosmo:26, multi:22, plastic:56,  hair:46,  rehab:29, ophthalmo:38, pediatric:24}},
+    pl: {name:'Польша',    dot:'#fb7185', mult:0.72, cap:9000,  cpl:{dental:26, cosmo:17, multi:15, plastic:36,  hair:30,  rehab:20, ophthalmo:25, pediatric:16}},
+    tr: {name:'Турция',    dot:'#e11d48', mult:0.50, cap:12000, cpl:{dental:22, cosmo:15, multi:12, plastic:31,  hair:25,  rehab:16, ophthalmo:21, pediatric:13}},
+    kz: {name:'Казахстан', dot:'#06b6d4', mult:0.42, cap:4000,  cpl:{dental:14, cosmo:11, multi:9,  plastic:20,  hair:16,  rehab:12, ophthalmo:13, pediatric:10}},
+    us: {name:'США',       dot:'#6366f1', mult:1.60, cap:35000, cpl:{dental:90, cosmo:52, multi:55, plastic:126, hair:103, rehab:72, ophthalmo:86, pediatric:50},
+         /* США огромные и неоднородные - CPM пляшет в разы по штатам/метро.
+            cpm - множитель цены заявки, chk - множитель чека региона. */
+         regions:{
+           avg:{name:'Среднее по США', cpm:1.00, chk:1.00},
+           ny: {name:'Нью-Йорк',       cpm:1.40, chk:1.20},
+           ca: {name:'Калифорния',     cpm:1.30, chk:1.15},
+           fl: {name:'Флорида',        cpm:1.05, chk:1.00},
+           tx: {name:'Техас',          cpm:0.92, chk:0.95}
+         }}
+  },
+  /* === ЗАМЕНИТЬ НА РЕАЛЬНЫЕ ДАННЫЕ TC ===
+     l2b (заявка->запись) и b2s (запись->оплата) - взять из CRM по каждой нише.
+     У направлений: check - реальный средний чек за курс из кассы;
+     cplMult - насколько дороже/дешевле заявка по направлению (дорогие
+     процедуры = уже аудитория + длиннее цикл = дороже лид). cplMult специально
+     подняты на премиум-направлениях, чтобы ROAS не улетал в неправдоподобные x11+. */
+  niches: {
+    dental: {name:'Стоматология', l2b:0.40, b2s:0.45, dirs:{
+      implants:{name:'Импланты', check:2400, cplMult:1.35},
+      veneers:{name:'Виниры и эстетика', check:2600, cplMult:1.60},
+      ortho:{name:'Ортодонтия / элайнеры', check:2200, cplMult:1.45},
+      prosth:{name:'Протезирование / коронки', check:1400, cplMult:1.05},
+      therapy:{name:'Лечение и гигиена', check:400, cplMult:0.80},
+      surgery:{name:'Хирургия / удаление', check:550, cplMult:0.90},
+      whitening:{name:'Отбеливание', check:320, cplMult:0.75}
+    }},
+    cosmo: {name:'Косметология', l2b:0.50, b2s:0.50, dirs:{
+      inject:{name:'Инъекции: ботокс, филлеры', check:450, cplMult:0.90},
+      hardware:{name:'Аппаратная косметология', check:650, cplMult:1.00},
+      smas:{name:'SMAS-лифтинг', check:1100, cplMult:1.55},
+      threads:{name:'Нити и контурная пластика', check:1000, cplMult:1.45},
+      laser:{name:'Лазерная эпиляция', check:520, cplMult:0.85},
+      peeling:{name:'Пилинги / биоревитализация', check:550, cplMult:0.90},
+      body:{name:'Коррекция фигуры / липолиз', check:900, cplMult:1.30},
+      meso:{name:'Мезотерапия / PRP', check:520, cplMult:0.90}
+    }},
+    multi: {name:'Многопрофильная', l2b:0.40, b2s:0.45, dirs:{
+      checkup:{name:'Чекапы и диагностика', check:350, cplMult:0.85},
+      gyn:{name:'Гинекология', check:750, cplMult:0.95},
+      uro:{name:'Урология / андрология', check:850, cplMult:1.00},
+      endo:{name:'Эндокринология / снижение веса', check:1000, cplMult:1.15},
+      derma:{name:'Дерматология', check:500, cplMult:0.90},
+      gastro:{name:'Гастроэнтерология', check:700, cplMult:0.95},
+      lor:{name:'ЛОР', check:550, cplMult:0.90},
+      cardio:{name:'Кардиология', check:650, cplMult:0.95},
+      peptides:{name:'Пептидная терапия', check:1100, cplMult:1.45}
+    }},
+    plastic: {name:'Пластическая хирургия', l2b:0.35, b2s:0.35, dirs:{
+      breast:{name:'Увеличение груди', check:5500, cplMult:1.80},
+      rhino:{name:'Ринопластика', check:4500, cplMult:1.55},
+      lipo:{name:'Липосакция / контуринг', check:3200, cplMult:1.30},
+      blefaro:{name:'Блефаропластика', check:2600, cplMult:1.20},
+      facelift:{name:'Подтяжка лица', check:6000, cplMult:1.95},
+      abdomino:{name:'Абдоминопластика', check:4500, cplMult:1.55}
+    }},
+    hair: {name:'Трихология / пересадка волос', l2b:0.38, b2s:0.40, dirs:{
+      fue:{name:'Пересадка волос (FUE)', check:3000, cplMult:1.30},
+      beard:{name:'Пересадка бороды', check:2500, cplMult:1.20},
+      prp:{name:'PRP / мезотерапия волос', check:500, cplMult:0.85},
+      treat:{name:'Лечение выпадения', check:700, cplMult:0.90}
+    }},
+    rehab: {name:'Реабилитация / ортопедия', l2b:0.45, b2s:0.48, dirs:{
+      spine:{name:'Лечение спины и позвоночника', check:900, cplMult:1.00},
+      osteo:{name:'Остеопатия', check:500, cplMult:0.85},
+      physio:{name:'Физиотерапия / ЛФК', check:450, cplMult:0.80},
+      sport:{name:'Спортивная медицина', check:600, cplMult:0.90},
+      joints:{name:'Суставы / ортопедия', check:1000, cplMult:1.05},
+      massage:{name:'Массаж (курсы)', check:350, cplMult:0.75}
+    }},
+    ophthalmo: {name:'Офтальмология', l2b:0.40, b2s:0.45, dirs:{
+      lasik:{name:'Лазерная коррекция зрения', check:2000, cplMult:1.35},
+      cataract:{name:'Катаракта', check:2000, cplMult:1.45},
+      retina:{name:'Сетчатка / лечение', check:1500, cplMult:1.00},
+      kids:{name:'Детская офтальмология', check:400, cplMult:0.85}
+    }},
+    /* Педиатрия: модель регулярного спроса. l2b/b2s выше среднего (родители
+       быстро записываются при актуальном вопросе), но чек ниже стоматологии,
+       пластики и хирургии. check = выручка с пациента/семьи за первичный цикл,
+       не цена одной консультации. ROAS держим умеренным. */
+    pediatric: {name:'Педиатрия', l2b:0.55, b2s:0.55, dirs:{
+      consult:{name:'Консультация педиатра', check:90, cplMult:0.85},
+      vaccine:{name:'Вакцинация', check:180, cplMult:0.90},
+      checkup:{name:'Детский чекап', check:200, cplMult:1.00},
+      acute:{name:'Лечение простуд и ОРВИ', check:150, cplMult:0.85},
+      home:{name:'Педиатр на дом', check:160, cplMult:1.10},
+      allergy:{name:'Детская аллергология', check:320, cplMult:1.05},
+      gastro:{name:'Детская гастроэнтерология', check:340, cplMult:1.05},
+      infant:{name:'Наблюдение ребенка до года', check:550, cplMult:1.20}
+    }}
+  },
+  /* Сценарии: «осторожный» - если обработка заявок в клинике хромает,
+     «амбициозный» - при идеальной работе администраторов.
+     cpl/l2b/b2s - множители к базовым цифрам, spread - ширина вилки. */
+  scenarios: {
+    cons: {name:'Осторожный', cpl:1.20, l2b:0.85, b2s:0.85, spread:0.10},
+    base: {name:'Базовый',    cpl:1.00, l2b:1.00, b2s:1.00, spread:0.15},
+    aggr: {name:'Смелый',     cpl:0.88, l2b:1.08, b2s:1.08, spread:0.20}
+  }
+};
+
+/* Чистый расчет: state -> числа. Без DOM, тестируется отдельно. */
+function tcCalc(state, D){
+  var c = D.countries[state.country], n = D.niches[state.niche];
+  var sc = D.scenarios[state.scenario] || D.scenarios.base;
+  if(!c || !n || !state.dirs.length) return null;
+  /* Регион США: множители цены заявки (cpm) и чека (chk) - CPM в США
+     сильно различается по штатам/метро. Для остальных стран = 1. */
+  var reg = (c.regions && c.regions[state.usRegion]) ? c.regions[state.usRegion] : null;
+  var regCpm = reg ? reg.cpm : 1, regChk = reg ? reg.chk : 1;
+  var effMult = c.mult * regChk;
+  var cplMult = 0, check = 0, i, d;
+  for(i = 0; i < state.dirs.length; i++){
+    d = n.dirs[state.dirs[i]];
+    if(!d) return null;
+    cplMult += d.cplMult;
+    check += d.check * effMult;
+  }
+  cplMult /= state.dirs.length;
+  check = check / state.dirs.length;
+  if(state.checkOverride > 0) check = state.checkOverride;
+  var cpl = c.cpl[state.niche] * cplMult * sc.cpl * regCpm;
+  var l2b = Math.min(n.l2b * sc.l2b, 0.95);
+  var b2s = Math.min(n.b2s * sc.b2s, 0.95);
+  /* Емкость рынка: аудитория конечна. До потолка - бюджет работает
+     полностью и заявки растут вместе с ним. Выше потолка рынок уже выкуплен:
+     эффективный бюджет почти не растет (первые +50% потолка добавляют лишь 6%,
+     дальше 2%) - деньги идут в частоту показов, а не в новых людей. ROAS
+     считаем от ПОЛНОГО бюджета, поэтому переспенд честно роняет окупаемость. */
+  var cap = c.cap || 1e9;
+  var B = state.budget, effBudget = B, overCap = B > cap;
+  if(overCap){
+    var over = B - cap;
+    var band1 = Math.min(over, cap * 0.5), band2 = Math.max(0, over - cap * 0.5);
+    effBudget = cap + band1 * 0.06 + band2 * 0.02;
+  }
+  var leads = effBudget / cpl;
+  var bookings = leads * l2b;
+  var sales = bookings * b2s;
+  var revenue = sales * check;
+  return {
+    cpl: cpl, check: check, l2b: l2b, b2s: b2s,
+    leads: leads, bookings: bookings, sales: sales, revenue: revenue,
+    roas: revenue / state.budget,
+    cap: cap, effBudget: effBudget, overCap: overCap,
+    lo: 1 - sc.spread, hi: 1 + sc.spread
+  };
+}
+/*CORE-END*/
+
+/* ---------- состояние и DOM ---------- */
+/* Инлайновые SVG-флаги - надежнее эмодзи (их нет на Windows), рендерятся везде */
+var FLAGS = {
+  il:'<svg viewBox="0 0 20 14"><rect width="20" height="14" fill="#fff"/><rect width="20" height="2" y="1.6" fill="#0038b8"/><rect width="20" height="2" y="10.4" fill="#0038b8"/><path d="M10 4.4l1.75 3.03h-3.5z" fill="none" stroke="#0038b8" stroke-width=".6"/><path d="M10 9.6l1.75-3.03h-3.5z" fill="none" stroke="#0038b8" stroke-width=".6"/></svg>',
+  ae:'<svg viewBox="0 0 20 14"><rect width="20" height="14" fill="#fff"/><rect width="20" height="4.67" fill="#00732f"/><rect width="20" height="4.67" y="9.33" fill="#000"/><rect width="6" height="14" fill="#ff0000"/></svg>',
+  es:'<svg viewBox="0 0 20 14"><rect width="20" height="14" fill="#c60b1e"/><rect width="20" height="7" y="3.5" fill="#ffc400"/></svg>',
+  de:'<svg viewBox="0 0 20 14"><rect width="20" height="4.67" fill="#000"/><rect width="20" height="4.67" y="4.67" fill="#dd0000"/><rect width="20" height="4.67" y="9.33" fill="#ffce00"/></svg>',
+  cy:'<svg viewBox="0 0 20 14"><rect width="20" height="14" fill="#fff"/><ellipse cx="10" cy="6" rx="3.6" ry="1.5" fill="#d47600"/><path d="M7.5 9q1.2 1.6 2.5 0" stroke="#4e9f3d" stroke-width=".6" fill="none"/><path d="M12.5 9q-1.2 1.6-2.5 0" stroke="#4e9f3d" stroke-width=".6" fill="none"/></svg>',
+  pl:'<svg viewBox="0 0 20 14"><rect width="20" height="14" fill="#fff"/><rect width="20" height="7" y="7" fill="#dc143c"/></svg>',
+  tr:'<svg viewBox="0 0 20 14"><rect width="20" height="14" fill="#e30a17"/><circle cx="8" cy="7" r="3" fill="#fff"/><circle cx="9" cy="7" r="2.4" fill="#e30a17"/><path d="M12.2 5.4l.5 1.4 1.45.02-1.17 .86 .43 1.4-1.19-.83-1.18 .85 .42-1.41-1.16-.84 1.45-.03z" fill="#fff"/></svg>',
+  kz:'<svg viewBox="0 0 20 14"><rect width="20" height="14" fill="#00afca"/><circle cx="10" cy="6.5" r="2.2" fill="#fec50c"/></svg>',
+  us:'<svg viewBox="0 0 20 14"><rect width="20" height="14" fill="#fff"/><g fill="#b22234"><rect width="20" height="1.08"/><rect width="20" height="1.08" y="2.15"/><rect width="20" height="1.08" y="4.3"/><rect width="20" height="1.08" y="6.46"/><rect width="20" height="1.08" y="8.61"/><rect width="20" height="1.08" y="10.77"/><rect width="20" height="1.08" y="12.92"/></g><rect width="9" height="7.54" fill="#3c3b6e"/><g fill="#fff"><circle cx="2" cy="1.6" r=".4"/><circle cx="4.2" cy="1.6" r=".4"/><circle cx="6.4" cy="1.6" r=".4"/><circle cx="3.1" cy="3.2" r=".4"/><circle cx="5.3" cy="3.2" r=".4"/><circle cx="2" cy="4.8" r=".4"/><circle cx="4.2" cy="4.8" r=".4"/><circle cx="6.4" cy="4.8" r=".4"/><circle cx="3.1" cy="6.2" r=".4"/><circle cx="5.3" cy="6.2" r=".4"/></g></svg>'
+};
+function flagHtml(k){ return '<span class="cflag">' + (FLAGS[k] || '') + '</span>'; }
+
+var MAX_DIRS = 20;   /* фактически без лимита - можно выбрать все направления ниши */
+var state = { country:'il', niche:'dental', dirs:['implants'], budget:5000, checkOverride:0, scenario:'base', usRegion:'avg' };
+
+/* ============================================================
+   Аналитика: единая безопасная отправка событий в Meta Pixel.
+   - trackEvent НЕ падает, если fbq не определен (адблок/эксперимент).
+   - Общий payload: конфигурация + прогноз диапазонами, БЕЗ PII.
+   - Имя и телефон в пиксель не уходят - только на сервер /api/lead.
+   - console.debug только при флаге ?tcdebug=1 или localStorage tc_debug=1.
+   ============================================================ */
+var CALC_VERSION = 'calc-2026-07';
+var TC_DEBUG = false;
+try { TC_DEBUG = /[?&#]tcdebug=1/.test(location.href) || lsGet('tc_debug') === '1'; } catch(e){}
+
+/* Собирает не-PII payload: где человек, что выбрал и что показал прогноз. */
+function calcPayload(extra){
+  var p = { calc_version: CALC_VERSION, page_location: '' };
+  try { p.page_location = location.href.split('#')[0].slice(0, 300); } catch(e){}
+  try {
+    var c = DATA.countries[state.country], n = DATA.niches[state.niche];
+    p.country = state.country;
+    p.countryName = c ? c.name : '';
+    p.usRegion = (state.country === 'us') ? (state.usRegion || 'avg') : '';
+    p.niche = state.niche;
+    p.nicheName = n ? n.name : '';
+    p.selectedServices = state.dirs.join('.');   /* ключи услуг, не персональные данные */
+    p.budget = state.budget;
+    p.scenario = state.scenario;
+    var r = tcCalc(state, DATA);
+    if(r){
+      p.effectiveBudget = Math.round(r.effBudget);
+      p.averageCheck = Math.round(r.check);
+      p.isOverspend = !!r.overCap;
+      p.leadsLow = Math.round(r.leads * r.lo);       p.leadsHigh = Math.round(r.leads * r.hi);
+      p.bookingsLow = Math.round(r.bookings * r.lo); p.bookingsHigh = Math.round(r.bookings * r.hi);
+      p.salesLow = Math.round(r.sales * r.lo);       p.salesHigh = Math.round(r.sales * r.hi);
+      p.revenueLow = Math.round(r.revenue * r.lo);   p.revenueHigh = Math.round(r.revenue * r.hi);
+      p.roasLow = Math.round(r.roas * r.lo * 100) / 100; p.roasHigh = Math.round(r.roas * r.hi * 100) / 100;
+    }
+  } catch(e){}
+  if(extra){ for(var k in extra){ if(Object.prototype.hasOwnProperty.call(extra, k)) p[k] = extra[k]; } }
+  return p;
+}
+
+/* Безопасная отправка. standard:true -> fbq('track', ...) с eventID для
+   дедупликации с server-side CAPI (напр. Lead); иначе trackCustom. */
+function trackEvent(name, extra, opts){
+  opts = opts || {};
+  var payload = calcPayload(extra);
+  if(TC_DEBUG){ try { console.debug('[tc-track]', name, opts.eventID ? '(' + opts.eventID + ')' : '', payload); } catch(e){} }
+  try {
+    if(typeof window.fbq !== 'function') return;
+    if(opts.standard){ window.fbq('track', name, payload, opts.eventID ? { eventID: opts.eventID } : undefined); }
+    else { window.fbq('trackCustom', name, payload); }
+  } catch(e){}
+}
+
+/* ============================================================
+   Надежность: централизованная валидация входных данных.
+   Любое значение из hash/query/localStorage/полей проходит через
+   эти проверки - никаких сырых чисел или чужих ключей в state.
+   ============================================================ */
+var LIMITS = { budgetMin: 500, budgetMax: 30000, checkMin: 1, checkMax: 100000, maxDirs: 20 };
+function toInt(v){ var n = parseInt(v, 10); return isFinite(n) ? n : NaN; }
+function clampInt(v, min, max){ var n = toInt(v); return isNaN(n) ? NaN : Math.min(Math.max(n, min), max); }
+function isCountry(k){ return !!(k && DATA.countries[k]); }
+function isNiche(k){ return !!(k && DATA.niches[k]); }
+function isScenario(k){ return !!(k && DATA.scenarios[k]); }
+function isUsRegion(k){ return !!(k && DATA.countries.us.regions[k]); }
+/* Чек: либо 0 (авто-подстановка по направлениям), либо в разумном коридоре.
+   Важно: закрывает дыру, когда огромный ch из ссылки/памяти раздувал выручку. */
+function validCheck(v){ var n = toInt(v); if(isNaN(n) || n <= 0) return 0; return Math.min(Math.max(n, LIMITS.checkMin), LIMITS.checkMax); }
+/* Список услуг: только реальные ключи текущей ниши, максимум maxDirs. */
+function validDirs(arr, niche){
+  var nk = isNiche(niche) ? niche : state.niche;
+  var dirs = DATA.niches[nk].dirs;
+  if(!Array.isArray(arr)) return null;
+  var out = arr.filter(function(k){ return typeof k === 'string' && dirs[k]; });
+  return out.length ? out.slice(0, LIMITS.maxDirs) : null;
+}
+
+/* ---------- безопасные обертки над localStorage ----------
+   Приватный режим Safari, переполнение квоты или отключенное хранилище
+   бросают исключения - гасим их, калькулятор продолжает работать. */
+function lsGet(key){ try { return localStorage.getItem(key); } catch(e){ return null; } }
+function lsSet(key, val){ try { localStorage.setItem(key, val); return true; } catch(e){ return false; } }
+function lsRemove(key){ try { localStorage.removeItem(key); } catch(e){} }
+
+/* ---------- минимальная самопроверка расчета при загрузке ----------
+   Известный вход -> вменяемый выход. Ловит регрессии модели.
+   Ничего не блокирует: только предупреждение в консоль. */
+function tcSelfTest(){
+  try {
+    var r = tcCalc({ country:'il', niche:'dental', dirs:['implants'], budget:5000, checkOverride:0, scenario:'base', usRegion:'avg' }, DATA);
+    var good = r && isFinite(r.leads) && r.leads > 0 && isFinite(r.revenue) && r.revenue > 0 &&
+               isFinite(r.cpl) && r.cpl > 0 && isFinite(r.roas) && r.roas > 0 && r.roas < 20;
+    if(!good && typeof console !== 'undefined' && console.warn) console.warn('[tc] self-test: расчет вне ожидаемого диапазона', r);
+    return !!good;
+  } catch(e){ if(typeof console !== 'undefined' && console.warn) console.warn('[tc] self-test упал:', e); return false; }
+}
+
+/* Рандомайзер: случайный, но КОРРЕКТНЫЙ профиль.
+   Сегмент (бюджетный/средний/премиум) определяет и направления (по чеку),
+   и бюджет - в пределах потолка страны, чтобы не было выжигания. */
+function randInt(a, b){ return a + Math.floor(Math.random() * (b - a + 1)); }
+function pick(arr){ return arr[randInt(0, arr.length - 1)]; }
+function randomProfile(){
+  var co = pick(Object.keys(DATA.countries));
+  var ni = pick(Object.keys(DATA.niches));
+  var dirs = DATA.niches[ni].dirs;
+  var seg = pick(['budget', 'mid', 'premium']);
+  /* сортируем направления по чеку и берем из нужного сегмента */
+  var byCheck = Object.keys(dirs).sort(function(a, b){ return dirs[a].check - dirs[b].check; });
+  var third = Math.ceil(byCheck.length / 3);
+  var pool = seg === 'budget' ? byCheck.slice(0, third)
+           : seg === 'premium' ? byCheck.slice(-third)
+           : byCheck.slice(third - 1, -1) ;
+  if(!pool.length) pool = byCheck;
+  var n = randInt(1, 2), chosen = [];
+  for(var i = 0; i < n && pool.length; i++){ var d = pick(pool); if(chosen.indexOf(d) < 0) chosen.push(d); }
+  if(!chosen.length) chosen = [byCheck[0]];
+  /* бюджет по сегменту, но в пределах потолка страны (без выжигания) */
+  var cap = DATA.countries[co].cap || 20000;
+  var frac = seg === 'budget' ? [0.15, 0.35] : seg === 'premium' ? [0.6, 0.95] : [0.35, 0.6];
+  var raw = cap * (frac[0] + Math.random() * (frac[1] - frac[0]));
+  var budget = Math.max(1000, Math.min(30000, Math.round(raw / 500) * 500));
+  state.country = co; state.niche = ni; state.dirs = chosen; state.budget = budget;
+  state.checkOverride = 0; state.usRegion = (co === 'us') ? pick(Object.keys(DATA.countries.us.regions)) : 'avg';
+  document.getElementById('budget').value = state.budget;
+  trackEvent('CalcRandom', { segment: seg });
+  trackInteract();
+  renderChips(); renderScen(); update();
+  document.getElementById('res').scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+function renderPresets2(){
+  var el=document.getElementById('presetsRow'); el.innerHTML='';
+  /* рандомайзер - единственный быстрый старт, оформлен как явный способ увидеть механику за 1 клик */
+  var rb=document.createElement('button'); rb.type='button'; rb.id='randBtn'; rb.className='preset-btn preset-rand';
+  rb.innerHTML='<svg viewBox="0 0 16 16" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4" style="flex-shrink:0"><rect x="2" y="2" width="12" height="12" rx="3"/><circle cx="5.5" cy="5.5" r="1" fill="currentColor" stroke="none"/><circle cx="10.5" cy="10.5" r="1" fill="currentColor" stroke="none"/><circle cx="10.5" cy="5.5" r="1" fill="currentColor" stroke="none"/><circle cx="5.5" cy="10.5" r="1" fill="currentColor" stroke="none"/></svg>'
+    + '<span class="rand-txt"><b>Показать случайный пример</b></span>'
+    + '<span class="rand-arrow" aria-hidden="true">↗</span>';
+  rb.setAttribute('aria-label','Показать случайный пример: увидите механику калькулятора за один клик');
+  rb.onclick=randomProfile;
+  el.appendChild(rb);
+}
+var SCEN_HINTS = {
+  cons: 'Берем с запасом: если заявки обрабатывают не быстро.',
+  base: 'Средние цифры по нашим кампаниям.',
+  aggr: 'Если заявки обрабатывают быстро и по скриптам.'
+};
+
+function renderScen(){
+  var el = document.getElementById('scenToggle'); el.innerHTML = '';
+  Object.keys(DATA.scenarios).forEach(function(k){
+    var b = document.createElement('button'); b.type = 'button';
+    b.className = state.scenario === k ? 'on' : '';
+    b.textContent = DATA.scenarios[k].name;
+    b.setAttribute('aria-pressed', state.scenario === k ? 'true' : 'false');
+    b.onclick = function(){ state.scenario = k; renderScen(); update(); };
+    el.appendChild(b);
+  });
+  document.getElementById('scenHint').textContent = SCEN_HINTS[state.scenario] || '';
+}
+
+function fmtInt(x){ return Math.round(x).toLocaleString('ru-RU'); }
+/* Крупные суммы - компактно ($1,2 млн вместо $1 200 000), чтобы не рвать плитку */
+function fmtMoney(x){
+  x = Math.round(x);
+  if(x >= 1000000) return '$' + (Math.round(x / 100000) / 10).toLocaleString('ru-RU') + ' млн';
+  return '$' + x.toLocaleString('ru-RU');
+}
+/* Компактный диапазон денег для больших плиток: «$46-62к» / «$1,2-1,6 млн».
+   «к» = тысяч - короче «тыс.» и не рвет плитку на больших числах. */
+function fmtRangeMoney(lo, hi){
+  if(hi >= 1000000){
+    var f = function(v){ return (Math.round(v / 100000) / 10).toLocaleString('ru-RU'); };
+    return '$' + f(lo) + '-' + f(hi) + ' млн';
+  }
+  if(hi >= 10000) return '$' + Math.round(lo / 1000) + '-' + Math.round(hi / 1000) + 'к';
+  /* $1 000-$9 999: тоже компактно ($7,6-9,3к), иначе длинный диапазон рвет плитку */
+  if(hi >= 1000){ var g = function(v){ return (Math.round(v / 100) / 10).toLocaleString('ru-RU'); }; return '$' + g(lo) + '-' + g(hi) + 'к'; }
+  /* до $1 000: один знак $ («$741-906»), а не «$741-$906» - иначе длинно и рвет на 2 строки */
+  return '$' + Math.round(lo) + '-' + Math.round(hi);
+}
+
+function renderChips(){
+  var el = document.getElementById('countryChips'); el.innerHTML = '';
+  Object.keys(DATA.countries).forEach(function(k){
+    var c = DATA.countries[k];
+    var b = document.createElement('button'); b.type = 'button';
+    b.className = 'chip' + (state.country === k ? ' on' : '');
+    b.setAttribute('aria-pressed', state.country === k ? 'true' : 'false');
+    b.innerHTML = flagHtml(k) + c.name;
+    b.onclick = function(){ state.country = k; state.checkOverride = 0; state.budget = budgetCfg(k).def; renderChips(); update(); };
+    el.appendChild(b);
+  });
+  applyBudgetRange();
+  /* подселектор региона США - только когда выбраны США */
+  var usC = DATA.countries[state.country], usRow = document.getElementById('usRegionRow');
+  if(usC && usC.regions){
+    usRow.hidden = false;
+    var ur = document.getElementById('usRegionChips'); ur.innerHTML = '';
+    Object.keys(usC.regions).forEach(function(rk){
+      var rb = document.createElement('button'); rb.type = 'button';
+      rb.className = 'chip' + (state.usRegion === rk ? ' on' : '');
+      rb.setAttribute('aria-pressed', state.usRegion === rk ? 'true' : 'false');
+      rb.textContent = usC.regions[rk].name;
+      rb.onclick = function(){ state.usRegion = rk; state.checkOverride = 0; renderChips(); update(); };
+      ur.appendChild(rb);
+    });
+  } else {
+    usRow.hidden = true;
+  }
+  el = document.getElementById('nicheChips'); el.innerHTML = '';
+  Object.keys(DATA.niches).forEach(function(k){
+    var n = DATA.niches[k];
+    var b = document.createElement('button'); b.type = 'button';
+    b.className = 'chip' + (state.niche === k ? ' on' : '');
+    b.setAttribute('aria-pressed', state.niche === k ? 'true' : 'false');
+    b.textContent = n.name;
+    b.onclick = function(){
+      if(state.niche !== k){ state.niche = k; state.dirs = [Object.keys(DATA.niches[k].dirs)[0]]; state.checkOverride = 0; }
+      renderChips(); update();
+    };
+    el.appendChild(b);
+  });
+  el = document.getElementById('dirChips'); el.innerHTML = '';
+  var dirs = DATA.niches[state.niche].dirs;
+  Object.keys(dirs).forEach(function(k){
+    var b = document.createElement('button'); b.type = 'button';
+    var isOn = state.dirs.indexOf(k) >= 0;
+    b.className = 'chip' + (isOn ? ' on' : '');
+    b.setAttribute('aria-pressed', isOn ? 'true' : 'false');
+    b.textContent = (isOn ? '✓ ' : '') + dirs[k].name;
+    b.onclick = function(){
+      var i = state.dirs.indexOf(k);
+      if(i >= 0){ if(state.dirs.length > 1) state.dirs.splice(i, 1); }
+      else { state.dirs.push(k); if(state.dirs.length > MAX_DIRS) state.dirs.shift(); }
+      state.checkOverride = 0;
+      renderChips(); update();
+    };
+    el.appendChild(b);
+  });
+  /* мультивыбор: счетчик выбранных + переключатель "выбрать все / оставить одно" */
+  var dcEl = document.getElementById('dirCount'); if(dcEl) dcEl.textContent = state.dirs.length;
+  var dirAllBtn = document.getElementById('dirAll');
+  if(dirAllBtn){
+    var dkeys = Object.keys(dirs);
+    dirAllBtn.textContent = (state.dirs.length >= dkeys.length) ? 'Оставить одно' : 'Выбрать все';
+    dirAllBtn.onclick = function(){
+      state.dirs = (state.dirs.length >= dkeys.length) ? [dkeys[0]] : dkeys.slice(0, MAX_DIRS);
+      state.checkOverride = 0; renderChips(); update();
+    };
+  }
+  renderPresets();
+}
+
+/* Бюджет привязан к рынку: у каждой страны свой диапазон и рекомендованный
+   дефолт (для Казахстана $30k бессмысленны - потолок $4k). Считаем от cap. */
+function niceRound(x){ var s = x < 3000 ? 500 : x < 20000 ? 1000 : 5000; return Math.max(500, Math.round(x / s) * s); }
+function budgetCfg(co){
+  var cap = DATA.countries[co].cap || 20000;
+  return { min: 500, max: niceRound(cap * 1.5), def: niceRound(cap * 0.4) };
+}
+function fmtBudgetShort(v){ return v < 1000 ? '$' + v : (v % 1000 === 0 ? '$' + (v / 1000) + 'k' : '$' + (Math.round(v / 100) / 10).toLocaleString('ru-RU') + 'k'); }
+/* синхронизирует слайдер (min/max/подписи) и бюджетные пресеты с текущей страной */
+function applyBudgetRange(){
+  var cfg = budgetCfg(state.country), s = document.getElementById('budget');
+  s.min = cfg.min; s.max = cfg.max;
+  if(state.budget < cfg.min) state.budget = cfg.min;
+  if(state.budget > cfg.max) state.budget = cfg.max;
+  s.value = state.budget;
+  var m = document.querySelector('.slider-marks');
+  if(m) m.innerHTML = '<span>' + fmtMoney(cfg.min) + '</span><span>' + fmtMoney(cfg.max) + '</span>';
+  renderPresets();
+}
+function renderPresets(){
+  var el = document.getElementById('budgetPresets'); el.innerHTML = '';
+  var cfg = budgetCfg(state.country);
+  /* 4 удобных значения внутри диапазона страны */
+  var vals = [cfg.max * 0.2, cfg.max * 0.4, cfg.max * 0.65, cfg.max * 0.9].map(niceRound);
+  vals = vals.filter(function(v, i){ return vals.indexOf(v) === i && v >= cfg.min && v <= cfg.max; });
+  vals.forEach(function(v){
+    var b = document.createElement('button'); b.type = 'button';
+    b.className = 'preset' + (state.budget === v ? ' on' : '');
+    b.textContent = fmtBudgetShort(v);
+    b.onclick = function(){ state.budget = v; document.getElementById('budget').value = v; update(); renderPresets(); };
+    el.appendChild(b);
+  });
+}
+
+/* строка "рекомендуемый бюджет для этого рынка": показывает разумный дефолт,
+   кликом ставит его. Дефолт = budgetCfg().def, привязан к потолку рынка. */
+function renderRecBudget(){
+  var el = document.getElementById('recBudget'); if(!el) return;
+  var cfg = budgetCfg(state.country);
+  if(state.budget === cfg.def){
+    el.innerHTML = 'Рекомендуем для этого рынка: <b>' + fmtMoney(cfg.def) + '</b> (выбран)';
+  } else {
+    el.innerHTML = 'Рекомендуем для этого рынка: <button type="button" id="recBtn">' + fmtMoney(cfg.def) + '</button>';
+    var rb = document.getElementById('recBtn');
+    if(rb) rb.onclick = function(){ var c = budgetCfg(state.country); state.budget = c.def; document.getElementById('budget').value = c.def; update(); renderPresets(); };
+  }
+}
+
+function paintSlider(){
+  var s = document.getElementById('budget');
+  var fill = ((state.budget - s.min) / (s.max - s.min)) * 100;
+  s.style.setProperty('--fill', fill + '%');
+}
+
+/* ---------- анимация чисел (count-up при каждом изменении) ---------- */
+var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function animNum(id, target, fmt){
+  var el = document.getElementById(id);
+  if(prefersReduced || el._v == null){ el._v = target; el.textContent = fmt(target); return; }
+  var from = el._v; el._v = target;
+  if(from === target){ el.textContent = fmt(target); return; }
+  if(el._raf) cancelAnimationFrame(el._raf);
+  var t0 = performance.now(), dur = 380;
+  (function step(t){
+    var p = Math.min((t - t0) / dur, 1), e = 1 - Math.pow(1 - p, 3);
+    el.textContent = fmt(from + (target - from) * e);
+    if(p < 1) el._raf = requestAnimationFrame(step);
+  })(t0);
+}
+
+function update(){
+  var r = tcCalc(state, DATA);
+  if(!r) return;
+  var bv = document.getElementById('budgetVal');
+  if(!bv.querySelector('input')) bv.textContent = fmtMoney(state.budget);
+  document.getElementById('budget').setAttribute('aria-valuetext', fmtMoney(state.budget) + ' в месяц');
+  paintSlider();
+  var checkEl = document.getElementById('check');
+  if(document.activeElement !== checkEl) checkEl.value = Math.round(r.check);
+
+  var rangeInt = function(v){ return fmtInt(v * r.lo) + '-' + fmtInt(v * r.hi); };
+  var rangeMoneyBig = function(v){ return fmtRangeMoney(v * r.lo, v * r.hi); };
+
+  /* большие плитки: заявки и выручка (выручка - компактным диапазоном) */
+  animNum('rLeads', r.leads, rangeInt);
+  animNum('rRevenue', r.revenue, rangeMoneyBig);
+  /* воронка 4 ступени: заявки → записи → продажи → выручка, с конверсией между ними */
+  animNum('fLeads', r.leads, rangeInt);
+  animNum('rBookings', r.bookings, rangeInt);
+  animNum('rSales', r.sales, rangeInt);
+  animNum('fRev', r.revenue, rangeMoneyBig);
+  document.getElementById('fL2B').textContent = '· ' + Math.round(r.l2b * 100) + '% из заявок';
+  document.getElementById('fB2S').textContent = '· ' + Math.round(r.b2s * 100) + '% из записей';
+  document.getElementById('bBookings').style.width = Math.round(r.l2b * 100) + '%';
+  document.getElementById('bSales').style.width = Math.max(Math.round(r.l2b * r.b2s * 100), 4) + '%';
+  /* вердикт: сильный, но честный - до расходов клиники */
+  document.getElementById('verdict').innerHTML =
+    'Реклама окупается <b>~' + (Math.round(r.roas * 10) / 10).toLocaleString('ru-RU') + ' раз</b> по выручке, до ваших расходов. ' +
+    'Дальше все решает воронка внутри клиники.';
+  /* бейдж выбранной конфигурации в заголовке результата */
+  var dirNames = state.dirs.map(function(k){ return DATA.niches[state.niche].dirs[k].name; }).join(' + ');
+  var cObj = DATA.countries[state.country];
+  var geoName = cObj.name + ((cObj.regions && cObj.regions[state.usRegion] && state.usRegion !== 'avg') ? ' · ' + cObj.regions[state.usRegion].name : '');
+  document.getElementById('resTag').innerHTML = flagHtml(state.country) + geoName + ' · ' + DATA.niches[state.niche].name + ' · ' + dirNames;
+  /* печатная шапка (видна только в PDF) */
+  /* шапка печати/PDF: сводка конфигурации со страной, регионом, нишей, направлениями, бюджетом, чеком и сценарием */
+  document.getElementById('printHead').innerHTML =
+    '<b>Traffic Craft - прогноз рекламы для клиники</b><br>' +
+    geoName + ' · ' + DATA.niches[state.niche].name + ' · ' + dirNames + '<br>' +
+    'Бюджет ' + fmtMoney(state.budget) + '/мес · средний чек ' + fmtMoney(r.check) +
+    ' · сценарий «' + DATA.scenarios[state.scenario].name + '» · traffic-craft.com/calc';
+  /* критичное предупреждение о выжигании: видно всегда, когда бюджет выше потолка рынка */
+  var resBurn = document.getElementById('resBurn');
+  if(resBurn){
+    if(r.overCap){
+      resBurn.hidden = false;
+      resBurn.innerHTML = 'Бюджет выше потолка рынка (~<b>' + fmtMoney(r.cap) + '</b>/мес): реально работает ~<b>' + fmtMoney(r.effBudget) + '</b>, остальное почти впустую. Расти лучше вширь - новыми городами.';
+    } else {
+      resBurn.hidden = true;
+    }
+  }
+  /* sticky-бар */
+  animNum('sLeads', r.leads, fmtInt);
+  animNum('sRevenue', r.revenue, fmtMoney);
+  /* предупреждение о емкости рынка (выжигание аудитории) */
+  var capEl = document.getElementById('capWarn');
+  var capSoftEl = document.getElementById('capSoft');
+  if(capEl){
+    if(r.overCap){
+      capEl.hidden = false;
+      capEl.innerHTML = 'Бюджет выше потолка рынка (~' + fmtMoney(r.cap) + '/мес): реально сработает ~<b>' + fmtMoney(r.effBudget) + '</b>, дальше отдача падает. Растите вширь: добавляйте города, а не бюджет.';
+    } else {
+      capEl.hidden = true;
+    }
+  }
+  /* мягкая подсказка: подходим к потолку рынка (80-100% cap) - до жесткого предупреждения */
+  if(capSoftEl){
+    if(!r.overCap && r.cap && state.budget >= r.cap * 0.8){
+      capSoftEl.hidden = false;
+      capSoftEl.innerHTML = 'Близко к потолку рынка (~<b>' + fmtMoney(r.cap) + '</b>/мес). Выше - каждый доллар работает слабее.';
+    } else {
+      capSoftEl.hidden = true;
+    }
+  }
+  renderRecBudget();
+  updateWa();
+  if(calcInteracted) trackConfigured();
+  saveHash();
+}
+
+/* ---------- ссылка на расчет + запоминание между визитами ---------- */
+var STORAGE_KEY = 'tc_calc_v1';
+function buildHash(){
+  return ['c=' + state.country, 'n=' + state.niche, 'd=' + state.dirs.join('.'), 'b=' + state.budget, 's=' + state.scenario,
+    (state.country === 'us' && state.usRegion !== 'avg') ? 'ur=' + state.usRegion : '',
+    state.checkOverride > 0 ? 'ch=' + state.checkOverride : ''].filter(Boolean).join('&');
+}
+function shareUrl(){
+  return location.origin + location.pathname + '#' + buildHash();
+}
+/* Дебаунс: Safari лимитирует replaceState (100 вызовов / 30 сек),
+   а слайдер шлет событие на каждый пиксель */
+var persistTimer = null;
+function saveHash(){
+  clearTimeout(persistTimer);
+  persistTimer = setTimeout(function(){
+    try { if(history.replaceState) history.replaceState(null, '', '#' + buildHash()); else location.hash = buildHash(); } catch(e){}
+    lsSet(STORAGE_KEY, JSON.stringify(state));
+  }, 250);
+}
+function applyParsed(h){
+  var parts = String(h).split('&');
+  /* значение может содержать '=' или битую %-последовательность - режем по первому '=', декод в try */
+  function val(raw){ try { return decodeURIComponent(raw); } catch(e){ return raw; } }
+  function each(cb){ parts.forEach(function(p){ var i = p.indexOf('='); if(i >= 0) cb(p.slice(0, i), val(p.slice(i + 1))); }); }
+  each(function(k, v){
+    if(k === 'c'){ if(isCountry(v)) state.country = v; }
+    else if(k === 'n'){ if(isNiche(v)) state.niche = v; }
+    else if(k === 'b'){ var b = clampInt(v, LIMITS.budgetMin, LIMITS.budgetMax); if(!isNaN(b)) state.budget = b; }
+    else if(k === 'ch'){ state.checkOverride = validCheck(v); }   /* кламп чека: закрывает раздувание выручки */
+    else if(k === 's'){ if(isScenario(v)) state.scenario = v; }
+    else if(k === 'ur'){ state._urCand = v; }
+  });
+  /* регион США применяем, только если страна США и регион реальный */
+  var usC = DATA.countries[state.country];
+  if(usC && usC.regions && isUsRegion(state._urCand)) state.usRegion = state._urCand;
+  state._urCand = null;
+  /* направления - после ниши, валидируем под выбранную нишу */
+  each(function(k, v){ if(k === 'd'){ var ds = validDirs(v.split('.'), state.niche); if(ds) state.dirs = ds; } });
+}
+/* страна по часовому поясу браузера - тихий умный дефолт для первого визита */
+function smartCountry(){
+  try {
+    var tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '');
+    var map = {
+      'Asia/Jerusalem':'il', 'Asia/Tel_Aviv':'il', 'Asia/Hebron':'il',
+      'Asia/Dubai':'ae', 'Asia/Muscat':'ae',
+      'Europe/Madrid':'es', 'Atlantic/Canary':'es', 'Europe/Barcelona':'es',
+      'Europe/Istanbul':'tr',
+      'Asia/Almaty':'kz', 'Asia/Astana':'kz', 'Asia/Aqtobe':'kz', 'Asia/Qostanay':'kz', 'Asia/Atyrau':'kz', 'Asia/Oral':'kz'
+    };
+    return map[tz] || null;
+  } catch(e){ return null; }
+}
+function hasStateKeys(str){ return /(^|&)(c|n|d|b|s|ch)=/.test(str); }
+
+function loadState(){
+  var h = location.hash.replace('#', '');
+  if(h && hasStateKeys(h)){ applyParsed(h); return; }        /* 1. ссылка-хэш */
+  var q = location.search.replace('?', '');
+  if(q && hasStateKeys(q)){ applyParsed(q); return; }        /* 2. query - для рекламных ссылок /calc?c=ae&n=dental&b=10000 */
+  try {
+    var saved = JSON.parse(lsGet(STORAGE_KEY) || 'null');  /* битый JSON -> throw -> catch ниже */
+    if(saved && isCountry(saved.country) && isNiche(saved.niche)){
+      state.country = saved.country;
+      state.niche = saved.niche;
+      var ds = validDirs(saved.dirs, saved.niche);
+      if(ds) state.dirs = ds;
+      var b = clampInt(saved.budget, LIMITS.budgetMin, LIMITS.budgetMax);
+      if(!isNaN(b)) state.budget = b;
+      state.checkOverride = validCheck(saved.checkOverride);
+      if(isScenario(saved.scenario)) state.scenario = saved.scenario;
+      if(isUsRegion(saved.usRegion)) state.usRegion = saved.usRegion;
+      return;                                                 /* 3. память прошлого визита */
+    }
+  } catch(e){}
+  var sm = smartCountry();                                    /* 4. первый визит - угадаем страну */
+  if(sm) state.country = sm;
+}
+
+/* ---------- события ---------- */
+/* слайдер: rAF-троттлинг - пересчет не чаще кадра, а не на каждый пиксель */
+var budgetRaf = null;
+document.getElementById('budget').addEventListener('input', function(){
+  state.budget = parseInt(this.value, 10);
+  if(budgetRaf) return;
+  budgetRaf = requestAnimationFrame(function(){
+    budgetRaf = null;
+    renderPresets(); update();
+  });
+});
+/* клик по сумме бюджета - ручной ввод точного значения */
+document.getElementById('budgetVal').addEventListener('keydown', function(e){
+  if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); this.click(); }
+});
+document.getElementById('budgetVal').addEventListener('click', function(){
+  var el = this;
+  if(el.querySelector('input')) return;
+  var cur = state.budget, cfg = budgetCfg(state.country);
+  el.innerHTML = '';
+  var inp = document.createElement('input');
+  /* границы ручного ввода = диапазон текущей страны, иначе слайдер рассинхронизируется */
+  inp.type = 'number'; inp.min = cfg.min; inp.max = cfg.max; inp.step = 100; inp.value = cur;
+  inp.setAttribute('inputmode', 'numeric');
+  inp.setAttribute('aria-label', 'Месячный бюджет, точное значение');
+  inp.style.cssText = 'width:130px;background:var(--glass);border:1px solid var(--accent);border-radius:10px;color:var(--heading);font:inherit;font-size:20px;font-weight:700;padding:2px 10px';
+  el.appendChild(inp);
+  inp.focus(); inp.select();
+  function commit(){
+    var cfg = budgetCfg(state.country);
+    var v = parseInt(inp.value, 10);
+    if(!(v >= cfg.min)) v = cur;
+    state.budget = Math.min(Math.max(v, cfg.min), cfg.max);
+    document.getElementById('budget').value = state.budget;
+    el.textContent = fmtMoney(state.budget);   /* убираем input, иначе сумма застынет */
+    renderPresets(); update();
+  }
+  inp.addEventListener('blur', commit);
+  inp.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); inp.blur(); } });
+});
+document.getElementById('check').addEventListener('input', function(){
+  /* кламп чека централизованно: до $100 000. Нижняя граница низкая - у кого-то чек и $10 */
+  var raw = toInt(this.value);
+  if(!isNaN(raw) && raw > LIMITS.checkMax){ this.value = LIMITS.checkMax; }  /* отражаем потолок в поле */
+  state.checkOverride = validCheck(this.value);
+  update();
+});
+/* Enter в поле чека - подтвердить и убрать фокус (иначе кажется, что ничего не произошло) */
+document.getElementById('check').addEventListener('keydown', function(e){
+  if(e.key === 'Enter'){ e.preventDefault(); this.blur(); }
+});
+document.getElementById('check').addEventListener('blur', function(){
+  var v = parseInt(this.value, 10);
+  if(!(v >= LIMITS.checkMin)){ state.checkOverride = 0; update(); }
+});
+function copyFallback(text){
+  var t = document.createElement('textarea');
+  t.value = text; t.style.position = 'fixed'; t.style.opacity = '0';
+  document.body.appendChild(t); t.select();
+  try { document.execCommand('copy'); } catch(e){}
+  document.body.removeChild(t);
+}
+document.getElementById('shareBtn').addEventListener('click', function(){
+  var btn = this;
+  trackEvent('CalcShare', { method: navigator.share ? 'native' : 'copy' });
+  var done = function(){
+    btn.textContent = 'Ссылка скопирована ✓';
+    setTimeout(function(){ btn.textContent = 'Поделиться расчетом'; }, 2000);
+  };
+  /* на мобиле - нативное меню «поделиться», иначе копируем ссылку */
+  var url = shareUrl();
+  if(navigator.share){
+    navigator.share({ title: 'Прогноз заявок и продаж - Traffic Craft', text: calcSummary(), url: url }).catch(function(){});
+    return;
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(url).then(done, function(){ copyFallback(url); done(); });
+  } else { copyFallback(url); done(); }
+});
+document.getElementById('printBtn').addEventListener('click', function(){
+  trackEvent('CalcPrint');
+  window.print();
+});
+document.getElementById('resetBtn').addEventListener('click', function(){
+  var rc = smartCountry() || 'il';
+  /* usRegion и бюджет по стране - иначе после сброса на США остается старый регион, а бюджет может выйти за потолок */
+  state = { country: rc, niche:'dental', dirs:['implants'], budget: budgetCfg(rc).def, checkOverride:0, scenario:'base', usRegion:'avg' };
+  lsRemove(STORAGE_KEY);
+  document.getElementById('budget').value = state.budget;
+  renderChips(); renderScen(); update();
+});
+/* вставили новую ссылку с другим расчетом в ту же вкладку - применяем */
+window.addEventListener('hashchange', function(){
+  var h = location.hash.replace('#', '');
+  if(h && hasStateKeys(h)){
+    applyParsed(h);
+    document.getElementById('budget').value = state.budget;
+    renderChips(); renderScen(); update();
+  }
+});
+var stickyNumsEl = document.getElementById('stickyNums');
+function stickyToRes(){ document.getElementById('res').scrollIntoView({behavior:'smooth', block:'center'}); }
+stickyNumsEl.addEventListener('click', stickyToRes);
+stickyNumsEl.addEventListener('keydown', function(e){ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); stickyToRes(); } });
+/* sticky-бар прячется, когда результат и так на экране */
+if('IntersectionObserver' in window){
+  var stickyEl = document.getElementById('stickyRes');
+  var io = new IntersectionObserver(function(e){
+    var visible = e.some(function(x){ return x.isIntersecting; });
+    stickyEl.classList.toggle('show', !visible);
+  }, {threshold: .15});
+  io.observe(document.getElementById('res'));
+  io.observe(document.getElementById('cta'));
+} else {
+  document.getElementById('stickyRes').classList.add('show');
+}
+
+/* ---------- сводка расчета (для заявки и WhatsApp) ---------- */
+function calcSummary(){
+  var r = tcCalc(state, DATA);
+  return 'Калькулятор: ' + DATA.countries[state.country].name + ', ' + DATA.niches[state.niche].name +
+    ', ' + state.dirs.map(function(k){ return DATA.niches[state.niche].dirs[k].name; }).join(' + ') +
+    ', бюджет ' + fmtMoney(state.budget) +
+    (r ? ', чек ' + fmtMoney(r.check) + (state.checkOverride > 0 ? ' (вручную)' : '') : '') +
+    ', сценарий «' + DATA.scenarios[state.scenario].name + '»' +
+    (r ? ' → прогноз ' + fmtInt(r.leads) + ' заявок, ' + fmtInt(r.sales) + ' продаж, выручка ' + fmtMoney(r.revenue) : '');
+}
+
+/* ---------- WhatsApp: мгновенный контакт с предзаполненным расчетом ---------- */
+function msgText(){
+  return 'Здравствуйте! Мой расчет из калькулятора: ' + calcSummary().replace('Калькулятор: ', '') + '. Хочу понять, где это усилить в моей клинике.';
+}
+function updateWa(){
+  /* WhatsApp умеет предзаполнять текст прямо в ссылке */
+  var href = 'https://wa.me/77782182305?text=' + encodeURIComponent(msgText());
+  document.getElementById('waBtn').href = href;
+  document.getElementById('stickyWa').href = href;
+}
+/* Telegram не предзаполняет текст через ссылку - копируем расчет в буфер,
+   открываем чат, показываем подсказку «вставьте» */
+function tgHandler(e){
+  waClicked = true; /* не считаем это «уходом без контакта» */
+  trackEvent('CalcTelegram', { channel: 'telegram' });
+  trackMessengerLead('telegram');
+  var txt = msgText();
+  var toast = document.getElementById('tgCopied');
+  var show = function(){ if(toast){ toast.hidden = false; setTimeout(function(){ toast.hidden = true; }, 4000); } };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(show, function(){ copyFallback(txt); show(); });
+  } else { copyFallback(txt); show(); }
+  /* ссылка t.me открывается штатно по href - текст уже в буфере */
+}
+
+/* ============================================================
+   События для ретаргетинга (Meta Custom Audiences).
+   Как использовать в Ads Manager → Аудитории:
+   • «Теплые»: событие CalcConfigured за 30 дн, исключить Lead -
+     считали прогноз, но не оставили заявку.
+   • Сегменты по параметрам: country / niche / budget -
+     можно строить аудитории и креативы под гео и нишу.
+   • CalcAbandon - ушли со страницы без контакта: самый горячий ретаргет.
+   ============================================================ */
+var calcInteracted = false, waClicked = false, cfgTimer = null, lastCfgSig = '', msgLeadSent = false;
+function trackInteract(){
+  if(calcInteracted) return;
+  calcInteracted = true;
+  trackEvent('CalcInteract', { trigger: 'first_interaction' });
+}
+function trackConfigured(){
+  clearTimeout(cfgTimer);
+  cfgTimer = setTimeout(function(){
+    if(!tcCalc(state, DATA)) return;
+    /* дедуп: одну и ту же конфигурацию повторно не шлем */
+    var sig = buildHash();
+    if(sig === lastCfgSig) return;
+    lastCfgSig = sig;
+    trackEvent('CalcConfigured');
+  }, 1500); /* debounce: шлем итог настройки, а не каждый клик */
+}
+/* Lead при осознанном переходе в мессенджер: один раз за сессию и только
+   если форму еще не отправили (иначе Lead уже уйдет с формы + CAPI). */
+function trackMessengerLead(channel){
+  if(formSubmitted || msgLeadSent) return;
+  msgLeadSent = true;
+  var eid = 'msg_' + Date.now() + '_' + Math.random().toString(36).slice(2, 11);
+  trackEvent('Lead', { content_category: 'messenger_' + channel, value: 0, currency: 'KZT' }, { standard: true, eventID: eid });
+}
+document.querySelector('main').addEventListener('pointerdown', trackInteract, {passive:true});
+document.querySelector('main').addEventListener('input', trackInteract, {passive:true});
+window.addEventListener('pagehide', function(){
+  if(calcInteracted && !formSubmitted && !waClicked){
+    trackEvent('CalcAbandon');
+  }
+});
+['waBtn', 'stickyWa'].forEach(function(id){
+  document.getElementById(id).addEventListener('click', function(){
+    waClicked = true;
+    trackEvent('CalcWhatsApp', { channel: 'whatsapp' });
+    trackMessengerLead('whatsapp');
+  });
+});
+['tgBtn', 'stickyTg'].forEach(function(id){
+  document.getElementById(id).addEventListener('click', tgHandler);
+});
+
+/* ---------- utm / fbclid / куки пикселя - прокидываем в заявку, как на главной ---------- */
+var urlParams = new URLSearchParams(window.location.search);
+function tcCookie(n){ var m = document.cookie.match(new RegExp('(?:^|; )' + n + '=([^;]*)')); return m ? decodeURIComponent(m[1]) : ''; }
+
+/* ---------- инлайн-валидация ---------- */
+function markErr(el, bad){
+  el.classList.toggle('err', bad);
+  if(bad) el.setAttribute('aria-invalid', 'true'); else el.removeAttribute('aria-invalid');
+}
+['cName','cPhone'].forEach(function(id){
+  document.getElementById(id).addEventListener('input', function(){ this.classList.remove('err'); var st = document.getElementById('formStatus'); if(st) st.hidden = true; });
+});
+
+/* ---------- форма: параметры калькулятора уходят вместе с заявкой ---------- */
+var formSubmitted = false;
+document.getElementById('calcForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  if(formSubmitted) return;
+  var hp = document.getElementById('cWebsite');
+  if(hp && hp.value){ window.location.href = '/thanks'; return; }
+  var nameEl = document.getElementById('cName'), phoneEl = document.getElementById('cPhone');
+  var name = nameEl.value.trim(), phone = phoneEl.value.trim();
+  var st = document.getElementById('formStatus');
+  markErr(nameEl, name.length < 2);
+  markErr(phoneEl, phone.length < 3);
+  if(name.length < 2 || phone.length < 3){
+    if(st){ st.hidden = false; st.className = 'form-status err'; st.textContent = 'Впишите имя и контакт - без них не ответим.'; }
+    (name.length < 2 ? nameEl : phoneEl).focus();
+    return;
+  }
+  if(st) st.hidden = true;
+  formSubmitted = true;
+  var btn = document.getElementById('cBtn');
+  btn.textContent = 'Отправляем...'; btn.style.opacity = '.8'; btn.style.pointerEvents = 'none';
+
+  var summary = calcSummary();
+  var eventId = 'calc_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+  /* Пиксель Lead: только НЕ-PII (конфиг + прогноз добавит trackEvent). eventID -
+     для дедупликации с server-side CAPI. Имя и телефон уходят ТОЛЬКО на сервер ниже. */
+  trackEvent('Lead', { content_name: summary, content_category: 'calc_form', value: 0, currency: 'KZT' }, { standard: true, eventID: eventId });
+
+  var p = new URLSearchParams();
+  p.append('name', name);
+  p.append('phone', phone);
+  p.append('project', summary);
+  p.append('eventId', eventId);
+  p.append('pageUrl', location.href.split('#')[0].slice(0, 500));
+  ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'].forEach(function(k){
+    var v = urlParams.get(k); if(v) p.append(k, v);
+  });
+  var fbclid = urlParams.get('fbclid'); if(fbclid) p.append('fbclid', fbclid);
+  var fbpC = tcCookie('_fbp'); if(fbpC) p.append('fbp', fbpC);
+  var fbcC = tcCookie('_fbc'); if(fbcC) p.append('fbc', fbcC);
+  var sent = false;
+  if(navigator.sendBeacon){ sent = navigator.sendBeacon('/api/lead', p); }
+  if(!sent){ fetch('/api/lead', {method:'POST', body:p, keepalive:true}).catch(function(){}); }
+
+  if(st){ st.hidden = false; st.className = 'form-status done'; st.textContent = 'Готово. Открываем ваш разбор...'; }
+  setTimeout(function(){ window.location.href = '/thanks'; }, 600);
+});
+
+/* возврат «назад» из /thanks (bfcache): размораживаем форму */
+window.addEventListener('pageshow', function(e){
+  if(e.persisted){
+    formSubmitted = false;
+    var btn = document.getElementById('cBtn');
+    btn.textContent = 'Получить разбор под клинику ↗';
+    btn.style.opacity = ''; btn.style.pointerEvents = '';
+    var st = document.getElementById('formStatus'); if(st) st.hidden = true;
+  }
+});
+
+/* ---------- старт ---------- */
+document.getElementById('footerYear').textContent = new Date().getFullYear();
+tcSelfTest();   /* самопроверка расчета: предупредит в консоль при регрессии модели, но не заблокирует */
+loadState();
+document.getElementById('budget').value = state.budget;
+renderPresets2();
+renderChips();
+renderScen();
+update();
+</script>
+</body>
+</html>
