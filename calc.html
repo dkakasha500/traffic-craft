@@ -363,6 +363,18 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
 .footer-legal a{font-size:13px;color:var(--txt3);text-decoration:underline;transition:color .3s}
 .footer-legal a:hover{color:var(--txt)}
 .footer-cta{background:var(--glass);border:1px solid var(--brd);color:var(--white);padding:12px 28px;border-radius:60px;font-size:14px;font-weight:600;transition:all .3s;text-decoration:none}
+@media(hover:hover){.footer-cta:hover{background:var(--white);color:var(--dark)}}
+/* ===== кастомный курсор - как на главной ===== */
+html.js-cursor, html.js-cursor *, html.js-cursor *::before, html.js-cursor *::after{cursor:none !important}
+html.js-cursor ::-webkit-scrollbar{cursor:auto}
+.cursor-dot, .cursor-outline{position:fixed;top:0;left:0;transform:translate(-50%,-50%);border-radius:50%;z-index:10000;pointer-events:none;will-change:transform;display:none}
+@media(pointer:fine){.cursor-dot,.cursor-outline{display:block}}
+.cursor-dot{width:6px;height:6px;background:var(--accent);transition:opacity .15s,width .15s,height .15s;box-shadow:0 0 10px var(--accent)}
+.cursor-outline{width:40px;height:40px;border:1px solid rgba(14,224,207,.5);transition:width .3s cubic-bezier(.22,1,.36,1),height .3s cubic-bezier(.22,1,.36,1),background .3s,border-color .3s,opacity .3s}
+body.cursor-hover .cursor-dot{opacity:0;transform:translate(-50%,-50%) scale(.5)}
+body.cursor-hover .cursor-outline{width:64px;height:64px;background:rgba(14,224,207,.1);border-color:var(--accent)}
+body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline{opacity:0 !important}
+@media print{.cursor-dot,.cursor-outline{display:none !important}}
 
 /* ===== появление секций + фирменный noise ===== */
 .head,.card,.res-border,.cta{opacity:0;transform:translateY(24px);animation:fadeUp .8s cubic-bezier(.22,1,.36,1) forwards}
@@ -489,6 +501,8 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
 </style>
 </head>
 <body>
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-outline" id="cursorOutline"></div>
 <div class="bg-grid" aria-hidden="true"></div>
 <div class="bg-orb1" aria-hidden="true"></div>
 <div class="bg-orb2" aria-hidden="true"></div>
@@ -1707,6 +1721,53 @@ renderPresets2();
 renderChips();
 renderScen();
 update();
+
+/* ===== кастомный курсор - тот же, что на главной ===== */
+(function(){
+  var cursorDot = document.getElementById('cursorDot'), cursorOutline = document.getElementById('cursorOutline');
+  if (!(window.matchMedia('(pointer: fine)').matches && cursorDot && cursorOutline)) return;
+  document.documentElement.classList.add('js-cursor');
+  var mouseX = -100, mouseY = -100, outlineX = -100, outlineY = -100, isCursorActive = false;
+  document.body.classList.add('cursor-hidden');
+  var cursorRafId = null, cursorIdle = null;
+
+  function showCursor(){ if (!isCursorActive) { document.body.classList.remove('cursor-hidden'); isCursorActive = true; } }
+  function hideCursor(){ document.body.classList.add('cursor-hidden'); isCursorActive = false; }
+
+  window.addEventListener('mousemove', function(e){
+    mouseX = e.clientX; mouseY = e.clientY;
+    cursorDot.style.transform = 'translate3d(' + mouseX + 'px,' + mouseY + 'px,0) translate(-50%,-50%)';
+    showCursor();
+    if (!cursorRafId) startCursorLoop();
+    clearTimeout(cursorIdle);
+    cursorIdle = setTimeout(function(){ if (cursorRafId) { cancelAnimationFrame(cursorRafId); cursorRafId = null; } }, 150);
+  });
+
+  function startCursorLoop(){
+    var step = function(){
+      outlineX += (mouseX - outlineX) * 0.45;
+      outlineY += (mouseY - outlineY) * 0.45;
+      cursorOutline.style.transform = 'translate3d(' + outlineX + 'px,' + outlineY + 'px,0) translate(-50%,-50%)';
+      cursorRafId = requestAnimationFrame(step);
+    };
+    cursorRafId = requestAnimationFrame(step);
+  }
+  startCursorLoop();
+
+  /* ховер-эффект на интерактивных элементах (динамические ловим через mouseover) */
+  var hoverSelector = 'a, button, input, select, textarea, label, [role="button"], summary, .chip, .preset-btn, .btn, .btn-msg';
+  document.addEventListener('mouseover', function(e){
+    if (e.target.closest(hoverSelector)) document.body.classList.add('cursor-hover');
+  });
+  document.addEventListener('mouseout', function(e){
+    if (e.target.closest(hoverSelector) && !(e.relatedTarget && e.relatedTarget.closest(hoverSelector))) document.body.classList.remove('cursor-hover');
+  });
+
+  document.addEventListener('mouseleave', hideCursor);
+  document.addEventListener('mouseenter', showCursor);
+  window.addEventListener('blur', hideCursor);
+  document.addEventListener('visibilitychange', function(){ if (document.hidden) hideCursor(); });
+})();
 </script>
 </body>
 </html>
