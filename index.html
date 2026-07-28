@@ -647,6 +647,29 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
   .lang-switcher a:not(.active):active, .footer-link:active, .footer-contact-link:active { opacity: 0.4; transition: opacity 0.1s ease !important; }
   .case:active { transform: scale(0.97) !important; background: var(--bg3) !important; transition: all 0.1s ease !important; }
 }
+
+/* ===== тизер калькулятора ===== */
+.calc-teaser{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:center;background:linear-gradient(160deg,#0a1016,#070b0f);border:1px solid rgba(14,224,207,.25);border-radius:24px;padding:38px 40px;transition:border-color .3s, transform .3s, box-shadow .3s;cursor:pointer}
+@media(hover:hover){.calc-teaser:hover{border-color:#0ee0cf;transform:translateY(-3px);box-shadow:0 18px 44px rgba(14,224,207,.08)}}
+.ct-btn{display:inline-flex;align-items:center;background:#0ee0cf;color:#04211e;font-weight:700;font-size:14.5px;padding:13px 24px;border-radius:60px;transition:all .3s}
+@media(hover:hover){.calc-teaser:hover .ct-btn{background:var(--white);color:var(--dark)}}
+.ct-demo{background:rgba(255,255,255,.015);border:1px solid var(--brd);border-radius:16px;padding:20px;pointer-events:none}
+.ct-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.ct-chip{font-size:12px;font-weight:600;color:var(--txt2);border:1px solid var(--brd);border-radius:60px;padding:6px 13px;transition:all .35s;white-space:nowrap}
+.ct-chip.on{color:#fff;border-color:#0ee0cf;background:rgba(14,224,207,.12)}
+.ct-budget{margin:14px 0 16px}
+.ct-budget-top{display:flex;justify-content:space-between;font-size:12.5px;color:var(--txt2);margin-bottom:7px}
+.ct-budget-top b{color:#fff;font-size:13.5px}
+.ct-track{height:6px;border-radius:4px;background:rgba(255,255,255,.07);overflow:hidden}
+.ct-fill{height:100%;width:0;border-radius:4px;background:linear-gradient(90deg,#0ee0cf,#3b82f6);transition:width .7s cubic-bezier(.22,1,.36,1)}
+.ct-tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ct-tile{background:rgba(255,255,255,.02);border:1px solid var(--brd);border-radius:12px;padding:14px 8px;text-align:center;overflow:hidden}
+.ct-num{font-weight:800;font-size:clamp(17px,2vw,22px);letter-spacing:-.02em;white-space:nowrap}
+.ct-num.acc{color:#0ee0cf}
+.ct-num.gold{color:var(--gold)}
+.ct-lbl{font-size:10.5px;color:var(--txt2);text-transform:uppercase;letter-spacing:.7px;margin-top:4px}
+@media(max-width:860px){.calc-teaser{grid-template-columns:1fr;gap:26px;padding:28px 22px}}
+
 </style>
 </head>
 <body>
@@ -808,6 +831,31 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
     </div>
   </div>
 </section>
+
+
+<!-- ===== Тизер калькулятора: живое демо, клик ведет на /calc ===== -->
+<section class="sec" id="calc-teaser" style="padding-top:0"><div class="ctn">
+  <a href="/calc" class="calc-teaser" id="calcTeaser" data-reveal aria-label="Открыть калькулятор прогноза">
+    <div class="ct-info">
+      <div class="label">Бесплатный инструмент</div>
+      <h2 class="heading" style="font-size:clamp(22px,3vw,30px);margin:10px 0 12px">Сколько заявок и выручки может дать реклама вашей клиники?</h2>
+      <p style="color:var(--txt2);font-size:14.5px;line-height:1.55;margin-bottom:22px">Страна, ниша и бюджет - прогноз за 30 секунд. Без имени и телефона.</p>
+      <span class="ct-btn">Открыть калькулятор ↗</span>
+    </div>
+    <div class="ct-demo" aria-hidden="true">
+      <div class="ct-chips" id="ctGeo"></div>
+      <div class="ct-chips" id="ctNiche"></div>
+      <div class="ct-budget">
+        <div class="ct-budget-top"><span>Бюджет</span><b id="ctBudget">$0</b></div>
+        <div class="ct-track"><div class="ct-fill" id="ctFill"></div></div>
+      </div>
+      <div class="ct-tiles">
+        <div class="ct-tile"><div class="ct-num acc" id="ctLeads">-</div><div class="ct-lbl">живых заявок</div></div>
+        <div class="ct-tile"><div class="ct-num gold" id="ctRev">-</div><div class="ct-lbl">выручки в месяц</div></div>
+      </div>
+    </div>
+  </a>
+</div></section>
 
 <section class="sec" id="reviews" style="padding-top:var(--sec-pad)"><div class="ctn">
   <div class="sec-header" data-reveal><div class="label">Отзывы клиентов</div><h2 class="heading sec-heading">Что говорят владельцы клиник</h2></div>
@@ -1298,6 +1346,78 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
   });
 })();
 /* ===== End сигналы воронки ===== */
+
+
+/* ===== тизер калькулятора: демо-цикл на реальных цифрах модели /calc ===== */
+(function(){
+  const teaser = document.getElementById('calcTeaser');
+  if (!teaser) return;
+  /* значения посчитаны настоящей моделью калькулятора (base-сценарий) */
+  const CFG = [
+    { c:'ae', n:'dental', b:10000, geo:'ОАЭ',       niche:'Стоматология',    fill:55, lLo:98,  lHi:133, rLo:57, rHi:78 },
+    { c:'kz', n:'cosmo',  b:3000,  geo:'Казахстан', niche:'Косметология',    fill:50, lLo:258, lHi:348, rLo:12, rHi:16 },
+    { c:'es', n:'multi',  b:8000,  geo:'Испания',   niche:'Многопрофильная', fill:45, lLo:231, lHi:312, rLo:33, rHi:44 }
+  ];
+  const geoRow = document.getElementById('ctGeo'), nicheRow = document.getElementById('ctNiche');
+  CFG.forEach(cfg => {
+    geoRow.insertAdjacentHTML('beforeend', '<span class="ct-chip">' + cfg.geo + '</span>');
+    nicheRow.insertAdjacentHTML('beforeend', '<span class="ct-chip">' + cfg.niche + '</span>');
+  });
+  const geoChips = geoRow.children, nicheChips = nicheRow.children;
+  const fmt = n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  const budgetEl = document.getElementById('ctBudget'), fillEl = document.getElementById('ctFill');
+  const leadsEl = document.getElementById('ctLeads'), revEl = document.getElementById('ctRev');
+  let idx = 0, timers = [], raf = null, running = false;
+  const later = (fn, ms) => timers.push(setTimeout(fn, ms));
+
+  function count(el, to, dur, render){
+    const t0 = performance.now();
+    const step = now => {
+      const p = Math.min((now - t0) / dur, 1), e = 1 - Math.pow(1 - p, 3);
+      render(el, Math.round(to.lo * e), Math.round(to.hi * e));
+      if (p < 1) raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+  }
+
+  function show(i, animate){
+    const cfg = CFG[i];
+    for (let k = 0; k < CFG.length; k++){
+      geoChips[k].classList.toggle('on', k === i);
+      nicheChips[k].classList.toggle('on', k === i);
+    }
+    teaser.setAttribute('href', '/calc?c=' + cfg.c + '&n=' + cfg.n + '&b=' + cfg.b);
+    fillEl.style.width = cfg.fill + '%';
+    budgetEl.textContent = '$' + fmt(cfg.b) + '/мес';
+    if (animate){
+      later(() => count(leadsEl, {lo:cfg.lLo,hi:cfg.lHi}, 600, (el,a,b) => { el.textContent = a + '-' + b; }), 350);
+      later(() => count(revEl, {lo:cfg.rLo,hi:cfg.rHi}, 600, (el,a,b) => { el.textContent = '$' + a + '-' + b + 'к'; }), 500);
+    } else {
+      leadsEl.textContent = cfg.lLo + '-' + cfg.lHi;
+      revEl.textContent = '$' + cfg.rLo + '-' + cfg.rHi + 'к';
+    }
+  }
+
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduced){ show(0, false); return; }
+
+  function loop(){
+    if (!running) return;
+    show(idx, true);
+    later(() => { idx = (idx + 1) % CFG.length; loop(); }, 4200);
+  }
+  function start(){ if (!running){ running = true; loop(); } }
+  function stop(){ running = false; timers.forEach(clearTimeout); timers = []; if (raf) cancelAnimationFrame(raf); }
+
+  show(0, false);
+  if ('IntersectionObserver' in window){
+    new IntersectionObserver(es => { es.some(x => x.isIntersecting) ? start() : stop(); }, { threshold: .3 }).observe(teaser);
+  } else { start(); }
+
+  teaser.addEventListener('click', () => {
+    try { if (typeof fbq === 'function') fbq('trackCustom', 'CalcTeaserClick', { config: CFG[idx].c + '/' + CFG[idx].n }); } catch(e){}
+  });
+})();
 
 </script>
 </body>
