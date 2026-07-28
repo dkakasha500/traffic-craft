@@ -649,17 +649,17 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 }
 
 /* ===== тизер калькулятора ===== */
-.ct-wrap{position:relative;padding:1px;border-radius:25px;background:linear-gradient(150deg,rgba(14,224,207,.6),rgba(14,224,207,.16) 35%,rgba(59,130,246,.3) 65%,rgba(14,224,207,.45));box-shadow:0 24px 60px rgba(0,0,0,.45)}
-.ct-wrap::before{content:'';position:absolute;inset:-40px -20px;background:radial-gradient(420px 240px at 72% 50%, rgba(14,224,207,.10), transparent 70%);pointer-events:none;z-index:0}
-.calc-teaser{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:center;background:linear-gradient(160deg,#0a1016,#070b0f);border-radius:24px;padding:38px 40px}
-.ct-btn{display:inline-flex;align-items:center;gap:8px;background:#0ee0cf;color:#04211e;font-weight:700;font-size:14.5px;padding:14px 26px;border-radius:60px;transition:transform .3s cubic-bezier(.22,1,.36,1), box-shadow .3s, background .3s, color .3s}
+.ct-wrap{position:relative;padding:1.5px;border-radius:26px;background:linear-gradient(140deg,rgba(14,224,207,.75),rgba(14,224,207,.22) 30%,rgba(59,130,246,.4) 62%,rgba(14,224,207,.6));box-shadow:0 28px 70px rgba(0,0,0,.5), 0 0 60px rgba(14,224,207,.06)}
+.ct-wrap::before{content:'';position:absolute;inset:-60px -30px;background:radial-gradient(520px 300px at 74% 45%, rgba(14,224,207,.16), transparent 70%);pointer-events:none;z-index:0;filter:blur(2px)}
+.calc-teaser{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;background:radial-gradient(600px 340px at 12% 8%, rgba(14,224,207,.05), transparent 60%), linear-gradient(160deg,#0a1016,#070b0f);border-radius:25px;padding:42px 44px}
+.ct-btn{display:inline-flex;align-items:center;gap:8px;background:#0ee0cf;color:#04211e;font-weight:700;font-size:15px;padding:16px 30px;border-radius:60px;box-shadow:0 6px 22px rgba(14,224,207,.22);transition:transform .3s cubic-bezier(.22,1,.36,1), box-shadow .3s, background .3s, color .3s}
 @media(hover:hover){.ct-btn:hover{transform:translateY(-3px);background:var(--white);color:var(--dark);box-shadow:0 12px 30px rgba(14,224,207,.35)}}
 .ct-btn:active{transform:scale(.97)}
 .ct-btn.pump{animation:ctPump .8s ease-out}
 @keyframes ctPump{0%{box-shadow:0 0 0 0 rgba(14,224,207,.5)}100%{box-shadow:0 0 0 22px rgba(14,224,207,0)}}
-.ct-demo{background:rgba(255,255,255,.015);border:1px solid var(--brd);border-radius:16px;padding:20px;pointer-events:none}
+.ct-demo{background:linear-gradient(180deg,#0c1219,#080d13);border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:20px;pointer-events:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.04), 0 18px 40px rgba(0,0,0,.35)}
 .ct-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
-.ct-chip{font-size:12px;font-weight:600;color:var(--txt2);border:1px solid var(--brd);border-radius:60px;padding:6px 13px;transition:color .35s,border-color .35s,background .35s,transform .14s;white-space:nowrap}
+.ct-chip{font-size:12px;font-weight:600;color:var(--txt2);background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:60px;padding:6px 13px;transition:color .35s,border-color .35s,background .35s,transform .14s;white-space:nowrap}
 .ct-chip.press{transform:scale(.9)}
 .ct-chip.on{color:#fff;border-color:#0ee0cf;background:rgba(14,224,207,.12)}
 .ct-budget{margin:12px 0 16px}
@@ -668,20 +668,29 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 .ct-track{height:6px;border-radius:4px;background:rgba(255,255,255,.07);overflow:hidden}
 .ct-fill{height:100%;width:0;border-radius:4px;background:linear-gradient(90deg,#0ee0cf,#3b82f6)}
 .ct-tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.ct-tile{background:rgba(255,255,255,.02);border:1px solid var(--brd);border-radius:12px;padding:14px 8px;text-align:center;overflow:hidden}
-.ct-num{font-weight:800;font-size:clamp(17px,2vw,22px);letter-spacing:-.02em;white-space:nowrap;transition:transform .35s cubic-bezier(.22,1,.36,1),opacity .35s}
+.ct-tile{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:16px 8px 13px;text-align:center;overflow:hidden}
+#ctTileL{background:linear-gradient(180deg,rgba(14,224,207,.07),rgba(14,224,207,.015))}
+#ctTileR{background:linear-gradient(180deg,rgba(251,191,36,.07),rgba(251,191,36,.015))}
+.ct-num{font-weight:800;font-size:clamp(19px,2.2vw,25px);letter-spacing:-.02em;white-space:nowrap;transition:transform .35s cubic-bezier(.22,1,.36,1),opacity .35s}
 .ct-num.rise{transform:translateY(6px);opacity:.25}
 .ct-num.acc{color:#0ee0cf}
 .ct-num.gold{color:var(--gold)}
 .ct-lbl{font-size:10.5px;color:var(--txt2);text-transform:uppercase;letter-spacing:.7px;margin-top:4px}
-.ct-check{font-size:11.5px;color:var(--txt3);margin:-2px 0 0;opacity:0;transform:translateY(-3px);transition:opacity .4s,transform .4s}
-.ct-check b{color:var(--txt)}
+.ct-check{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:var(--txt2);margin:0;padding:5px 11px;border-radius:8px;background:rgba(14,224,207,.06);border:1px solid rgba(14,224,207,.14);opacity:0;transform:translateY(-3px);transition:opacity .4s,transform .4s}
+.ct-check::before{content:'✓';color:#0ee0cf;font-weight:700}
+.ct-check b{color:var(--white)}
 .ct-check.show{opacity:1;transform:none}
-.ct-roas{font-size:12.5px;color:var(--txt2);margin-top:12px;text-align:center;opacity:0;transform:translateY(4px);transition:opacity .45s,transform .45s}
-.ct-roas b{color:#0ee0cf;font-weight:700}
+.ct-roas{font-size:13px;color:var(--txt2);margin-top:13px;text-align:center;opacity:0;transform:translateY(4px);transition:opacity .45s,transform .45s}
+.ct-roas b{color:#0ee0cf;font-weight:800;font-size:14.5px}
 .ct-roas.show{opacity:1;transform:none}
-@media(max-width:860px){.calc-teaser{grid-template-columns:1fr;gap:26px;padding:28px 22px}}
-.ct-winbar{display:flex;align-items:center;gap:10px;margin:-6px -6px 14px;padding:8px 10px;border-bottom:1px solid rgba(255,255,255,.05)}
+@media(max-width:860px){
+  .calc-teaser{grid-template-columns:1fr;gap:26px;padding:28px 20px}
+  .ct-btn{width:100%;justify-content:center}
+  .ct-lbl{font-size:9.5px;letter-spacing:.5px;white-space:nowrap}
+  .ct-demo{padding:16px}
+  .ct-winbar{margin:-16px -16px 14px}
+}
+.ct-winbar{display:flex;align-items:center;gap:10px;margin:-20px -20px 16px;padding:11px 16px;background:rgba(255,255,255,.025);border-bottom:1px solid rgba(255,255,255,.06);border-radius:18px 18px 0 0}
 .ct-dots{display:flex;gap:5px}
 .ct-dots i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.14)}
 .ct-dots i:first-child{background:rgba(255,95,86,.75)}
@@ -872,8 +881,8 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
   <div class="ct-wrap" data-reveal><div class="calc-teaser" id="calcTeaser">
     <div class="ct-info">
       <div class="label">Бесплатный инструмент</div>
-      <h2 class="heading" style="font-size:clamp(22px,3vw,30px);margin:10px 0 12px">Сколько <span style="color:#0ee0cf">заявок и выручки</span> может дать реклама вашей клиники?</h2>
-      <p style="color:var(--txt2);font-size:14.5px;line-height:1.55;margin-bottom:22px">Страна, ниша и бюджет - прогноз за 30 секунд. Без имени и телефона.</p>
+      <h2 class="heading" style="font-size:clamp(23px,2.6vw,30px);line-height:1.18;letter-spacing:-.02em;margin:12px 0 14px">Сколько <span style="color:#0ee0cf">заявок и выручки</span> может дать реклама вашей клиники?</h2>
+      <p style="color:var(--txt2);font-size:15px;line-height:1.6;margin-bottom:28px;max-width:360px">Страна, ниша и бюджет - прогноз за 30 секунд. Без имени и телефона.</p>
       <a class="ct-btn" id="ctOpen" href="/calc">Открыть калькулятор ↗</a>
     </div>
     <div class="ct-demo" id="ctDemo" aria-hidden="true">
