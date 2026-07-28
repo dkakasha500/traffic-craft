@@ -1407,10 +1407,11 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
 (function(){
   const demo = document.getElementById('ctDemo');
   if (!demo) return;
+  /* цифры посчитаны реальной моделью calc.html для ДВУХ выбранных услуг (base) */
   const CFG = [
-    { c:'ae', n:'dental', b:10000, geo:'ОАЭ',       niche:'Стоматология',    dirs:['Импланты','Виниры','Ортодонтия'], more:'+4 услуги', fill:55, lLo:98,  lHi:133, rLo:57, rHi:78, check:3240, roas:'6,8' },
-    { c:'kz', n:'cosmo',  b:3000,  geo:'Казахстан', niche:'Косметология',    dirs:['Инъекции','SMAS-лифтинг','Аппаратная'], more:'+5 услуг', fill:50, lLo:258, lHi:348, rLo:12, rHi:16, check:189,  roas:'4,8' },
-    { c:'es', n:'multi',  b:8000,  geo:'Испания',   niche:'Многопрофильная', dirs:['Гинекология','Чекапы','Урология'], more:'+5 услуг', fill:45, lLo:231, lHi:312, rLo:33, rHi:44, check:788,  roas:'4,8' }
+    { c:'ae', n:'dental', b:10000, geo:'ОАЭ',       niche:'Стоматология',    dirs:['Импланты','Виниры','Ортодонтия'], dir2:1, more:'+4 услуги', fill:55, lLo:90,  lHi:122, rLo:55, rHi:74, check:3375, roas:'6,4' },
+    { c:'kz', n:'cosmo',  b:3000,  geo:'Казахстан', niche:'Косметология',    dirs:['Инъекции','SMAS-лифтинг','Аппаратная'], dir2:2, more:'+5 услуг', fill:50, lLo:244, lHi:330, rLo:14, rHi:19, check:231,  roas:'5,5' },
+    { c:'es', n:'multi',  b:8000,  geo:'Испания',   niche:'Многопрофильная', dirs:['Гинекология','Чекапы','Урология'], dir2:1, more:'+5 услуг', fill:45, lLo:244, lHi:330, rLo:25, rHi:34, check:578,  roas:'3,7' }
   ];
   const geoRow = document.getElementById('ctGeo'), nicheRow = document.getElementById('ctNiche');
   CFG.forEach(cfg => {
@@ -1513,6 +1514,7 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
       nicheChips[k].classList.toggle('on', CFG[k] === cfg);
     }
     setDirs(cfg, 0);
+    dirsRow.children[cfg.dir2].classList.add('on');
     barTo(cfg.fill);
     budgetEl.textContent = '$' + fmt(cfg.b) + '/мес';
     leadsEl.textContent = cfg.lLo + '-' + cfg.lHi;
@@ -1539,13 +1541,15 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
     later(() => { const t = centerOf(nicheChips[i]); flyTo(t.x, t.y, 500, () => { tap(nicheChips[i]); nicheChips[i].classList.add('on'); }); }, 1150);
     later(() => setDirs(cfg, -1, true), 1780);
     later(() => { const t = centerOf(dirsRow.children[0]); flyTo(t.x, t.y, 480, () => { tap(dirsRow.children[0]); dirsRow.children[0].classList.add('on'); }); }, 2450);
+    /* в калькуляторе можно выбрать несколько услуг - кликаем вторую */
+    later(() => { const t = centerOf(dirsRow.children[cfg.dir2]); flyTo(t.x, t.y, 360, () => { tap(dirsRow.children[cfg.dir2]); dirsRow.children[cfg.dir2].classList.add('on'); }); }, 3230);
     later(() => {
-      /* чек зависит от услуги - подставляется сразу после ее выбора, как в реальном калькуляторе */
+      /* чек усредняется по выбранным услугам - подставляется после выбора, как в реальном калькуляторе */
       checkRow.classList.add('show');
       count(checkEl, { lo: cfg.check, hi: cfg.check }, 450, (el, a) => { el.textContent = '$' + fmt(a); });
-    }, 2900);
-    later(() => { const t = knobPos(12); flyTo(t.x, t.y, 460); }, 3250);
-    later(() => drag(12, cfg.fill, cfg.b, 850), 3850);
+    }, 3750);
+    later(() => { const t = knobPos(12); flyTo(t.x, t.y, 460); }, 4150);
+    later(() => drag(12, cfg.fill, cfg.b, 850), 4700);
     later(() => {
       tileL.classList.add('flash'); tileR.classList.add('flash');
       leadsEl.classList.remove('rise'); revEl.classList.remove('rise');
@@ -1554,7 +1558,7 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
       later(() => { tileL.classList.remove('flash'); tileR.classList.remove('flash'); }, 700);
       later(() => { roasEl.textContent = '~' + cfg.roas + ' раз'; roasRow.classList.add('show'); }, 550);
       later(() => { openBtn.classList.add('pump'); later(() => openBtn.classList.remove('pump'), 850); }, 900);
-    }, 4900);
+    }, 5750);
   }
 
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1563,7 +1567,7 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
   function loop(){
     if (!running) return;
     play(idx);
-    later(() => { idx = (idx + 1) % CFG.length; loop(); }, 7300);
+    later(() => { idx = (idx + 1) % CFG.length; loop(); }, 8100);
   }
   function start(){ if (!running){ running = true; loop(); } }
   function stop(){
