@@ -662,7 +662,7 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 .ct-chip{font-size:12px;font-weight:600;color:var(--txt2);border:1px solid var(--brd);border-radius:60px;padding:6px 13px;transition:color .35s,border-color .35s,background .35s,transform .14s;white-space:nowrap}
 .ct-chip.press{transform:scale(.9)}
 .ct-chip.on{color:#fff;border-color:#0ee0cf;background:rgba(14,224,207,.12)}
-.ct-budget{margin:14px 0 16px}
+.ct-budget{margin:12px 0 16px}
 .ct-budget-top{display:flex;justify-content:space-between;font-size:12.5px;color:var(--txt2);margin-bottom:7px}
 .ct-budget-top b{color:#fff;font-size:13.5px}
 .ct-track{height:6px;border-radius:4px;background:rgba(255,255,255,.07);overflow:hidden}
@@ -674,6 +674,12 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 .ct-num.acc{color:#0ee0cf}
 .ct-num.gold{color:var(--gold)}
 .ct-lbl{font-size:10.5px;color:var(--txt2);text-transform:uppercase;letter-spacing:.7px;margin-top:4px}
+.ct-check{font-size:11.5px;color:var(--txt3);margin:-2px 0 0;opacity:0;transform:translateY(-3px);transition:opacity .4s,transform .4s}
+.ct-check b{color:var(--txt)}
+.ct-check.show{opacity:1;transform:none}
+.ct-roas{font-size:12.5px;color:var(--txt2);margin-top:12px;text-align:center;opacity:0;transform:translateY(4px);transition:opacity .45s,transform .45s}
+.ct-roas b{color:#0ee0cf;font-weight:700}
+.ct-roas.show{opacity:1;transform:none}
 @media(max-width:860px){.calc-teaser{grid-template-columns:1fr;gap:26px;padding:28px 22px}}
 .ct-winbar{display:flex;align-items:center;gap:10px;margin:-6px -6px 14px;padding:8px 10px;border-bottom:1px solid rgba(255,255,255,.05)}
 .ct-dots{display:flex;gap:5px}
@@ -874,6 +880,7 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
       <div class="ct-winbar"><span class="ct-dots"><i></i><i></i><i></i></span><span class="ct-url">traffic-craft.com/calc</span></div>
       <div class="ct-chips" id="ctGeo"></div>
       <div class="ct-chips" id="ctNiche"></div>
+      <div class="ct-check" id="ctCheckRow">Средний чек подставлен: <b id="ctCheck">$0</b></div>
       <div class="ct-budget">
         <div class="ct-budget-top"><span>Бюджет</span><b id="ctBudget">$0</b></div>
         <div class="ct-track" id="ctTrack"><div class="ct-fill" id="ctFill"></div><div class="ct-knob" id="ctKnob"></div></div>
@@ -882,6 +889,7 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
         <div class="ct-tile" id="ctTileL"><div class="ct-num acc" id="ctLeads">-</div><div class="ct-lbl">живых заявок</div></div>
         <div class="ct-tile" id="ctTileR"><div class="ct-num gold" id="ctRev">-</div><div class="ct-lbl">выручки в месяц</div></div>
       </div>
+      <div class="ct-roas" id="ctRoasRow">Реклама окупается <b id="ctRoas">~0 раз</b></div>
       <div class="ct-cursor" id="ctCursor"><span class="ct-cur-dot"></span></div>
     </div>
   </div></div>
@@ -1383,9 +1391,9 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
   const demo = document.getElementById('ctDemo');
   if (!demo) return;
   const CFG = [
-    { c:'ae', n:'dental', b:10000, geo:'ОАЭ',       niche:'Стоматология',    fill:55, lLo:98,  lHi:133, rLo:57, rHi:78 },
-    { c:'kz', n:'cosmo',  b:3000,  geo:'Казахстан', niche:'Косметология',    fill:50, lLo:258, lHi:348, rLo:12, rHi:16 },
-    { c:'es', n:'multi',  b:8000,  geo:'Испания',   niche:'Многопрофильная', fill:45, lLo:231, lHi:312, rLo:33, rHi:44 }
+    { c:'ae', n:'dental', b:10000, geo:'ОАЭ',       niche:'Стоматология',    fill:55, lLo:98,  lHi:133, rLo:57, rHi:78, check:3240, roas:'6,8' },
+    { c:'kz', n:'cosmo',  b:3000,  geo:'Казахстан', niche:'Косметология',    fill:50, lLo:258, lHi:348, rLo:12, rHi:16, check:189,  roas:'4,8' },
+    { c:'es', n:'multi',  b:8000,  geo:'Испания',   niche:'Многопрофильная', fill:45, lLo:231, lHi:312, rLo:33, rHi:44, check:788,  roas:'4,8' }
   ];
   const geoRow = document.getElementById('ctGeo'), nicheRow = document.getElementById('ctNiche');
   CFG.forEach(cfg => {
@@ -1399,6 +1407,8 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
   const leadsEl = document.getElementById('ctLeads'), revEl = document.getElementById('ctRev');
   const tileL = document.getElementById('ctTileL'), tileR = document.getElementById('ctTileR');
   const cur = document.getElementById('ctCursor'), openBtn = document.getElementById('ctOpen');
+  const checkRow = document.getElementById('ctCheckRow'), checkEl = document.getElementById('ctCheck');
+  const roasRow = document.getElementById('ctRoasRow'), roasEl = document.getElementById('ctRoas');
   let idx = 0, timers = [], rafs = [], running = false;
   let curX = -100, curY = -100, arcSign = 1;
   const later = (fn, ms) => timers.push(setTimeout(fn, ms));
@@ -1475,6 +1485,10 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
     budgetEl.textContent = '$' + fmt(cfg.b) + '/мес';
     leadsEl.textContent = cfg.lLo + '-' + cfg.lHi;
     revEl.textContent = '$' + cfg.rLo + '-' + cfg.rHi + 'к';
+    checkEl.textContent = '$' + fmt(cfg.check);
+    checkRow.classList.add('show');
+    roasEl.textContent = '~' + cfg.roas + ' раз';
+    roasRow.classList.add('show');
     openBtn.setAttribute('href', '/calc?c=' + cfg.c + '&n=' + cfg.n + '&b=' + cfg.b);
   }
 
@@ -1486,9 +1500,14 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
     budgetEl.textContent = '$' + fmt(Math.round(cfg.b * 0.25)) + '/мес';
     leadsEl.classList.add('rise'); revEl.classList.add('rise');
     leadsEl.textContent = '-'; revEl.textContent = '-';
+    checkRow.classList.remove('show'); roasRow.classList.remove('show');
 
     later(() => { const t = centerOf(geoChips[i]); flyTo(t.x, t.y, 560, () => { tap(geoChips[i]); geoChips[i].classList.add('on'); }); }, 80);
     later(() => { const t = centerOf(nicheChips[i]); flyTo(t.x, t.y, 500, () => { tap(nicheChips[i]); nicheChips[i].classList.add('on'); }); }, 1150);
+    later(() => {
+      checkRow.classList.add('show');
+      count(checkEl, { lo: cfg.check, hi: cfg.check }, 450, (el, a) => { el.textContent = '$' + fmt(a); });
+    }, 1850);
     later(() => { const t = knobPos(12); flyTo(t.x, t.y, 460); }, 2150);
     later(() => drag(12, cfg.fill, cfg.b, 850), 2750);
     later(() => {
@@ -1497,7 +1516,8 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
       count(leadsEl, { lo: cfg.lLo, hi: cfg.lHi }, 650, (el, a, b) => { el.textContent = a + '-' + b; });
       count(revEl, { lo: cfg.rLo, hi: cfg.rHi }, 650, (el, a, b) => { el.textContent = '$' + a + '-' + b + 'к'; });
       later(() => { tileL.classList.remove('flash'); tileR.classList.remove('flash'); }, 700);
-      later(() => { openBtn.classList.add('pump'); later(() => openBtn.classList.remove('pump'), 850); }, 500);
+      later(() => { roasEl.textContent = '~' + cfg.roas + ' раз'; roasRow.classList.add('show'); }, 550);
+      later(() => { openBtn.classList.add('pump'); later(() => openBtn.classList.remove('pump'), 850); }, 900);
     }, 3800);
   }
 
@@ -1507,7 +1527,7 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
   function loop(){
     if (!running) return;
     play(idx);
-    later(() => { idx = (idx + 1) % CFG.length; loop(); }, 5700);
+    later(() => { idx = (idx + 1) % CFG.length; loop(); }, 6100);
   }
   function start(){ if (!running){ running = true; loop(); } }
   function stop(){
@@ -1516,6 +1536,7 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
     rafs.forEach(cancelAnimationFrame); rafs = [];
     cur.classList.remove('tap', 'fly'); knobEl.classList.remove('drag');
     leadsEl.classList.remove('rise'); revEl.classList.remove('rise');
+    checkRow.classList.add('show'); roasRow.classList.add('show');
   }
 
   setStatic(CFG[0]);
