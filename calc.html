@@ -1145,15 +1145,25 @@ function fmtMoney(x){
 /* Компактный диапазон денег для больших плиток: «$46-62к» / «$1,2-1,6 млн».
    «к» = тысяч - короче «тыс.» и не рвет плитку на больших числах. */
 function fmtRangeMoney(lo, hi){
+  var a, b;
   if(hi >= 1000000){
     var f = function(v){ return (Math.round(v / 100000) / 10).toLocaleString('ru-RU'); };
-    return '$' + f(lo) + '-' + f(hi) + ' млн';
+    a = f(lo); b = f(hi);
+    return a === b ? '~$' + a + ' млн' : '$' + a + '-' + b + ' млн';
   }
-  if(hi >= 10000) return '$' + Math.round(lo / 1000) + '-' + Math.round(hi / 1000) + 'к';
+  if(hi >= 10000){
+    a = Math.round(lo / 1000); b = Math.round(hi / 1000);
+    return a === b ? '~$' + a + 'к' : '$' + a + '-' + b + 'к';
+  }
   /* $1 000-$9 999: тоже компактно ($7,6-9,3к), иначе длинный диапазон рвет плитку */
-  if(hi >= 1000){ var g = function(v){ return (Math.round(v / 100) / 10).toLocaleString('ru-RU'); }; return '$' + g(lo) + '-' + g(hi) + 'к'; }
+  if(hi >= 1000){
+    var g = function(v){ return (Math.round(v / 100) / 10).toLocaleString('ru-RU'); };
+    a = g(lo); b = g(hi);
+    return a === b ? '~$' + a + 'к' : '$' + a + '-' + b + 'к';
+  }
   /* до $1 000: один знак $ («$741-906»), а не «$741-$906» - иначе длинно и рвет на 2 строки */
-  return '$' + Math.round(lo) + '-' + Math.round(hi);
+  a = Math.round(lo); b = Math.round(hi);
+  return a === b ? '~$' + a : '$' + a + '-' + b;
 }
 
 function renderChips(){
@@ -1308,7 +1318,14 @@ function update(){
   var checkEl = document.getElementById('check');
   if(document.activeElement !== checkEl) checkEl.value = Math.round(r.check);
 
-  var rangeInt = function(v){ return fmtInt(v * r.lo) + '-' + fmtInt(v * r.hi); };
+  /* вырожденные диапазоны на малых бюджетах: '2-2' -> '~2', '0-0' -> '<1'
+     (продажи дробные, 0.3 продажи в месяц = продажа раз в 3 месяца - честнее '<1', чем ноль) */
+  var rangeInt = function(v){
+    var lo = Math.round(v * r.lo), hi = Math.round(v * r.hi);
+    if(hi === 0) return '<1';
+    if(lo === hi) return '~' + fmtInt(lo);
+    return fmtInt(lo) + '-' + fmtInt(hi);
+  };
   var rangeMoneyBig = function(v){ return fmtRangeMoney(v * r.lo, v * r.hi); };
 
   /* большие плитки: заявки и выручка (выручка - компактным диапазоном) */
@@ -1583,7 +1600,7 @@ function calcSummary(){
     ', бюджет ' + fmtMoney(state.budget) +
     (r ? ', чек ' + fmtMoney(r.check) + (state.checkOverride > 0 ? ' (вручную)' : '') : '') +
     ', сценарий «' + DATA.scenarios[state.scenario].name + '»' +
-    (r ? ' → прогноз ' + fmtInt(r.leads) + ' заявок, ' + fmtInt(r.sales) + ' продаж, выручка ' + fmtMoney(r.revenue) : '');
+    (r ? ' → прогноз ' + fmtInt(r.leads) + ' заявок, ' + (r.sales < 0.5 ? 'менее 1' : fmtInt(r.sales)) + ' продаж, выручка ' + fmtMoney(r.revenue) : '');
 }
 
 /* ---------- WhatsApp: мгновенный контакт с предзаполненным расчетом ---------- */

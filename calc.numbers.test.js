@@ -31,7 +31,13 @@ const g = id => (d.getElementById(id) || {}).textContent || '';
     const errs = [];
     if (!r) return { errs: ['tcCalc null'], r };
     const eq = (name, actual, expected) => { if (String(actual).trim() !== String(expected).trim()) errs.push(name + ': DOM"' + actual + '" != "' + expected + '"'); };
-    const ri = v => w.fmtInt(v * r.lo) + '-' + w.fmtInt(v * r.hi);
+    /* зеркалим форматтер страницы: вырожденные диапазоны '2-2' -> '~2', ноль -> '<1' */
+    const ri = v => {
+      const lo = Math.round(v * r.lo), hi = Math.round(v * r.hi);
+      if (hi === 0) return '<1';
+      if (lo === hi) return '~' + w.fmtInt(lo);
+      return w.fmtInt(lo) + '-' + w.fmtInt(hi);
+    };
     const rm = v => w.fmtRangeMoney(v * r.lo, v * r.hi);
     eq('плитка заявок', g('rLeads'), ri(r.leads));
     eq('плитка выручки', g('rRevenue'), rm(r.revenue));
@@ -48,7 +54,7 @@ const g = id => (d.getElementById(id) || {}).textContent || '';
     eq('sticky выручка', g('sRevenue'), w.fmtMoney(r.revenue));
     const sum = w.calcSummary();
     if (!sum.includes(w.fmtInt(r.leads) + ' заявок')) errs.push('сводка WA: заявки');
-    if (!sum.includes(w.fmtInt(r.sales) + ' продаж')) errs.push('сводка WA: продажи');
+    if (!sum.includes((r.sales < 0.5 ? 'менее 1' : w.fmtInt(r.sales)) + ' продаж')) errs.push('сводка WA: продажи');
     if (!sum.includes(w.fmtMoney(r.revenue))) errs.push('сводка WA: выручка');
     if (!sum.includes(w.fmtMoney(w.state.budget))) errs.push('сводка WA: бюджет');
     const burn = d.getElementById('resBurn');
