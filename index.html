@@ -651,10 +651,12 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 /* ===== тизер калькулятора ===== */
 .ct-wrap{position:relative;padding:1.5px;border-radius:26px;background:linear-gradient(140deg,rgba(14,224,207,.75),rgba(14,224,207,.22) 30%,rgba(59,130,246,.4) 62%,rgba(14,224,207,.6));box-shadow:0 28px 70px rgba(0,0,0,.5), 0 0 60px rgba(14,224,207,.06)}
 .ct-wrap::before{content:'';position:absolute;inset:-60px -30px;background:radial-gradient(520px 300px at 74% 45%, rgba(14,224,207,.16), transparent 70%);pointer-events:none;z-index:0;filter:blur(2px)}
-.calc-teaser{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;background:radial-gradient(600px 340px at 12% 8%, rgba(14,224,207,.05), transparent 60%), linear-gradient(160deg,#0a1016,#070b0f);border-radius:25px;padding:42px 44px}
+.calc-teaser{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1.08fr;gap:34px;align-items:center;background:radial-gradient(600px 340px at 12% 8%, rgba(14,224,207,.05), transparent 60%), linear-gradient(160deg,#0a1016,#070b0f);border-radius:25px;padding:42px 44px}
 .ct-btn{display:inline-flex;align-items:center;gap:8px;background:#0ee0cf;color:#04211e;font-weight:700;font-size:15px;padding:16px 30px;border-radius:60px;box-shadow:0 6px 22px rgba(14,224,207,.22);transition:transform .3s cubic-bezier(.22,1,.36,1), box-shadow .3s, background .3s, color .3s}
 @media(hover:hover){.ct-btn:hover{transform:translateY(-3px);background:var(--white);color:var(--dark);box-shadow:0 12px 30px rgba(14,224,207,.35)}}
 .ct-btn:active{transform:scale(.97)}
+.ct-scope{margin-top:18px;font-size:13px;color:var(--txt3)}
+.ct-scope b{color:var(--txt2);font-weight:600}
 .ct-btn.pump{animation:ctPump .8s ease-out}
 @keyframes ctPump{0%{box-shadow:0 0 0 0 rgba(14,224,207,.5)}100%{box-shadow:0 0 0 22px rgba(14,224,207,0)}}
 .ct-demo{background:linear-gradient(180deg,#0c1219,#080d13);border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:20px;pointer-events:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.04), 0 18px 40px rgba(0,0,0,.35)}
@@ -888,6 +890,7 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
       <h2 class="heading" style="font-size:clamp(23px,2.6vw,30px);line-height:1.18;letter-spacing:-.02em;margin:12px 0 14px">Калькулятор <span style="color:#0ee0cf">заявок и выручки</span></h2>
       <p style="color:var(--txt2);font-size:15px;line-height:1.6;margin-bottom:28px;max-width:380px">Выбираете страну, услуги и бюджет - и видите примерный прогноз по рекламе. Никаких данных оставлять не нужно: инструмент доступен сразу.</p>
       <a class="ct-btn" id="ctOpen" href="/calc">Открыть калькулятор ↗</a>
+      <div class="ct-scope">В калькуляторе: <b>9 стран</b> · <b>8 ниш</b> · <b>52 услуги</b></div>
     </div>
     <div class="ct-demo" id="ctDemo" aria-hidden="true">
       <div class="ct-winbar"><span class="ct-dots"><i></i><i></i><i></i></span><span class="ct-url">traffic-craft.com/calc</span></div>
