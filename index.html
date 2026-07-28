@@ -669,6 +669,18 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 .ct-num.gold{color:var(--gold)}
 .ct-lbl{font-size:10.5px;color:var(--txt2);text-transform:uppercase;letter-spacing:.7px;margin-top:4px}
 @media(max-width:860px){.calc-teaser{grid-template-columns:1fr;gap:26px;padding:28px 22px}}
+.ct-demo{position:relative}
+.ct-track{position:relative;overflow:visible}
+.ct-fill{transition:width .8s linear}
+.ct-knob{position:absolute;top:50%;left:0;width:14px;height:14px;border-radius:50%;background:#fff;border:3px solid #0ee0cf;box-shadow:0 0 10px rgba(14,224,207,.5);transform:translate(-50%,-50%);transition:left .8s linear}
+.ct-cursor{position:absolute;left:0;top:0;z-index:5;pointer-events:none;transform:translate(-100px,-100px);transition:transform .5s cubic-bezier(.22,1,.36,1)}
+.ct-cur-dot{display:block;width:12px;height:12px;border-radius:50%;background:#0ee0cf;box-shadow:0 0 12px #0ee0cf, 0 0 0 4px rgba(14,224,207,.18);transition:transform .2s}
+.ct-cursor.grab .ct-cur-dot{transform:scale(.72)}
+.ct-cursor .pulse{position:absolute;left:50%;top:50%;width:12px;height:12px;border-radius:50%;border:2px solid #0ee0cf;transform:translate(-50%,-50%);animation:ctPulse .5s ease-out forwards}
+@keyframes ctPulse{from{opacity:.9;width:10px;height:10px}to{opacity:0;width:44px;height:44px}}
+.ct-tile.flash{animation:ctFlash .6s ease-out}
+@keyframes ctFlash{0%{border-color:#0ee0cf;background:rgba(14,224,207,.10)}100%{border-color:var(--brd);background:rgba(255,255,255,.02)}}
+@media(prefers-reduced-motion:reduce){.ct-cursor,.ct-knob{display:none}}
 
 </style>
 </head>
@@ -835,26 +847,27 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 
 <!-- ===== Тизер калькулятора: живое демо, клик ведет на /calc ===== -->
 <section class="sec" id="calc-teaser" style="padding-top:0"><div class="ctn">
-  <a href="/calc" class="calc-teaser" id="calcTeaser" data-reveal aria-label="Открыть калькулятор прогноза">
+  <div class="calc-teaser" id="calcTeaser" data-reveal>
     <div class="ct-info">
       <div class="label">Бесплатный инструмент</div>
       <h2 class="heading" style="font-size:clamp(22px,3vw,30px);margin:10px 0 12px">Сколько заявок и выручки может дать реклама вашей клиники?</h2>
       <p style="color:var(--txt2);font-size:14.5px;line-height:1.55;margin-bottom:22px">Страна, ниша и бюджет - прогноз за 30 секунд. Без имени и телефона.</p>
-      <span class="ct-btn">Открыть калькулятор ↗</span>
+      <a class="ct-btn" id="ctOpen" href="/calc">Открыть калькулятор ↗</a>
     </div>
-    <div class="ct-demo" aria-hidden="true">
+    <div class="ct-demo" id="ctDemo" aria-hidden="true">
       <div class="ct-chips" id="ctGeo"></div>
       <div class="ct-chips" id="ctNiche"></div>
       <div class="ct-budget">
         <div class="ct-budget-top"><span>Бюджет</span><b id="ctBudget">$0</b></div>
-        <div class="ct-track"><div class="ct-fill" id="ctFill"></div></div>
+        <div class="ct-track" id="ctTrack"><div class="ct-fill" id="ctFill"></div><div class="ct-knob" id="ctKnob"></div></div>
       </div>
       <div class="ct-tiles">
-        <div class="ct-tile"><div class="ct-num acc" id="ctLeads">-</div><div class="ct-lbl">живых заявок</div></div>
-        <div class="ct-tile"><div class="ct-num gold" id="ctRev">-</div><div class="ct-lbl">выручки в месяц</div></div>
+        <div class="ct-tile" id="ctTileL"><div class="ct-num acc" id="ctLeads">-</div><div class="ct-lbl">живых заявок</div></div>
+        <div class="ct-tile" id="ctTileR"><div class="ct-num gold" id="ctRev">-</div><div class="ct-lbl">выручки в месяц</div></div>
       </div>
+      <div class="ct-cursor" id="ctCursor"><span class="ct-cur-dot"></span></div>
     </div>
-  </a>
+  </div>
 </div></section>
 
 <section class="sec" id="reviews" style="padding-top:var(--sec-pad)"><div class="ctn">
@@ -1348,11 +1361,10 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
 /* ===== End сигналы воронки ===== */
 
 
-/* ===== тизер калькулятора: демо-цикл на реальных цифрах модели /calc ===== */
+/* ===== тизер калькулятора: демо с курсором-актером, цифры из реальной модели /calc ===== */
 (function(){
-  const teaser = document.getElementById('calcTeaser');
-  if (!teaser) return;
-  /* значения посчитаны настоящей моделью калькулятора (base-сценарий) */
+  const demo = document.getElementById('ctDemo');
+  if (!demo) return;
   const CFG = [
     { c:'ae', n:'dental', b:10000, geo:'ОАЭ',       niche:'Стоматология',    fill:55, lLo:98,  lHi:133, rLo:57, rHi:78 },
     { c:'kz', n:'cosmo',  b:3000,  geo:'Казахстан', niche:'Косметология',    fill:50, lLo:258, lHi:348, rLo:12, rHi:16 },
@@ -1366,55 +1378,110 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
   const geoChips = geoRow.children, nicheChips = nicheRow.children;
   const fmt = n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
   const budgetEl = document.getElementById('ctBudget'), fillEl = document.getElementById('ctFill');
+  const knobEl = document.getElementById('ctKnob'), trackEl = document.getElementById('ctTrack');
   const leadsEl = document.getElementById('ctLeads'), revEl = document.getElementById('ctRev');
-  let idx = 0, timers = [], raf = null, running = false;
+  const tileL = document.getElementById('ctTileL'), tileR = document.getElementById('ctTileR');
+  const cur = document.getElementById('ctCursor'), openBtn = document.getElementById('ctOpen');
+  let idx = 0, timers = [], rafs = [], running = false;
   const later = (fn, ms) => timers.push(setTimeout(fn, ms));
 
+  function moveTo(el, dur){
+    const d = demo.getBoundingClientRect(), r = el.getBoundingClientRect();
+    const x = r.left - d.left + r.width / 2, y = r.top - d.top + r.height / 2;
+    cur.style.transitionDuration = (dur || 500) + 'ms';
+    cur.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+  }
+  function moveToKnob(dur){
+    const d = demo.getBoundingClientRect(), t = trackEl.getBoundingClientRect();
+    const pct = parseFloat(fillEl.style.width) || 0;
+    const x = t.left - d.left + t.width * pct / 100, y = t.top - d.top + t.height / 2;
+    cur.style.transitionDuration = (dur || 500) + 'ms';
+    cur.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+  }
+  function click(){
+    const p = document.createElement('span');
+    p.className = 'pulse';
+    cur.appendChild(p);
+    setTimeout(() => p.remove(), 550);
+  }
   function count(el, to, dur, render){
     const t0 = performance.now();
     const step = now => {
       const p = Math.min((now - t0) / dur, 1), e = 1 - Math.pow(1 - p, 3);
       render(el, Math.round(to.lo * e), Math.round(to.hi * e));
-      if (p < 1) raf = requestAnimationFrame(step);
+      if (p < 1) rafs.push(requestAnimationFrame(step));
     };
-    raf = requestAnimationFrame(step);
+    rafs.push(requestAnimationFrame(step));
+  }
+  function setBar(pct, dur){
+    fillEl.style.transitionDuration = dur + 'ms';
+    knobEl.style.transitionDuration = dur + 'ms';
+    fillEl.style.width = pct + '%';
+    knobEl.style.left = pct + '%';
+  }
+  function setStatic(cfg){
+    for (let k = 0; k < CFG.length; k++){
+      geoChips[k].classList.toggle('on', CFG[k] === cfg);
+      nicheChips[k].classList.toggle('on', CFG[k] === cfg);
+    }
+    setBar(cfg.fill, 0);
+    budgetEl.textContent = '$' + fmt(cfg.b) + '/мес';
+    leadsEl.textContent = cfg.lLo + '-' + cfg.lHi;
+    revEl.textContent = '$' + cfg.rLo + '-' + cfg.rHi + 'к';
+    openBtn.setAttribute('href', '/calc?c=' + cfg.c + '&n=' + cfg.n + '&b=' + cfg.b);
   }
 
-  function show(i, animate){
+  /* сценарий одного конфига: подлет -> клик страна -> клик ниша -> тянем бюджет -> цифры */
+  function play(i){
     const cfg = CFG[i];
-    for (let k = 0; k < CFG.length; k++){
-      geoChips[k].classList.toggle('on', k === i);
-      nicheChips[k].classList.toggle('on', k === i);
-    }
-    teaser.setAttribute('href', '/calc?c=' + cfg.c + '&n=' + cfg.n + '&b=' + cfg.b);
-    fillEl.style.width = cfg.fill + '%';
-    budgetEl.textContent = '$' + fmt(cfg.b) + '/мес';
-    if (animate){
-      later(() => count(leadsEl, {lo:cfg.lLo,hi:cfg.lHi}, 600, (el,a,b) => { el.textContent = a + '-' + b; }), 350);
-      later(() => count(revEl, {lo:cfg.rLo,hi:cfg.rHi}, 600, (el,a,b) => { el.textContent = '$' + a + '-' + b + 'к'; }), 500);
-    } else {
-      leadsEl.textContent = cfg.lLo + '-' + cfg.lHi;
-      revEl.textContent = '$' + cfg.rLo + '-' + cfg.rHi + 'к';
-    }
+    openBtn.setAttribute('href', '/calc?c=' + cfg.c + '&n=' + cfg.n + '&b=' + cfg.b);
+    for (let k = 0; k < CFG.length; k++){ geoChips[k].classList.remove('on'); nicheChips[k].classList.remove('on'); }
+    setBar(12, 0);
+    budgetEl.textContent = '$' + fmt(Math.round(cfg.b * 0.25)) + '/мес';
+    leadsEl.textContent = '-'; revEl.textContent = '-';
+
+    later(() => moveTo(geoChips[i], 520), 60);
+    later(() => { click(); geoChips[i].classList.add('on'); }, 650);
+    later(() => moveTo(nicheChips[i], 480), 1050);
+    later(() => { click(); nicheChips[i].classList.add('on'); }, 1600);
+    later(() => moveToKnob(430), 2000);
+    later(() => {
+      cur.classList.add('grab');
+      setBar(cfg.fill, 800);
+      moveToKnob(800);
+      count(budgetEl, { lo: cfg.b, hi: cfg.b }, 800, (el, a) => { el.textContent = '$' + fmt(a) + '/мес'; });
+    }, 2500);
+    later(() => cur.classList.remove('grab'), 3400);
+    later(() => {
+      tileL.classList.add('flash'); tileR.classList.add('flash');
+      count(leadsEl, { lo: cfg.lLo, hi: cfg.lHi }, 650, (el, a, b) => { el.textContent = a + '-' + b; });
+      count(revEl, { lo: cfg.rLo, hi: cfg.rHi }, 650, (el, a, b) => { el.textContent = '$' + a + '-' + b + 'к'; });
+      later(() => { tileL.classList.remove('flash'); tileR.classList.remove('flash'); }, 700);
+    }, 3550);
   }
 
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduced){ show(0, false); return; }
+  if (reduced){ setStatic(CFG[0]); return; }
 
   function loop(){
     if (!running) return;
-    show(idx, true);
-    later(() => { idx = (idx + 1) % CFG.length; loop(); }, 4200);
+    play(idx);
+    later(() => { idx = (idx + 1) % CFG.length; loop(); }, 5400);
   }
   function start(){ if (!running){ running = true; loop(); } }
-  function stop(){ running = false; timers.forEach(clearTimeout); timers = []; if (raf) cancelAnimationFrame(raf); }
+  function stop(){
+    running = false;
+    timers.forEach(clearTimeout); timers = [];
+    rafs.forEach(cancelAnimationFrame); rafs = [];
+    cur.classList.remove('grab');
+  }
 
-  show(0, false);
+  setStatic(CFG[0]);
   if ('IntersectionObserver' in window){
-    new IntersectionObserver(es => { es.some(x => x.isIntersecting) ? start() : stop(); }, { threshold: .3 }).observe(teaser);
+    new IntersectionObserver(es => { es.some(x => x.isIntersecting) ? start() : stop(); }, { threshold: .3 }).observe(demo);
   } else { start(); }
 
-  teaser.addEventListener('click', () => {
+  openBtn.addEventListener('click', () => {
     try { if (typeof fbq === 'function') fbq('trackCustom', 'CalcTeaserClick', { config: CFG[idx].c + '/' + CFG[idx].n }); } catch(e){}
   });
 })();
