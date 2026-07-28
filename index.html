@@ -662,6 +662,10 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 .ct-chip{font-size:12px;font-weight:600;color:var(--txt2);background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:60px;padding:6px 13px;transition:color .35s,border-color .35s,background .35s,transform .14s;white-space:nowrap}
 .ct-chip.press{transform:scale(.9)}
 .ct-chip.ghost{border-style:dashed;border-color:rgba(255,255,255,.14);background:transparent;color:var(--txt3);font-weight:500}
+#ctDirs{min-height:31px}
+#ctDirs .ct-chip{transition:color .35s,border-color .35s,background .35s,transform .32s cubic-bezier(.22,1,.36,1),opacity .32s}
+#ctDirs.enter .ct-chip{opacity:0;transform:translateY(6px)}
+#ctDirs.enter.in .ct-chip{opacity:1;transform:translateY(0)}
 .ct-chip.on{color:#fff;border-color:#0ee0cf;background:rgba(14,224,207,.12)}
 .ct-budget{margin:12px 0 16px}
 .ct-budget-top{display:flex;justify-content:space-between;font-size:12.5px;color:var(--txt2);margin-bottom:7px}
@@ -1415,9 +1419,15 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
   geoRow.insertAdjacentHTML('beforeend', '<span class="ct-chip ghost">+6 стран</span>');
   nicheRow.insertAdjacentHTML('beforeend', '<span class="ct-chip ghost">+5 ниш</span>');
   const dirsRow = document.getElementById('ctDirs');
-  function setDirs(cfg, onIdx){
-    dirsRow.innerHTML = cfg.dirs.map(d => '<span class="ct-chip">' + d + '</span>').join('') + '<span class="ct-chip ghost">' + cfg.more + '</span>';
+  function setDirs(cfg, onIdx, animate){
+    dirsRow.className = 'ct-chips' + (animate ? ' enter' : '');
+    dirsRow.innerHTML = cfg.dirs.map((d, k) => '<span class="ct-chip" style="transition-delay:' + (animate ? k * 70 : 0) + 'ms">' + d + '</span>').join('') +
+      '<span class="ct-chip ghost" style="transition-delay:' + (animate ? cfg.dirs.length * 70 : 0) + 'ms">' + cfg.more + '</span>';
     if (onIdx >= 0) dirsRow.children[onIdx].classList.add('on');
+    if (animate){
+      requestAnimationFrame(() => requestAnimationFrame(() => dirsRow.classList.add('in')));
+      later(() => { dirsRow.classList.remove('enter', 'in'); Array.from(dirsRow.children).forEach(c => { c.style.transitionDelay = '0ms'; }); }, 800);
+    }
   }
   const fmt = n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
   const budgetEl = document.getElementById('ctBudget'), fillEl = document.getElementById('ctFill');
@@ -1515,7 +1525,7 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
     const cfg = CFG[i];
     openBtn.setAttribute('href', '/calc?c=' + cfg.c + '&n=' + cfg.n + '&b=' + cfg.b);
     for (let k = 0; k < CFG.length; k++){ geoChips[k].classList.remove('on'); nicheChips[k].classList.remove('on'); }
-    setDirs(cfg, -1);
+    dirsRow.className = 'ct-chips'; dirsRow.innerHTML = '';
     barTo(12);
     budgetEl.textContent = '$' + fmt(Math.round(cfg.b * 0.25)) + '/мес';
     leadsEl.classList.add('rise'); revEl.classList.add('rise');
@@ -1524,7 +1534,8 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
 
     later(() => { const t = centerOf(geoChips[i]); flyTo(t.x, t.y, 560, () => { tap(geoChips[i]); geoChips[i].classList.add('on'); }); }, 80);
     later(() => { const t = centerOf(nicheChips[i]); flyTo(t.x, t.y, 500, () => { tap(nicheChips[i]); nicheChips[i].classList.add('on'); }); }, 1150);
-    later(() => { const t = centerOf(dirsRow.children[0]); flyTo(t.x, t.y, 480, () => { tap(dirsRow.children[0]); dirsRow.children[0].classList.add('on'); }); }, 2150);
+    later(() => setDirs(cfg, -1, true), 1780);
+    later(() => { const t = centerOf(dirsRow.children[0]); flyTo(t.x, t.y, 480, () => { tap(dirsRow.children[0]); dirsRow.children[0].classList.add('on'); }); }, 2450);
     later(() => {
       /* чек зависит от услуги - подставляется сразу после ее выбора, как в реальном калькуляторе */
       checkRow.classList.add('show');
