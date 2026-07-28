@@ -655,18 +655,22 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 .ct-btn{display:inline-flex;align-items:center;gap:8px;background:#0ee0cf;color:#04211e;font-weight:700;font-size:14.5px;padding:14px 26px;border-radius:60px;transition:transform .3s cubic-bezier(.22,1,.36,1), box-shadow .3s, background .3s, color .3s}
 @media(hover:hover){.ct-btn:hover{transform:translateY(-3px);background:var(--white);color:var(--dark);box-shadow:0 12px 30px rgba(14,224,207,.35)}}
 .ct-btn:active{transform:scale(.97)}
+.ct-btn.pump{animation:ctPump .8s ease-out}
+@keyframes ctPump{0%{box-shadow:0 0 0 0 rgba(14,224,207,.5)}100%{box-shadow:0 0 0 22px rgba(14,224,207,0)}}
 .ct-demo{background:rgba(255,255,255,.015);border:1px solid var(--brd);border-radius:16px;padding:20px;pointer-events:none}
 .ct-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
-.ct-chip{font-size:12px;font-weight:600;color:var(--txt2);border:1px solid var(--brd);border-radius:60px;padding:6px 13px;transition:all .35s;white-space:nowrap}
+.ct-chip{font-size:12px;font-weight:600;color:var(--txt2);border:1px solid var(--brd);border-radius:60px;padding:6px 13px;transition:color .35s,border-color .35s,background .35s,transform .14s;white-space:nowrap}
+.ct-chip.press{transform:scale(.9)}
 .ct-chip.on{color:#fff;border-color:#0ee0cf;background:rgba(14,224,207,.12)}
 .ct-budget{margin:14px 0 16px}
 .ct-budget-top{display:flex;justify-content:space-between;font-size:12.5px;color:var(--txt2);margin-bottom:7px}
 .ct-budget-top b{color:#fff;font-size:13.5px}
 .ct-track{height:6px;border-radius:4px;background:rgba(255,255,255,.07);overflow:hidden}
-.ct-fill{height:100%;width:0;border-radius:4px;background:linear-gradient(90deg,#0ee0cf,#3b82f6);transition:width .7s cubic-bezier(.22,1,.36,1)}
+.ct-fill{height:100%;width:0;border-radius:4px;background:linear-gradient(90deg,#0ee0cf,#3b82f6)}
 .ct-tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .ct-tile{background:rgba(255,255,255,.02);border:1px solid var(--brd);border-radius:12px;padding:14px 8px;text-align:center;overflow:hidden}
-.ct-num{font-weight:800;font-size:clamp(17px,2vw,22px);letter-spacing:-.02em;white-space:nowrap}
+.ct-num{font-weight:800;font-size:clamp(17px,2vw,22px);letter-spacing:-.02em;white-space:nowrap;transition:transform .35s cubic-bezier(.22,1,.36,1),opacity .35s}
+.ct-num.rise{transform:translateY(6px);opacity:.25}
 .ct-num.acc{color:#0ee0cf}
 .ct-num.gold{color:var(--gold)}
 .ct-lbl{font-size:10.5px;color:var(--txt2);text-transform:uppercase;letter-spacing:.7px;margin-top:4px}
@@ -681,9 +685,12 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 .ct-demo{position:relative}
 .ct-track{position:relative;overflow:visible}
 .ct-fill{transition:width .8s linear}
-.ct-knob{position:absolute;top:50%;left:0;width:14px;height:14px;border-radius:50%;background:#fff;border:3px solid #0ee0cf;box-shadow:0 0 10px rgba(14,224,207,.5);transform:translate(-50%,-50%);transition:left .8s linear}
-.ct-cursor{position:absolute;left:0;top:0;z-index:5;pointer-events:none;transform:translate(-100px,-100px);transition:transform .5s cubic-bezier(.22,1,.36,1)}
-.ct-cur-dot{display:block;width:12px;height:12px;border-radius:50%;background:#0ee0cf;box-shadow:0 0 12px #0ee0cf, 0 0 0 4px rgba(14,224,207,.18);transition:transform .2s}
+.ct-knob{position:absolute;top:50%;left:0;width:14px;height:14px;border-radius:50%;background:#fff;border:3px solid #0ee0cf;box-shadow:0 0 10px rgba(14,224,207,.5);transform:translate(-50%,-50%);transition:transform .25s,box-shadow .25s}
+.ct-knob.drag{transform:translate(-50%,-50%) scale(1.3);box-shadow:0 0 18px rgba(14,224,207,.8)}
+.ct-cursor{position:absolute;left:0;top:0;z-index:5;pointer-events:none;transform:translate(-100px,-100px)}
+.ct-cur-dot{display:block;width:12px;height:12px;border-radius:50%;background:#0ee0cf;box-shadow:0 0 12px #0ee0cf, 0 0 0 4px rgba(14,224,207,.18);transition:transform .18s}
+.ct-cursor.fly .ct-cur-dot{transform:scale(1.18)}
+.ct-cursor.tap .ct-cur-dot{transform:scale(.7)}
 .ct-cursor.grab .ct-cur-dot{transform:scale(.72)}
 .ct-cursor .pulse{position:absolute;left:50%;top:50%;width:12px;height:12px;border-radius:50%;border:2px solid #0ee0cf;transform:translate(-50%,-50%);animation:ctPulse .5s ease-out forwards}
 @keyframes ctPulse{from{opacity:.9;width:10px;height:10px}to{opacity:0;width:44px;height:44px}}
@@ -1371,7 +1378,7 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
 /* ===== End сигналы воронки ===== */
 
 
-/* ===== тизер калькулятора: демо с курсором-актером, цифры из реальной модели /calc ===== */
+/* ===== тизер калькулятора: демо с курсором-актером (дуги, инерция, реальные цифры модели) ===== */
 (function(){
   const demo = document.getElementById('ctDemo');
   if (!demo) return;
@@ -1393,81 +1400,105 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
   const tileL = document.getElementById('ctTileL'), tileR = document.getElementById('ctTileR');
   const cur = document.getElementById('ctCursor'), openBtn = document.getElementById('ctOpen');
   let idx = 0, timers = [], rafs = [], running = false;
+  let curX = -100, curY = -100, arcSign = 1;
   const later = (fn, ms) => timers.push(setTimeout(fn, ms));
+  const ease = t => 1 - Math.pow(1 - t, 3);
 
-  function moveTo(el, dur){
+  function centerOf(el){
     const d = demo.getBoundingClientRect(), r = el.getBoundingClientRect();
-    const x = r.left - d.left + r.width / 2, y = r.top - d.top + r.height / 2;
-    cur.style.transitionDuration = (dur || 500) + 'ms';
-    cur.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+    return { x: r.left - d.left + r.width / 2, y: r.top - d.top + r.height / 2 };
   }
-  function moveToKnob(dur){
-    const d = demo.getBoundingClientRect(), t = trackEl.getBoundingClientRect();
-    const pct = parseFloat(fillEl.style.width) || 0;
-    const x = t.left - d.left + t.width * pct / 100, y = t.top - d.top + t.height / 2;
-    cur.style.transitionDuration = (dur || 500) + 'ms';
-    cur.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+  function place(x, y){ curX = x; curY = y; cur.style.transform = 'translate(' + x + 'px,' + y + 'px)'; }
+
+  /* полет по квадратичной дуге Безье - как движение руки, изгиб чередуется */
+  function flyTo(x1, y1, dur, done){
+    const x0 = curX, y0 = curY;
+    const mx = (x0 + x1) / 2, my = (y0 + y1) / 2;
+    const dx = x1 - x0, dy = y1 - y0, len = Math.max(Math.hypot(dx, dy), 1);
+    const bend = Math.min(len * 0.22, 34) * arcSign; arcSign = -arcSign;
+    const cx = mx - dy / len * bend, cy = my + dx / len * bend;
+    cur.classList.add('fly');
+    const t0 = performance.now();
+    const step = now => {
+      const p = Math.min((now - t0) / dur, 1), e = ease(p);
+      const a = 1 - e;
+      place(a * a * x0 + 2 * a * e * cx + e * e * x1, a * a * y0 + 2 * a * e * cy + e * e * y1);
+      if (p < 1) rafs.push(requestAnimationFrame(step));
+      else { cur.classList.remove('fly'); done && done(); }
+    };
+    rafs.push(requestAnimationFrame(step));
   }
-  function click(){
-    const p = document.createElement('span');
-    p.className = 'pulse';
-    cur.appendChild(p);
-    setTimeout(() => p.remove(), 550);
+  function tap(el){
+    cur.classList.add('tap');
+    const pulse = document.createElement('span');
+    pulse.className = 'pulse';
+    cur.appendChild(pulse);
+    setTimeout(() => pulse.remove(), 550);
+    if (el){ el.classList.add('press'); setTimeout(() => el.classList.remove('press'), 150); }
+    setTimeout(() => cur.classList.remove('tap'), 190);
   }
   function count(el, to, dur, render){
     const t0 = performance.now();
     const step = now => {
-      const p = Math.min((now - t0) / dur, 1), e = 1 - Math.pow(1 - p, 3);
+      const p = Math.min((now - t0) / dur, 1), e = ease(p);
       render(el, Math.round(to.lo * e), Math.round(to.hi * e));
       if (p < 1) rafs.push(requestAnimationFrame(step));
     };
     rafs.push(requestAnimationFrame(step));
   }
-  function setBar(pct, dur){
-    fillEl.style.transitionDuration = dur + 'ms';
-    knobEl.style.transitionDuration = dur + 'ms';
-    fillEl.style.width = pct + '%';
-    knobEl.style.left = pct + '%';
+  function barTo(pct){ fillEl.style.width = pct + '%'; knobEl.style.left = pct + '%'; }
+  function knobPos(pct){
+    const d = demo.getBoundingClientRect(), t = trackEl.getBoundingClientRect();
+    return { x: t.left - d.left + t.width * pct / 100, y: t.top - d.top + t.height / 2 };
+  }
+  /* тяга бегунка: заливка, бегунок, курсор и сумма движутся одним rAF с инерцией */
+  function drag(fromPct, toPct, budget, dur, done){
+    knobEl.classList.add('drag'); cur.classList.add('tap');
+    const t0 = performance.now();
+    const step = now => {
+      const p = Math.min((now - t0) / dur, 1), e = ease(p);
+      const pct = fromPct + (toPct - fromPct) * e;
+      barTo(pct);
+      const k = knobPos(pct); place(k.x, k.y);
+      budgetEl.textContent = '$' + fmt(Math.round(budget * (0.25 + 0.75 * e))) + '/мес';
+      if (p < 1) rafs.push(requestAnimationFrame(step));
+      else { knobEl.classList.remove('drag'); cur.classList.remove('tap'); done && done(); }
+    };
+    rafs.push(requestAnimationFrame(step));
   }
   function setStatic(cfg){
     for (let k = 0; k < CFG.length; k++){
       geoChips[k].classList.toggle('on', CFG[k] === cfg);
       nicheChips[k].classList.toggle('on', CFG[k] === cfg);
     }
-    setBar(cfg.fill, 0);
+    barTo(cfg.fill);
     budgetEl.textContent = '$' + fmt(cfg.b) + '/мес';
     leadsEl.textContent = cfg.lLo + '-' + cfg.lHi;
     revEl.textContent = '$' + cfg.rLo + '-' + cfg.rHi + 'к';
     openBtn.setAttribute('href', '/calc?c=' + cfg.c + '&n=' + cfg.n + '&b=' + cfg.b);
   }
 
-  /* сценарий одного конфига: подлет -> клик страна -> клик ниша -> тянем бюджет -> цифры */
   function play(i){
     const cfg = CFG[i];
     openBtn.setAttribute('href', '/calc?c=' + cfg.c + '&n=' + cfg.n + '&b=' + cfg.b);
     for (let k = 0; k < CFG.length; k++){ geoChips[k].classList.remove('on'); nicheChips[k].classList.remove('on'); }
-    setBar(12, 0);
+    barTo(12);
     budgetEl.textContent = '$' + fmt(Math.round(cfg.b * 0.25)) + '/мес';
+    leadsEl.classList.add('rise'); revEl.classList.add('rise');
     leadsEl.textContent = '-'; revEl.textContent = '-';
 
-    later(() => moveTo(geoChips[i], 520), 60);
-    later(() => { click(); geoChips[i].classList.add('on'); }, 650);
-    later(() => moveTo(nicheChips[i], 480), 1050);
-    later(() => { click(); nicheChips[i].classList.add('on'); }, 1600);
-    later(() => moveToKnob(430), 2000);
-    later(() => {
-      cur.classList.add('grab');
-      setBar(cfg.fill, 800);
-      moveToKnob(800);
-      count(budgetEl, { lo: cfg.b, hi: cfg.b }, 800, (el, a) => { el.textContent = '$' + fmt(a) + '/мес'; });
-    }, 2500);
-    later(() => cur.classList.remove('grab'), 3400);
+    later(() => { const t = centerOf(geoChips[i]); flyTo(t.x, t.y, 560, () => { tap(geoChips[i]); geoChips[i].classList.add('on'); }); }, 80);
+    later(() => { const t = centerOf(nicheChips[i]); flyTo(t.x, t.y, 500, () => { tap(nicheChips[i]); nicheChips[i].classList.add('on'); }); }, 1150);
+    later(() => { const t = knobPos(12); flyTo(t.x, t.y, 460); }, 2150);
+    later(() => drag(12, cfg.fill, cfg.b, 850), 2750);
     later(() => {
       tileL.classList.add('flash'); tileR.classList.add('flash');
+      leadsEl.classList.remove('rise'); revEl.classList.remove('rise');
       count(leadsEl, { lo: cfg.lLo, hi: cfg.lHi }, 650, (el, a, b) => { el.textContent = a + '-' + b; });
       count(revEl, { lo: cfg.rLo, hi: cfg.rHi }, 650, (el, a, b) => { el.textContent = '$' + a + '-' + b + 'к'; });
       later(() => { tileL.classList.remove('flash'); tileR.classList.remove('flash'); }, 700);
-    }, 3550);
+      later(() => { openBtn.classList.add('pump'); later(() => openBtn.classList.remove('pump'), 850); }, 500);
+    }, 3800);
   }
 
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1476,17 +1507,19 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
   function loop(){
     if (!running) return;
     play(idx);
-    later(() => { idx = (idx + 1) % CFG.length; loop(); }, 5400);
+    later(() => { idx = (idx + 1) % CFG.length; loop(); }, 5700);
   }
   function start(){ if (!running){ running = true; loop(); } }
   function stop(){
     running = false;
     timers.forEach(clearTimeout); timers = [];
     rafs.forEach(cancelAnimationFrame); rafs = [];
-    cur.classList.remove('grab');
+    cur.classList.remove('tap', 'fly'); knobEl.classList.remove('drag');
+    leadsEl.classList.remove('rise'); revEl.classList.remove('rise');
   }
 
   setStatic(CFG[0]);
+  place(-40, 40);
   if ('IntersectionObserver' in window){
     new IntersectionObserver(es => { es.some(x => x.isIntersecting) ? start() : stop(); }, { threshold: .3 }).observe(demo);
   } else { start(); }
