@@ -889,6 +889,7 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
       <div class="ct-winbar"><span class="ct-dots"><i></i><i></i><i></i></span><span class="ct-url">traffic-craft.com/calc</span></div>
       <div class="ct-chips" id="ctGeo"></div>
       <div class="ct-chips" id="ctNiche"></div>
+      <div class="ct-chips" id="ctDirs"></div>
       <div class="ct-check" id="ctCheckRow">Средний чек подставлен: <b id="ctCheck">$0</b></div>
       <div class="ct-budget">
         <div class="ct-budget-top"><span>Бюджет</span><b id="ctBudget">$0</b></div>
@@ -1400,9 +1401,9 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
   const demo = document.getElementById('ctDemo');
   if (!demo) return;
   const CFG = [
-    { c:'ae', n:'dental', b:10000, geo:'ОАЭ',       niche:'Стоматология',    fill:55, lLo:98,  lHi:133, rLo:57, rHi:78, check:3240, roas:'6,8' },
-    { c:'kz', n:'cosmo',  b:3000,  geo:'Казахстан', niche:'Косметология',    fill:50, lLo:258, lHi:348, rLo:12, rHi:16, check:189,  roas:'4,8' },
-    { c:'es', n:'multi',  b:8000,  geo:'Испания',   niche:'Многопрофильная', fill:45, lLo:231, lHi:312, rLo:33, rHi:44, check:788,  roas:'4,8' }
+    { c:'ae', n:'dental', b:10000, geo:'ОАЭ',       niche:'Стоматология',    dirs:['Импланты','Виниры','Ортодонтия'], more:'+4 услуги', fill:55, lLo:98,  lHi:133, rLo:57, rHi:78, check:3240, roas:'6,8' },
+    { c:'kz', n:'cosmo',  b:3000,  geo:'Казахстан', niche:'Косметология',    dirs:['Инъекции','SMAS-лифтинг','Аппаратная'], more:'+5 услуг', fill:50, lLo:258, lHi:348, rLo:12, rHi:16, check:189,  roas:'4,8' },
+    { c:'es', n:'multi',  b:8000,  geo:'Испания',   niche:'Многопрофильная', dirs:['Гинекология','Чекапы','Урология'], more:'+5 услуг', fill:45, lLo:231, lHi:312, rLo:33, rHi:44, check:788,  roas:'4,8' }
   ];
   const geoRow = document.getElementById('ctGeo'), nicheRow = document.getElementById('ctNiche');
   CFG.forEach(cfg => {
@@ -1413,6 +1414,11 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
   /* в калькуляторе 9 стран и 8 ниш - показываем, что демо не предел */
   geoRow.insertAdjacentHTML('beforeend', '<span class="ct-chip ghost">+6 стран</span>');
   nicheRow.insertAdjacentHTML('beforeend', '<span class="ct-chip ghost">+5 ниш</span>');
+  const dirsRow = document.getElementById('ctDirs');
+  function setDirs(cfg, onIdx){
+    dirsRow.innerHTML = cfg.dirs.map(d => '<span class="ct-chip">' + d + '</span>').join('') + '<span class="ct-chip ghost">' + cfg.more + '</span>';
+    if (onIdx >= 0) dirsRow.children[onIdx].classList.add('on');
+  }
   const fmt = n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
   const budgetEl = document.getElementById('ctBudget'), fillEl = document.getElementById('ctFill');
   const knobEl = document.getElementById('ctKnob'), trackEl = document.getElementById('ctTrack');
@@ -1493,6 +1499,7 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
       geoChips[k].classList.toggle('on', CFG[k] === cfg);
       nicheChips[k].classList.toggle('on', CFG[k] === cfg);
     }
+    setDirs(cfg, 0);
     barTo(cfg.fill);
     budgetEl.textContent = '$' + fmt(cfg.b) + '/мес';
     leadsEl.textContent = cfg.lLo + '-' + cfg.lHi;
@@ -1508,6 +1515,7 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
     const cfg = CFG[i];
     openBtn.setAttribute('href', '/calc?c=' + cfg.c + '&n=' + cfg.n + '&b=' + cfg.b);
     for (let k = 0; k < CFG.length; k++){ geoChips[k].classList.remove('on'); nicheChips[k].classList.remove('on'); }
+    setDirs(cfg, -1);
     barTo(12);
     budgetEl.textContent = '$' + fmt(Math.round(cfg.b * 0.25)) + '/мес';
     leadsEl.classList.add('rise'); revEl.classList.add('rise');
@@ -1516,12 +1524,14 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
 
     later(() => { const t = centerOf(geoChips[i]); flyTo(t.x, t.y, 560, () => { tap(geoChips[i]); geoChips[i].classList.add('on'); }); }, 80);
     later(() => { const t = centerOf(nicheChips[i]); flyTo(t.x, t.y, 500, () => { tap(nicheChips[i]); nicheChips[i].classList.add('on'); }); }, 1150);
+    later(() => { const t = centerOf(dirsRow.children[0]); flyTo(t.x, t.y, 480, () => { tap(dirsRow.children[0]); dirsRow.children[0].classList.add('on'); }); }, 2150);
     later(() => {
+      /* чек зависит от услуги - подставляется сразу после ее выбора, как в реальном калькуляторе */
       checkRow.classList.add('show');
       count(checkEl, { lo: cfg.check, hi: cfg.check }, 450, (el, a) => { el.textContent = '$' + fmt(a); });
-    }, 1850);
-    later(() => { const t = knobPos(12); flyTo(t.x, t.y, 460); }, 2150);
-    later(() => drag(12, cfg.fill, cfg.b, 850), 2750);
+    }, 2900);
+    later(() => { const t = knobPos(12); flyTo(t.x, t.y, 460); }, 3250);
+    later(() => drag(12, cfg.fill, cfg.b, 850), 3850);
     later(() => {
       tileL.classList.add('flash'); tileR.classList.add('flash');
       leadsEl.classList.remove('rise'); revEl.classList.remove('rise');
@@ -1530,7 +1540,7 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
       later(() => { tileL.classList.remove('flash'); tileR.classList.remove('flash'); }, 700);
       later(() => { roasEl.textContent = '~' + cfg.roas + ' раз'; roasRow.classList.add('show'); }, 550);
       later(() => { openBtn.classList.add('pump'); later(() => openBtn.classList.remove('pump'), 850); }, 900);
-    }, 3800);
+    }, 4900);
   }
 
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1539,7 +1549,7 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
   function loop(){
     if (!running) return;
     play(idx);
-    later(() => { idx = (idx + 1) % CFG.length; loop(); }, 6100);
+    later(() => { idx = (idx + 1) % CFG.length; loop(); }, 7300);
   }
   function start(){ if (!running){ running = true; loop(); } }
   function stop(){
