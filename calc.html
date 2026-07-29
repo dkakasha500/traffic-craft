@@ -813,25 +813,26 @@ var DATA = {
   countries: {
     /* aud - сегменты аудитории страны: рус диаспора / местные / экспаты.
        cpl - множитель цены заявки, cap - множитель емкости (доля аудитории в рынке).
+       rec - рекомендуемый СТАРТОВЫЙ месячный бюджет, USD (якорь: Дубай ~8 000 AED = ~$2 200).
        'all' = смесь аудиторий, текущие средние цифры (кейсы TC - смесь кампаний).
        ВНИМАНИЕ: множители - оценки, заменить реальными из кабинетов, как и весь конфиг. */
-    il: {name:'Израиль',   dot:'#3b82f6', mult:1.30, cap:16000, cpl:{dental:44, cosmo:28, multi:22, plastic:62,  hair:51,  rehab:29, ophthalmo:42, pediatric:26},
+    il: {name:'Израиль',   dot:'#3b82f6', mult:1.30, cap:16000, rec:3000, cpl:{dental:44, cosmo:28, multi:22, plastic:62,  hair:51,  rehab:29, ophthalmo:42, pediatric:26},
          aud:{all:{name:'Все'}, ru:{name:'Русскоязычные', cpl:0.90, cap:0.45}, loc:{name:'Ивритоязычные', cpl:1.25, cap:1.60}}},
-    ae: {name:'ОАЭ',       dot:'#16a34a', mult:1.35, cap:20000, cpl:{dental:64, cosmo:42, multi:31, plastic:90,  hair:74,  rehab:40, ophthalmo:61, pediatric:36},
+    ae: {name:'ОАЭ',       dot:'#16a34a', mult:1.35, cap:20000, rec:2500, cpl:{dental:64, cosmo:42, multi:31, plastic:90,  hair:74,  rehab:40, ophthalmo:61, pediatric:36},
          aud:{all:{name:'Все'}, ru:{name:'Русскоязычные', cpl:0.85, cap:0.30}, ex:{name:'Экспаты (англ.)', cpl:1.30, cap:1.80}, loc:{name:'Местные (араб.)', cpl:1.70, cap:0.90}}},
-    es: {name:'Испания',   dot:'#ef4444', mult:1.05, cap:18000, cpl:{dental:62, cosmo:40, multi:31, plastic:87,  hair:71,  rehab:40, ophthalmo:59, pediatric:35},
+    es: {name:'Испания',   dot:'#ef4444', mult:1.05, cap:18000, rec:2500, cpl:{dental:62, cosmo:40, multi:31, plastic:87,  hair:71,  rehab:40, ophthalmo:59, pediatric:35},
          aud:{all:{name:'Все'}, ru:{name:'Русскоязычные', cpl:0.85, cap:0.25}, loc:{name:'Испанцы', cpl:1.20, cap:1.70}, ex:{name:'Экспаты (англ.)', cpl:1.10, cap:0.55}}},
-    de: {name:'Германия',  dot:'#facc15', mult:1.25, cap:22000, cpl:{dental:72, cosmo:46, multi:48, plastic:101, hair:83,  rehab:62, ophthalmo:68, pediatric:42},
+    de: {name:'Германия',  dot:'#facc15', mult:1.25, cap:22000, rec:3000, cpl:{dental:72, cosmo:46, multi:48, plastic:101, hair:83,  rehab:62, ophthalmo:68, pediatric:42},
          aud:{all:{name:'Все'}, ru:{name:'Русскоязычные', cpl:0.85, cap:0.35}, loc:{name:'Немцы', cpl:1.30, cap:1.70}}},
-    cy: {name:'Кипр',      dot:'#fb923c', mult:1.08, cap:2500,  cpl:{dental:40, cosmo:26, multi:22, plastic:56,  hair:46,  rehab:29, ophthalmo:38, pediatric:24},
+    cy: {name:'Кипр',      dot:'#fb923c', mult:1.08, cap:2500,  rec:1000, cpl:{dental:40, cosmo:26, multi:22, plastic:56,  hair:46,  rehab:29, ophthalmo:38, pediatric:24},
          aud:{all:{name:'Все'}, ru:{name:'Русскоязычные', cpl:0.85, cap:0.40}, ex:{name:'Экспаты (англ.)', cpl:1.15, cap:0.90}, loc:{name:'Киприоты', cpl:1.25, cap:1.30}}},
-    pl: {name:'Польша',    dot:'#fb7185', mult:0.72, cap:9000,  cpl:{dental:26, cosmo:17, multi:15, plastic:36,  hair:30,  rehab:20, ophthalmo:25, pediatric:16},
+    pl: {name:'Польша',    dot:'#fb7185', mult:0.72, cap:9000,  rec:1500, cpl:{dental:26, cosmo:17, multi:15, plastic:36,  hair:30,  rehab:20, ophthalmo:25, pediatric:16},
          aud:{all:{name:'Все'}, ru:{name:'Русскоязычные', cpl:0.85, cap:0.40}, loc:{name:'Поляки', cpl:1.20, cap:1.60}}},
-    tr: {name:'Турция',    dot:'#e11d48', mult:0.50, cap:12000, cpl:{dental:22, cosmo:15, multi:12, plastic:31,  hair:25,  rehab:16, ophthalmo:21, pediatric:13},
+    tr: {name:'Турция',    dot:'#e11d48', mult:0.50, cap:12000, rec:1500, cpl:{dental:22, cosmo:15, multi:12, plastic:31,  hair:25,  rehab:16, ophthalmo:21, pediatric:13},
          aud:{all:{name:'Все'}, ru:{name:'Русскоязычные', cpl:0.90, cap:0.45}, loc:{name:'Турки', cpl:1.15, cap:1.70}}},
-    kz: {name:'Казахстан', dot:'#06b6d4', mult:0.42, cap:4000,  cpl:{dental:14, cosmo:11, multi:9,  plastic:20,  hair:16,  rehab:12, ophthalmo:13, pediatric:10},
+    kz: {name:'Казахстан', dot:'#06b6d4', mult:0.42, cap:4000,  rec:1500, cpl:{dental:14, cosmo:11, multi:9,  plastic:20,  hair:16,  rehab:12, ophthalmo:13, pediatric:10},
          aud:{all:{name:'Все'}, ru:{name:'Русскоязычные', cpl:0.95, cap:0.70}, loc:{name:'Казахоязычные', cpl:1.05, cap:0.80}}},
-    us: {name:'США',       dot:'#6366f1', mult:1.60, cap:35000, cpl:{dental:90, cosmo:52, multi:55, plastic:126, hair:103, rehab:72, ophthalmo:86, pediatric:50},
+    us: {name:'США',       dot:'#6366f1', mult:1.60, cap:35000, rec:5000, cpl:{dental:90, cosmo:52, multi:55, plastic:126, hair:103, rehab:72, ophthalmo:86, pediatric:50},
          aud:{all:{name:'Все'}, ru:{name:'Русскоязычные', cpl:0.80, cap:0.15}, loc:{name:'Англоязычные', cpl:1.15, cap:1.40}},
          /* США огромные и неоднородные - CPM пляшет в разы по штатам/метро.
             cpm - множитель цены заявки, chk - множитель чека региона. */
@@ -1319,8 +1320,10 @@ function renderChips(){
    дефолт (для Казахстана $30k бессмысленны - потолок $4k). Считаем от cap. */
 function niceRound(x){ var s = x < 3000 ? 500 : x < 20000 ? 1000 : 5000; return Math.max(500, Math.round(x / s) * s); }
 function budgetCfg(co){
-  var cap = DATA.countries[co].cap || 20000;
-  return { min: 500, max: niceRound(cap * 1.5), def: niceRound(cap * 0.4) };
+  var c = DATA.countries[co], cap = c.cap || 20000;
+  /* def - стартовый бюджет из конфига (rec), а не доля потолка:
+     30к AED сходу мало кто готов выделить, рекомендуем реальный вход в рынок */
+  return { min: 500, max: niceRound(cap * 1.5), def: c.rec || niceRound(cap * 0.4) };
 }
 /* короткая сумма для пресетов бюджета, в валюте страны: «$2к», «7,3к AED», «€1,8к» */
 function fmtBudgetShort(v){
@@ -1357,16 +1360,19 @@ function renderPresets(){
 
 /* строка "рекомендуемый бюджет для этого рынка": показывает разумный дефолт,
    кликом ставит его. Дефолт = budgetCfg().def, привязан к потолку рынка. */
-/* рекомендуемый бюджет с учетом сегмента аудитории: узкому сегменту потолок ниже */
+/* рекомендуемый СТАРТОВЫЙ бюджет: rec страны, но не выше половины потолка сегмента
+   (узкой аудитории нет смысла рекомендовать бюджет у ее потолка выжигания) */
 function recDef(){
   var c = DATA.countries[state.country], cfg = budgetCfg(state.country);
   var am = (c.aud && c.aud[state.aud] && c.aud[state.aud].cap) || 1;
-  return Math.min(Math.max(niceRound((c.cap || 20000) * am * 0.4), cfg.min), cfg.max);
+  var base = c.rec || niceRound((c.cap || 20000) * 0.4);
+  var segHalf = niceRound((c.cap || 20000) * am * 0.5);
+  return Math.min(Math.max(Math.min(base, segHalf), cfg.min), cfg.max);
 }
 function renderRecBudget(){
   var el = document.getElementById('recBudget'); if(!el) return;
   var def = recDef();
-  var label = state.aud === 'all' ? 'Рекомендуем для этого рынка: ' : 'Рекомендуем для этой аудитории: ';
+  var label = state.aud === 'all' ? 'Для старта рекомендуем: ' : 'Для старта по этой аудитории: ';
   if(state.budget === def){
     el.innerHTML = label + '<b>' + fmtMoney(def) + '</b> (выбран)';
   } else {
