@@ -26,10 +26,25 @@ setTimeout(() => {
   const rows = [];
   for (const c of countries) for (const n of niches) for (const d of Object.keys(DATA.niches[n].dirs)) for (const s of scens) {
     const budget = Math.round(DATA.countries[c].cap * 0.4);
-    const st = { country: c, niche: n, dirs: [d], budget, checkOverride: 0, scenario: s, usRegion: 'avg' };
+    const st = { country: c, niche: n, dirs: [d], budget, checkOverride: 0, scenario: s, usRegion: 'avg', aud: 'all' };
     const r = tcCalc(st, DATA);
     if (!r) { console.log('NULL:', c, n, d, s); continue; }
     rows.push({ k: c + '/' + n + '/' + d, s, roas: r.roas });
+  }
+
+  /* сегменты аудитории: свой рекомендуемый бюджет (0.4 сегментного потолка, линейная зона).
+     Коридор для сегментов шире базового: осознанное отклонение от среднего по рынку,
+     но x11 base / x15 aggr - потолок правдоподобия и для них. */
+  const audRows = [];
+  for (const c of countries) for (const a of Object.keys(DATA.countries[c].aud || {})) {
+    if (a === 'all') continue;
+    for (const n of niches) for (const d of Object.keys(DATA.niches[n].dirs)) for (const s of scens) {
+      const budget = Math.max(500, Math.round(DATA.countries[c].cap * DATA.countries[c].aud[a].cap * 0.4));
+      const st = { country: c, niche: n, dirs: [d], budget, checkOverride: 0, scenario: s, usRegion: 'avg', aud: a };
+      const r = tcCalc(st, DATA);
+      if (!r) { console.log('NULL aud:', c, a, n, d, s); continue; }
+      audRows.push({ k: c + '(' + a + ')/' + n + '/' + d, s, roas: r.roas });
+    }
   }
 
   const nDirs = niches.reduce((sum, n) => sum + Object.keys(DATA.niches[n].dirs).length, 0);
@@ -62,5 +77,14 @@ setTimeout(() => {
   const pmin = Math.min(...ped.map(x => x.roas)), pmax = Math.max(...ped.map(x => x.roas));
   console.log('Педиатрия base: x' + pmin.toFixed(1) + ' .. x' + pmax.toFixed(1) + ' (' + ped.length + ' комбо)');
 
-  process.exit(badBase.length || badAggr.length ? 1 : 0);
+  /* коридор сегментов аудитории */
+  const audBadBase = audRows.filter(x => x.s === 'base' && x.roas > 11.05).sort((a, b) => b.roas - a.roas);
+  const audBadAggr = audRows.filter(x => x.s === 'aggr' && x.roas > 15.05).sort((a, b) => b.roas - a.roas);
+  const audMaxB = audRows.filter(x => x.s === 'base').sort((a, b) => b.roas - a.roas)[0];
+  const audMaxA = audRows.filter(x => x.s === 'aggr').sort((a, b) => b.roas - a.roas)[0];
+  console.log('Сегменты (' + audRows.length + ' комбо): base макс x' + audMaxB.roas.toFixed(1) + ' (' + audMaxB.k + ') | aggr макс x' + audMaxA.roas.toFixed(1) + ' (' + audMaxA.k + ')');
+  console.log('ВЫБРОСЫ сегментов base > x11 (' + audBadBase.length + '):', audBadBase.slice(0, 8).map(x => x.k + ' x' + x.roas.toFixed(1)).join(', ') || 'нет');
+  console.log('ВЫБРОСЫ сегментов aggr > x15 (' + audBadAggr.length + '):', audBadAggr.slice(0, 8).map(x => x.k + ' x' + x.roas.toFixed(1)).join(', ') || 'нет');
+
+  process.exit(badBase.length || badAggr.length || audBadBase.length || audBadAggr.length ? 1 : 0);
 }, 120);

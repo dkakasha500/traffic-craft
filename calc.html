@@ -576,6 +576,10 @@ html.js-cursor input::-webkit-inner-spin-button,html.js-cursor input::-webkit-ou
         <div class="subrow-label">Регион США:</div>
         <div class="chips chips-sm" id="usRegionChips"></div>
       </div>
+      <div class="subrow" id="audRow" hidden>
+        <div class="subrow-label">Аудитория:</div>
+        <div class="chips chips-sm" id="audChips"></div>
+      </div>
     </div>
     <div class="step">
       <div class="step-title"><span class="num">02</span> Ниша</div>
@@ -807,15 +811,28 @@ var DATA = {
   /* === ЗАМЕНИТЬ НА РЕАЛЬНЫЕ ДАННЫЕ: cpl.<ниша> ниже - оценка по бенчмаркам,
      подставь фактический CPL из своего Ads Manager по стране и нише === */
   countries: {
-    il: {name:'Израиль',   dot:'#3b82f6', mult:1.30, cap:16000, cpl:{dental:44, cosmo:28, multi:22, plastic:62,  hair:51,  rehab:29, ophthalmo:42, pediatric:26}},
-    ae: {name:'ОАЭ',       dot:'#16a34a', mult:1.35, cap:20000, cpl:{dental:64, cosmo:42, multi:31, plastic:90,  hair:74,  rehab:40, ophthalmo:61, pediatric:36}},
-    es: {name:'Испания',   dot:'#ef4444', mult:1.05, cap:18000, cpl:{dental:62, cosmo:40, multi:31, plastic:87,  hair:71,  rehab:40, ophthalmo:59, pediatric:35}},
-    de: {name:'Германия',  dot:'#facc15', mult:1.25, cap:22000, cpl:{dental:72, cosmo:46, multi:48, plastic:101, hair:83,  rehab:62, ophthalmo:68, pediatric:42}},
-    cy: {name:'Кипр',      dot:'#fb923c', mult:1.08, cap:2500,  cpl:{dental:40, cosmo:26, multi:22, plastic:56,  hair:46,  rehab:29, ophthalmo:38, pediatric:24}},
-    pl: {name:'Польша',    dot:'#fb7185', mult:0.72, cap:9000,  cpl:{dental:26, cosmo:17, multi:15, plastic:36,  hair:30,  rehab:20, ophthalmo:25, pediatric:16}},
-    tr: {name:'Турция',    dot:'#e11d48', mult:0.50, cap:12000, cpl:{dental:22, cosmo:15, multi:12, plastic:31,  hair:25,  rehab:16, ophthalmo:21, pediatric:13}},
-    kz: {name:'Казахстан', dot:'#06b6d4', mult:0.42, cap:4000,  cpl:{dental:14, cosmo:11, multi:9,  plastic:20,  hair:16,  rehab:12, ophthalmo:13, pediatric:10}},
+    /* aud - сегменты аудитории страны: рус диаспора / местные / экспаты.
+       cpl - множитель цены заявки, cap - множитель емкости (доля аудитории в рынке).
+       'all' = смесь аудиторий, текущие средние цифры (кейсы TC - смесь кампаний).
+       ВНИМАНИЕ: множители - оценки, заменить реальными из кабинетов, как и весь конфиг. */
+    il: {name:'Израиль',   dot:'#3b82f6', mult:1.30, cap:16000, cpl:{dental:44, cosmo:28, multi:22, plastic:62,  hair:51,  rehab:29, ophthalmo:42, pediatric:26},
+         aud:{all:{name:'Все'}, ru:{name:'Русскоязычные', cpl:0.90, cap:0.45}, loc:{name:'Ивритоязычные', cpl:1.25, cap:1.60}}},
+    ae: {name:'ОАЭ',       dot:'#16a34a', mult:1.35, cap:20000, cpl:{dental:64, cosmo:42, multi:31, plastic:90,  hair:74,  rehab:40, ophthalmo:61, pediatric:36},
+         aud:{all:{name:'Все'}, ru:{name:'Русскоязычные', cpl:0.85, cap:0.30}, ex:{name:'Экспаты (англ.)', cpl:1.30, cap:1.80}, loc:{name:'Местные (араб.)', cpl:1.70, cap:0.90}}},
+    es: {name:'Испания',   dot:'#ef4444', mult:1.05, cap:18000, cpl:{dental:62, cosmo:40, multi:31, plastic:87,  hair:71,  rehab:40, ophthalmo:59, pediatric:35},
+         aud:{all:{name:'Все'}, ru:{name:'Русскоязычные', cpl:0.85, cap:0.25}, loc:{name:'Испанцы', cpl:1.20, cap:1.70}, ex:{name:'Экспаты (англ.)', cpl:1.10, cap:0.55}}},
+    de: {name:'Германия',  dot:'#facc15', mult:1.25, cap:22000, cpl:{dental:72, cosmo:46, multi:48, plastic:101, hair:83,  rehab:62, ophthalmo:68, pediatric:42},
+         aud:{all:{name:'Все'}, ru:{name:'Русскоязычные', cpl:0.85, cap:0.35}, loc:{name:'Немцы', cpl:1.30, cap:1.70}}},
+    cy: {name:'Кипр',      dot:'#fb923c', mult:1.08, cap:2500,  cpl:{dental:40, cosmo:26, multi:22, plastic:56,  hair:46,  rehab:29, ophthalmo:38, pediatric:24},
+         aud:{all:{name:'Все'}, ru:{name:'Русскоязычные', cpl:0.85, cap:0.40}, ex:{name:'Экспаты (англ.)', cpl:1.15, cap:0.90}, loc:{name:'Киприоты', cpl:1.25, cap:1.30}}},
+    pl: {name:'Польша',    dot:'#fb7185', mult:0.72, cap:9000,  cpl:{dental:26, cosmo:17, multi:15, plastic:36,  hair:30,  rehab:20, ophthalmo:25, pediatric:16},
+         aud:{all:{name:'Все'}, ru:{name:'Русскоязычные', cpl:0.85, cap:0.40}, loc:{name:'Поляки', cpl:1.20, cap:1.60}}},
+    tr: {name:'Турция',    dot:'#e11d48', mult:0.50, cap:12000, cpl:{dental:22, cosmo:15, multi:12, plastic:31,  hair:25,  rehab:16, ophthalmo:21, pediatric:13},
+         aud:{all:{name:'Все'}, ru:{name:'Русскоязычные', cpl:0.90, cap:0.45}, loc:{name:'Турки', cpl:1.15, cap:1.70}}},
+    kz: {name:'Казахстан', dot:'#06b6d4', mult:0.42, cap:4000,  cpl:{dental:14, cosmo:11, multi:9,  plastic:20,  hair:16,  rehab:12, ophthalmo:13, pediatric:10},
+         aud:{all:{name:'Все'}, ru:{name:'Русскоязычные', cpl:0.95, cap:0.70}, loc:{name:'Казахоязычные', cpl:1.05, cap:0.80}}},
     us: {name:'США',       dot:'#6366f1', mult:1.60, cap:35000, cpl:{dental:90, cosmo:52, multi:55, plastic:126, hair:103, rehab:72, ophthalmo:86, pediatric:50},
+         aud:{all:{name:'Все'}, ru:{name:'Русскоязычные', cpl:0.80, cap:0.15}, loc:{name:'Англоязычные', cpl:1.15, cap:1.40}},
          /* США огромные и неоднородные - CPM пляшет в разы по штатам/метро.
             cpm - множитель цены заявки, chk - множитель чека региона. */
          regions:{
@@ -925,6 +942,10 @@ function tcCalc(state, D){
      сильно различается по штатам/метро. Для остальных стран = 1. */
   var reg = (c.regions && c.regions[state.usRegion]) ? c.regions[state.usRegion] : null;
   var regCpm = reg ? reg.cpm : 1, regChk = reg ? reg.chk : 1;
+  /* Сегмент аудитории: рус диаспора / местные / экспаты. Меняет цену заявки
+     (audCpl) и емкость рынка (audCap) - узкий сегмент дешевле, но выжигается раньше. */
+  var aud = (c.aud && c.aud[state.aud]) ? c.aud[state.aud] : null;
+  var audCpl = (aud && aud.cpl) || 1, audCap = (aud && aud.cap) || 1;
   var effMult = c.mult * regChk;
   var cplMult = 0, check = 0, i, d;
   for(i = 0; i < state.dirs.length; i++){
@@ -936,7 +957,7 @@ function tcCalc(state, D){
   cplMult /= state.dirs.length;
   check = check / state.dirs.length;
   if(state.checkOverride > 0) check = state.checkOverride;
-  var cpl = c.cpl[state.niche] * cplMult * sc.cpl * regCpm;
+  var cpl = c.cpl[state.niche] * cplMult * sc.cpl * regCpm * audCpl;
   var l2b = Math.min(n.l2b * sc.l2b, 0.95);
   var b2s = Math.min(n.b2s * sc.b2s, 0.95);
   /* Емкость рынка: аудитория конечна. До потолка - бюджет работает
@@ -944,7 +965,7 @@ function tcCalc(state, D){
      эффективный бюджет почти не растет (первые +50% потолка добавляют лишь 6%,
      дальше 2%) - деньги идут в частоту показов, а не в новых людей. ROAS
      считаем от ПОЛНОГО бюджета, поэтому переспенд честно роняет окупаемость. */
-  var cap = c.cap || 1e9;
+  var cap = (c.cap || 1e9) * audCap;
   var B = state.budget, effBudget = B, overCap = B > cap;
   if(overCap){
     var over = B - cap;
@@ -981,7 +1002,7 @@ var FLAGS = {
 function flagHtml(k){ return '<span class="cflag">' + (FLAGS[k] || '') + '</span>'; }
 
 var MAX_DIRS = 20;   /* фактически без лимита - можно выбрать все направления ниши */
-var state = { country:'il', niche:'dental', dirs:['implants'], budget:5000, checkOverride:0, scenario:'base', usRegion:'avg' };
+var state = { country:'il', niche:'dental', dirs:['implants'], budget:5000, checkOverride:0, scenario:'base', usRegion:'avg', aud:'all' };
 
 /* ============================================================
    Аналитика: единая безопасная отправка событий в Meta Pixel.
@@ -1049,6 +1070,7 @@ function isCountry(k){ return !!(k && DATA.countries[k]); }
 function isNiche(k){ return !!(k && DATA.niches[k]); }
 function isScenario(k){ return !!(k && DATA.scenarios[k]); }
 function isUsRegion(k){ return !!(k && DATA.countries.us.regions[k]); }
+function isAud(co, k){ var c = DATA.countries[co]; return !!(c && c.aud && k && c.aud[k]); }
 /* Чек: либо 0 (авто-подстановка по направлениям), либо в разумном коридоре.
    Важно: закрывает дыру, когда огромный ch из ссылки/памяти раздувал выручку. */
 function validCheck(v){ var n = toInt(v); if(isNaN(n) || n <= 0) return 0; return Math.min(Math.max(n, LIMITS.checkMin), LIMITS.checkMax); }
@@ -1073,7 +1095,7 @@ function lsRemove(key){ try { localStorage.removeItem(key); } catch(e){} }
    Ничего не блокирует: только предупреждение в консоль. */
 function tcSelfTest(){
   try {
-    var r = tcCalc({ country:'il', niche:'dental', dirs:['implants'], budget:5000, checkOverride:0, scenario:'base', usRegion:'avg' }, DATA);
+    var r = tcCalc({ country:'il', niche:'dental', dirs:['implants'], budget:5000, checkOverride:0, scenario:'base', usRegion:'avg', aud:'all' }, DATA);
     var good = r && isFinite(r.leads) && r.leads > 0 && isFinite(r.revenue) && r.revenue > 0 &&
                isFinite(r.cpl) && r.cpl > 0 && isFinite(r.roas) && r.roas > 0 && r.roas < 20;
     if(!good && typeof console !== 'undefined' && console.warn) console.warn('[tc] self-test: расчет вне ожидаемого диапазона', r);
@@ -1108,6 +1130,7 @@ function randomProfile(){
   var budget = Math.max(1000, Math.min(30000, Math.round(raw / 500) * 500));
   state.country = co; state.niche = ni; state.dirs = chosen; state.budget = budget;
   state.checkOverride = 0; state.usRegion = (co === 'us') ? pick(Object.keys(DATA.countries.us.regions)) : 'avg';
+  state.aud = 'all';   /* случайный пример - всегда по смеси аудиторий */
   document.getElementById('budget').value = state.budget;
   trackEvent('CalcRandom', { segment: seg });
   trackInteract();
@@ -1212,7 +1235,7 @@ function renderChips(){
     b.className = 'chip' + (state.country === k ? ' on' : '');
     b.setAttribute('aria-pressed', state.country === k ? 'true' : 'false');
     b.innerHTML = flagHtml(k) + c.name;
-    b.onclick = function(){ state.country = k; state.checkOverride = 0; state.budget = budgetCfg(k).def; renderChips(); update(); };
+    b.onclick = function(){ state.country = k; state.checkOverride = 0; state.aud = 'all'; state.budget = budgetCfg(k).def; renderChips(); update(); };
     el.appendChild(b);
   });
   applyBudgetRange();
@@ -1231,6 +1254,22 @@ function renderChips(){
     });
   } else {
     usRow.hidden = true;
+  }
+  /* сегменты аудитории: рус диаспора / местные / экспаты - цена лида и емкость разные */
+  var audRow = document.getElementById('audRow');
+  if(usC && usC.aud){
+    audRow.hidden = false;
+    var ac = document.getElementById('audChips'); ac.innerHTML = '';
+    Object.keys(usC.aud).forEach(function(ak){
+      var ab = document.createElement('button'); ab.type = 'button';
+      ab.className = 'chip' + (state.aud === ak ? ' on' : '');
+      ab.setAttribute('aria-pressed', state.aud === ak ? 'true' : 'false');
+      ab.textContent = usC.aud[ak].name;
+      ab.onclick = function(){ state.aud = ak; renderChips(); update(); };
+      ac.appendChild(ab);
+    });
+  } else {
+    audRow.hidden = true;
   }
   el = document.getElementById('nicheChips'); el.innerHTML = '';
   Object.keys(DATA.niches).forEach(function(k){
@@ -1318,15 +1357,22 @@ function renderPresets(){
 
 /* строка "рекомендуемый бюджет для этого рынка": показывает разумный дефолт,
    кликом ставит его. Дефолт = budgetCfg().def, привязан к потолку рынка. */
+/* рекомендуемый бюджет с учетом сегмента аудитории: узкому сегменту потолок ниже */
+function recDef(){
+  var c = DATA.countries[state.country], cfg = budgetCfg(state.country);
+  var am = (c.aud && c.aud[state.aud] && c.aud[state.aud].cap) || 1;
+  return Math.min(Math.max(niceRound((c.cap || 20000) * am * 0.4), cfg.min), cfg.max);
+}
 function renderRecBudget(){
   var el = document.getElementById('recBudget'); if(!el) return;
-  var cfg = budgetCfg(state.country);
-  if(state.budget === cfg.def){
-    el.innerHTML = 'Рекомендуем для этого рынка: <b>' + fmtMoney(cfg.def) + '</b> (выбран)';
+  var def = recDef();
+  var label = state.aud === 'all' ? 'Рекомендуем для этого рынка: ' : 'Рекомендуем для этой аудитории: ';
+  if(state.budget === def){
+    el.innerHTML = label + '<b>' + fmtMoney(def) + '</b> (выбран)';
   } else {
-    el.innerHTML = 'Рекомендуем для этого рынка: <button type="button" id="recBtn">' + fmtMoney(cfg.def) + '</button>';
+    el.innerHTML = label + '<button type="button" id="recBtn">' + fmtMoney(def) + '</button>';
     var rb = document.getElementById('recBtn');
-    if(rb) rb.onclick = function(){ var c = budgetCfg(state.country); state.budget = c.def; document.getElementById('budget').value = c.def; update(); renderPresets(); };
+    if(rb) rb.onclick = function(){ var v = recDef(); state.budget = v; document.getElementById('budget').value = v; update(); renderPresets(); };
   }
 }
 
@@ -1411,20 +1457,22 @@ function update(){
   var dirNames = state.dirs.map(function(k){ return DATA.niches[state.niche].dirs[k].name; }).join(' + ');
   var cObj = DATA.countries[state.country];
   var geoName = cObj.name + ((cObj.regions && cObj.regions[state.usRegion] && state.usRegion !== 'avg') ? ' · ' + cObj.regions[state.usRegion].name : '');
-  document.getElementById('resTag').innerHTML = flagHtml(state.country) + geoName + ' · ' + DATA.niches[state.niche].name + ' · ' + dirNames;
+  var audTag = (state.aud !== 'all' && cObj.aud && cObj.aud[state.aud]) ? ' · ' + cObj.aud[state.aud].name : '';
+  document.getElementById('resTag').innerHTML = flagHtml(state.country) + geoName + audTag + ' · ' + DATA.niches[state.niche].name + ' · ' + dirNames;
   /* печатная шапка (видна только в PDF) */
   /* шапка печати/PDF: сводка конфигурации со страной, регионом, нишей, направлениями, бюджетом, чеком и сценарием */
   document.getElementById('printHead').innerHTML =
     '<b>Traffic Craft - прогноз рекламы для клиники</b><br>' +
-    geoName + ' · ' + DATA.niches[state.niche].name + ' · ' + dirNames + '<br>' +
+    geoName + audTag + ' · ' + DATA.niches[state.niche].name + ' · ' + dirNames + '<br>' +
     'Бюджет ' + fmtMoney(state.budget) + '/мес' + usdNote(state.budget) + ' · средний чек ' + fmtMoney(r.check) + usdNote(r.check) +
     ' · сценарий «' + DATA.scenarios[state.scenario].name + '» · traffic-craft.com/calc';
   /* критичное предупреждение о выжигании: видно всегда, когда бюджет выше потолка рынка */
+  var capW = state.aud === 'all' ? 'потолка рынка' : 'потолка этой аудитории';
   var resBurn = document.getElementById('resBurn');
   if(resBurn){
     if(r.overCap){
       resBurn.hidden = false;
-      resBurn.innerHTML = 'Бюджет выше потолка рынка (~<b>' + fmtMoney(r.cap) + '</b>/мес): реально работает ~<b>' + fmtMoney(r.effBudget) + '</b>, остальное почти впустую. Расти лучше вширь - новыми городами.';
+      resBurn.innerHTML = 'Бюджет выше ' + capW + ' (~<b>' + fmtMoney(r.cap) + '</b>/мес): реально работает ~<b>' + fmtMoney(r.effBudget) + '</b>, остальное почти впустую. Расти лучше вширь - новыми городами' + (state.aud === 'all' ? '' : ' или соседними аудиториями') + '.';
     } else {
       resBurn.hidden = true;
     }
@@ -1438,7 +1486,7 @@ function update(){
   if(capEl){
     if(r.overCap){
       capEl.hidden = false;
-      capEl.innerHTML = 'Бюджет выше потолка рынка (~' + fmtMoney(r.cap) + '/мес): реально сработает ~<b>' + fmtMoney(r.effBudget) + '</b>, дальше отдача падает. Растите вширь: добавляйте города, а не бюджет.';
+      capEl.innerHTML = 'Бюджет выше ' + capW + ' (~' + fmtMoney(r.cap) + '/мес): реально сработает ~<b>' + fmtMoney(r.effBudget) + '</b>, дальше отдача падает. Растите вширь: добавляйте города, а не бюджет.';
     } else {
       capEl.hidden = true;
     }
@@ -1447,7 +1495,7 @@ function update(){
   if(capSoftEl){
     if(!r.overCap && r.cap && state.budget >= r.cap * 0.8){
       capSoftEl.hidden = false;
-      capSoftEl.innerHTML = 'Близко к потолку рынка (~<b>' + fmtMoney(r.cap) + '</b>/мес). Выше - отдача с бюджета падает.';
+      capSoftEl.innerHTML = 'Близко к ' + (state.aud === 'all' ? 'потолку рынка' : 'потолку этой аудитории') + ' (~<b>' + fmtMoney(r.cap) + '</b>/мес). Выше - отдача с бюджета падает.';
     } else {
       capSoftEl.hidden = true;
     }
@@ -1463,6 +1511,7 @@ var STORAGE_KEY = 'tc_calc_v1';
 function buildHash(){
   return ['c=' + state.country, 'n=' + state.niche, 'd=' + state.dirs.join('.'), 'b=' + state.budget, 's=' + state.scenario,
     (state.country === 'us' && state.usRegion !== 'avg') ? 'ur=' + state.usRegion : '',
+    state.aud !== 'all' ? 'a=' + state.aud : '',
     state.checkOverride > 0 ? 'ch=' + state.checkOverride : ''].filter(Boolean).join('&');
 }
 function shareUrl(){
@@ -1490,11 +1539,15 @@ function applyParsed(h){
     else if(k === 'ch'){ state.checkOverride = validCheck(v); }   /* кламп чека: закрывает раздувание выручки */
     else if(k === 's'){ if(isScenario(v)) state.scenario = v; }
     else if(k === 'ur'){ state._urCand = v; }
+    else if(k === 'a'){ state._audCand = v; }
   });
   /* регион США применяем, только если страна США и регион реальный */
   var usC = DATA.countries[state.country];
   if(usC && usC.regions && isUsRegion(state._urCand)) state.usRegion = state._urCand;
   state._urCand = null;
+  /* аудитория - только валидная для выбранной страны; нет a= в ссылке -> смесь */
+  state.aud = isAud(state.country, state._audCand) ? state._audCand : 'all';
+  state._audCand = null;
   /* направления - после ниши, валидируем под выбранную нишу */
   each(function(k, v){ if(k === 'd'){ var ds = validDirs(v.split('.'), state.niche); if(ds) state.dirs = ds; } });
 }
@@ -1531,6 +1584,7 @@ function loadState(){
       state.checkOverride = validCheck(saved.checkOverride);
       if(isScenario(saved.scenario)) state.scenario = saved.scenario;
       if(isUsRegion(saved.usRegion)) state.usRegion = saved.usRegion;
+      if(isAud(state.country, saved.aud)) state.aud = saved.aud;
       return;                                                 /* 3. память прошлого визита */
     }
   } catch(e){}
@@ -1629,7 +1683,7 @@ document.getElementById('printBtn').addEventListener('click', function(){
 document.getElementById('resetBtn').addEventListener('click', function(){
   var rc = smartCountry() || 'il';
   /* usRegion и бюджет по стране - иначе после сброса на США остается старый регион, а бюджет может выйти за потолок */
-  state = { country: rc, niche:'dental', dirs:['implants'], budget: budgetCfg(rc).def, checkOverride:0, scenario:'base', usRegion:'avg' };
+  state = { country: rc, niche:'dental', dirs:['implants'], budget: budgetCfg(rc).def, checkOverride:0, scenario:'base', usRegion:'avg', aud:'all' };
   lsRemove(STORAGE_KEY);
   document.getElementById('budget').value = state.budget;
   renderChips(); renderScen(); update();
@@ -1663,7 +1717,9 @@ if('IntersectionObserver' in window){
 /* ---------- сводка расчета (для заявки и WhatsApp) ---------- */
 function calcSummary(){
   var r = tcCalc(state, DATA);
-  return 'Калькулятор: ' + DATA.countries[state.country].name + ', ' + DATA.niches[state.niche].name +
+  var cAud = DATA.countries[state.country].aud;
+  var audPart = (state.aud !== 'all' && cAud && cAud[state.aud]) ? ' (' + cAud[state.aud].name.toLowerCase() + ')' : '';
+  return 'Калькулятор: ' + DATA.countries[state.country].name + audPart + ', ' + DATA.niches[state.niche].name +
     ', ' + state.dirs.map(function(k){ return DATA.niches[state.niche].dirs[k].name; }).join(' + ') +
     ', бюджет ' + fmtMoney(state.budget) + usdNote(state.budget) +
     (r ? ', чек ' + fmtMoney(r.check) + usdNote(r.check) + (state.checkOverride > 0 ? ' (вручную)' : '') : '') +

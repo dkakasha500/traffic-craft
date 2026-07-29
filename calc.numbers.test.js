@@ -114,6 +114,24 @@ const g = id => (d.getElementById(id) || {}).textContent || '';
       const all = checkAll();
       checked++; if (all.errs.length) fails.push({ cfg: 'edge-us-' + reg, errs: all.errs });
     }
+
+    /* сегменты аудитории: DOM сходится с моделью + механика множителей */
+    for (const [c, a] of [['il','ru'], ['il','loc'], ['ae','ex'], ['ae','loc'], ['es','ru'], ['us','ru']]) {
+      w.location.hash = '#c=' + c + '&n=dental&d=implants&b=1000&s=base&a=' + a;
+      w.dispatchEvent(new w.Event('hashchange'));
+      await sleep(140);
+      const errs = [];
+      if (w.state.aud !== a) errs.push('аудитория не применилась: ' + w.state.aud);
+      const rSeg = w.tcCalc(w.state, w.DATA);
+      const cfgAud = w.DATA.countries[c].aud[a];
+      const rBase = w.tcCalc(Object.assign({}, w.state, { aud: 'all' }), w.DATA);
+      /* b=1000 - линейная зона всех сегментов: заявки = базовые / множитель CPL */
+      if (Math.abs(rSeg.leads - rBase.leads / cfgAud.cpl) > 1e-9) errs.push('заявки != базовые/' + cfgAud.cpl);
+      if (Math.abs(rSeg.cap - w.DATA.countries[c].cap * cfgAud.cap) > 1e-9) errs.push('потолок сегмента');
+      if (Math.abs(rSeg.check - rBase.check) > 1e-9) errs.push('чек сегмента поехал');
+      const all = checkAll(); errs.push(...all.errs);
+      checked++; if (errs.length) fails.push({ cfg: 'edge-aud-' + c + '-' + a, errs });
+    }
   }
 
   console.log('проверено:', checked, edgeOnly ? '(edge-кейсы)' : '(' + countries.join(',') + ' x ' + niches.length + ' ниш x 3 сценария)');

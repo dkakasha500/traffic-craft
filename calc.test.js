@@ -50,6 +50,17 @@ function boot(opts = {}) {
   t.clickChip('dirChips', 'SMAS');
   const dirsOn = Array.from(t.d.getElementById('dirChips').children).filter(b => b.className.includes('on'));
   assert.strictEqual(dirsOn.length, 2, 'два направления выбраны');
+  /* сегмент аудитории: чип меняет прогноз, попадает в hash, сбрасывается сменой страны */
+  const audLeadsBefore = t.d.getElementById('rLeads').textContent;
+  const audChip = Array.from(t.d.getElementById('audChips').children).find(b => b.textContent === 'Русскоязычные');
+  assert.ok(audChip, 'чип аудитории отрендерен');
+  audChip.click();
+  assert.notStrictEqual(t.d.getElementById('rLeads').textContent, audLeadsBefore, 'сегмент меняет прогноз');
+  assert.ok(t.w.buildHash().includes('a=ru'), 'сегмент в hash');
+  assert.ok(t.d.getElementById('resTag').textContent.includes('Русскоязычные'), 'сегмент в бейдже');
+  t.clickChip('countryChips', 'Израиль');
+  assert.strictEqual(t.w.state.aud, 'all', 'смена страны сбрасывает сегмент');
+  t.clickChip('countryChips', 'ОАЭ');
   const slider = t.d.getElementById('budget');
   slider.value = '10000';
   slider.dispatchEvent(new t.w.Event('input', { bubbles: true }));
