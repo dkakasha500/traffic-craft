@@ -421,14 +421,20 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 .principle-ico{width:40px;height:40px;border-radius:12px;background:var(--glass-bg);border:1px solid var(--accent-mid);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:inset 0 0 10px rgba(14,224,207,0.1)}
 /* цепочка подхода: рельса вдоль иконок, заполняется по мере прокрутки - «чиним всю цепочку» буквально */
 .principles-rail{position:relative}
-.principles-rail::before{content:'';position:absolute;left:19.5px;top:44px;bottom:44px;width:1px;background:var(--brd)}
-.principles-rail .rail-fill{position:absolute;left:18px;top:44px;height:0;max-height:calc(100% - 88px);width:3px;border-radius:3px;background:linear-gradient(180deg,#0ee0cf,rgba(59,130,246,.9));box-shadow:0 0 12px rgba(14,224,207,.35);pointer-events:none}
-/* головка-комета на конце заполнения */
-.principles-rail .rail-fill::after{content:'';position:absolute;bottom:-3px;left:50%;transform:translateX(-50%);width:7px;height:7px;border-radius:50%;background:#0ee0cf;box-shadow:0 0 12px #0ee0cf,0 0 26px rgba(14,224,207,.5)}
+.principles-rail::before{content:'';position:absolute;left:19.5px;top:44px;bottom:44px;width:1px;background:linear-gradient(180deg,rgba(14,224,207,.35),rgba(59,130,246,.28))}
+/* бегущий по линии сгусток энергии - анимация живет сама, без привязки к скроллу */
+.principles-rail .rail-flow{position:absolute;left:18px;top:0;width:3px;height:76px;border-radius:3px;background:linear-gradient(180deg,transparent,#0ee0cf 42%,rgba(59,130,246,.95) 58%,transparent);box-shadow:0 0 14px rgba(14,224,207,.45);pointer-events:none;will-change:transform}
 .principles-rail .principle-item{position:relative;z-index:1}
-.principles-rail .principle-ico{background:var(--bg2);transition:border-color .45s,box-shadow .45s}
-/* иконка зажигается, когда рельса дошла до нее */
-.principles-rail .principle-ico.lit{border-color:#0ee0cf;box-shadow:0 0 14px rgba(14,224,207,.35),inset 0 0 10px rgba(14,224,207,.18)}
+.principles-rail .principle-ico{background:var(--bg2);transition:border-color .4s,box-shadow .4s,transform .3s,opacity .3s}
+/* вспышка иконки, когда сгусток проходит сквозь нее */
+.principles-rail .principle-ico.near{border-color:#0ee0cf;box-shadow:0 0 16px rgba(14,224,207,.45),inset 0 0 10px rgba(14,224,207,.2)}
+/* ховер: вся энергия собирается в одной иконке, остальные уходят на второй план */
+@media(hover:hover){
+  .principles-rail:has(.principle-item:hover) .principle-item:not(:hover){opacity:.38}
+  .principles-rail:has(.principle-item:hover) .rail-flow{opacity:0}
+  .principles-rail:has(.principle-item:hover) .principle-item:not(:hover) .principle-ico{border-color:var(--brd2,rgba(255,255,255,.14));box-shadow:none}
+  .principles-rail .principle-item:hover .principle-ico{border-color:#0ee0cf;box-shadow:0 0 24px rgba(14,224,207,.65),0 0 48px rgba(14,224,207,.28),inset 0 0 12px rgba(14,224,207,.25);transform:scale(1.1)}
+}
 .principle-ico svg{width:20px;height:20px;stroke:var(--accent);stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
 .principle-content{font-size:16px;color:var(--txt);line-height:1.65;padding-top:8px}
 .principle-content strong{color:var(--heading);font-weight:600}
@@ -1351,20 +1357,27 @@ if(ctaSecEl&&ctaBtnEl){
   cbO.observe(ctaSecEl);
 }
 
-/* рельса принципов: заполнение привязано к прокрутке (rAF-троттлинг, без layout-дерганий) */
+/* рельса принципов: сгусток энергии бежит по линии сам (не от скролла), иконки вспыхивают
+   при его прохождении. Работает только когда секция на экране; reduced-motion - статичная линия */
 const railEl=document.querySelector('.principles-rail');
-if(railEl){
-  const railFill=document.createElement('div');railFill.className='rail-fill';railEl.appendChild(railFill);
+if(railEl && !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)){
+  const railFlow=document.createElement('div');railFlow.className='rail-flow';railEl.appendChild(railFlow);
   const railIcos=railEl.querySelectorAll('.principle-ico');
-  let railRaf=null;
-  /* старт - когда верх рельсы у 85% экрана, финиш - когда низ дошел до середины: заполняется по мере чтения.
-     Иконки зажигаются, когда головка проходит их центр */
-  const railUpd=()=>{railRaf=null;const r=railEl.getBoundingClientRect();const p=Math.max(0,Math.min(1,(innerHeight*.85-r.top)/(r.height+innerHeight*.35)));
-    railFill.style.height=(p*(r.height-88))+'px';
-    const tipY=r.top+44+p*(r.height-88);
-    railIcos.forEach(ic=>{const ir=ic.getBoundingClientRect();ic.classList.toggle('lit',tipY>=ir.top+ir.height/2)});};
-  addEventListener('scroll',()=>{if(!railRaf)railRaf=requestAnimationFrame(railUpd)},{passive:true});
-  railUpd();
+  const CYCLE=3600;
+  let railRun=false,railRaf=null;
+  const railStep=now=>{
+    railRaf=null;
+    const r=railEl.getBoundingClientRect(),h=r.height-88;
+    const p=(now%CYCLE)/CYCLE,y=44+p*h;
+    railFlow.style.transform='translateY('+(y-38)+'px)';
+    railFlow.style.opacity=Math.min(1,Math.min(p,1-p)*7);   /* мягкий вход и уход на краях цикла */
+    railIcos.forEach(ic=>{const ir=ic.getBoundingClientRect();const c=ir.top-r.top+ir.height/2;ic.classList.toggle('near',Math.abs(c-y)<34)});
+    if(railRun)railRaf=requestAnimationFrame(railStep);
+  };
+  new IntersectionObserver(es=>{es.forEach(x=>{
+    if(x.isIntersecting){if(!railRun){railRun=true;railRaf=requestAnimationFrame(railStep);}}
+    else{railRun=false;if(railRaf)cancelAnimationFrame(railRaf);railRaf=null;}
+  })},{threshold:.15}).observe(railEl);
 }
 
 const sections=document.querySelectorAll('section[id]'),navLinks=document.querySelectorAll('.nav-links a');
@@ -1464,8 +1477,8 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
      Деньги - в валюте страны, как в самом калькуляторе (сверено с DOM calc.html):
      rLo/rHi - выручка в тысячах местной валюты, check - местная целиком; cur:null = доллары */
   const CFG = [
-    { c:'ae', n:'dental', b:10000, cur:{sym:'AED',pre:false,rate:3.67}, geo:'ОАЭ',       niche:'Стоматология',    dirs:['Импланты','Виниры','Ортодонтия'], dir2:1, more:'+4 услуги', fill:55, lLo:90,  lHi:122, rLo:201, rHi:272, check:12386, roas:'6,4', s:{lLo:98,lHi:133,rLo:211,rHi:285,check:11891},
-      aud:{ key:'ex',  label:'Экспаты (англ.)', lLo:69,  lHi:94,  rLo:154, rHi:209, roas:'5',   s:{lLo:76,lHi:102,rLo:162,rHi:219} } },
+    { c:'ae', n:'dental', b:10000, cur:{sym:'AED',pre:false,rate:3.67}, geo:'ОАЭ',       niche:'Стоматология',    dirs:['Импланты','Виниры','Ортодонтия'], dir2:1, more:'+4 услуги', fill:55, lLo:129, lHi:174, rLo:201, rHi:272, check:12386, roas:'6,4', s:{lLo:141,lHi:190,rLo:211,rHi:285,check:11891},
+      aud:{ key:'ex',  label:'Экспаты (англ.)', lLo:99,  lHi:134, rLo:154, rHi:209, roas:'5',   s:{lLo:108,lHi:146,rLo:162,rHi:219} } },
     { c:'kz', n:'cosmo',  b:3000,  cur:null,                            geo:'Казахстан', niche:'Косметология',    dirs:['Инъекции','SMAS-лифтинг','Аппаратная'], dir2:2, more:'+5 услуг', fill:50, lLo:244, lHi:330, rLo:14, rHi:19, check:231,  roas:'5,5', s:{lLo:258,lHi:348,rLo:12,rHi:16,check:189},
       aud:{ key:'loc', label:'Казахоязычные',   lLo:232, lHi:314, rLo:13,  rHi:18,  roas:'5,3', s:{lLo:245,lHi:332,rLo:12,rHi:16} } },
     { c:'es', n:'multi',  b:8000,  cur:{sym:'€',pre:true,rate:0.88},    geo:'Испания',   niche:'Многопрофильная', dirs:['Гинекология','Чекапы','Урология'], dir2:1, more:'+5 услуг', fill:45, lLo:244, lHi:330, rLo:22, rHi:30, check:508,  roas:'3,7', s:{lLo:231,lHi:312,rLo:29,rHi:39,check:693},
