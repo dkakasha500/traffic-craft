@@ -896,6 +896,7 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
     <div class="ct-demo" id="ctDemo" aria-hidden="true">
       <div class="ct-winbar"><span class="ct-dots"><i></i><i></i><i></i></span><span class="ct-url">traffic-craft.com/calc</span></div>
       <div class="ct-chips" id="ctGeo"></div>
+      <div class="ct-chips" id="ctAud"></div>
       <div class="ct-chips" id="ctNiche"></div>
       <div class="ct-chips" id="ctDirs"></div>
       <div class="ct-check" id="ctCheckRow">Средний чек подставлен: <b id="ctCheck">$0</b></div>
@@ -1412,9 +1413,12 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
      Деньги - в валюте страны, как в самом калькуляторе (сверено с DOM calc.html):
      rLo/rHi - выручка в тысячах местной валюты, check - местная целиком; cur:null = доллары */
   const CFG = [
-    { c:'ae', n:'dental', b:10000, cur:{sym:'AED',pre:false,rate:3.67}, geo:'ОАЭ',       niche:'Стоматология',    dirs:['Импланты','Виниры','Ортодонтия'], dir2:1, more:'+4 услуги', fill:55, lLo:90,  lHi:122, rLo:201, rHi:272, check:12386, roas:'6,4', s:{lLo:98,lHi:133,rLo:211,rHi:285,check:11891} },
-    { c:'kz', n:'cosmo',  b:3000,  cur:null,                            geo:'Казахстан', niche:'Косметология',    dirs:['Инъекции','SMAS-лифтинг','Аппаратная'], dir2:2, more:'+5 услуг', fill:50, lLo:244, lHi:330, rLo:14, rHi:19, check:231,  roas:'5,5', s:{lLo:258,lHi:348,rLo:12,rHi:16,check:189} },
-    { c:'es', n:'multi',  b:8000,  cur:{sym:'€',pre:true,rate:0.88},    geo:'Испания',   niche:'Многопрофильная', dirs:['Гинекология','Чекапы','Урология'], dir2:1, more:'+5 услуг', fill:45, lLo:244, lHi:330, rLo:22, rHi:30, check:508,  roas:'3,7', s:{lLo:231,lHi:312,rLo:29,rHi:39,check:693} }
+    { c:'ae', n:'dental', b:10000, cur:{sym:'AED',pre:false,rate:3.67}, geo:'ОАЭ',       niche:'Стоматология',    dirs:['Импланты','Виниры','Ортодонтия'], dir2:1, more:'+4 услуги', fill:55, lLo:90,  lHi:122, rLo:201, rHi:272, check:12386, roas:'6,4', s:{lLo:98,lHi:133,rLo:211,rHi:285,check:11891},
+      aud:{ key:'ex',  label:'Экспаты (англ.)', lLo:69,  lHi:94,  rLo:154, rHi:209, roas:'5' } },
+    { c:'kz', n:'cosmo',  b:3000,  cur:null,                            geo:'Казахстан', niche:'Косметология',    dirs:['Инъекции','SMAS-лифтинг','Аппаратная'], dir2:2, more:'+5 услуг', fill:50, lLo:244, lHi:330, rLo:14, rHi:19, check:231,  roas:'5,5', s:{lLo:258,lHi:348,rLo:12,rHi:16,check:189},
+      aud:{ key:'loc', label:'Казахоязычные',   lLo:232, lHi:314, rLo:13,  rHi:18,  roas:'5,3' } },
+    { c:'es', n:'multi',  b:8000,  cur:{sym:'€',pre:true,rate:0.88},    geo:'Испания',   niche:'Многопрофильная', dirs:['Гинекология','Чекапы','Урология'], dir2:1, more:'+5 услуг', fill:45, lLo:244, lHi:330, rLo:22, rHi:30, check:508,  roas:'3,7', s:{lLo:231,lHi:312,rLo:29,rHi:39,check:693},
+      aud:{ key:'loc', label:'Испанцы',         lLo:203, lHi:275, rLo:19,  rHi:25,  roas:'3,1' } }
   ];
   /* валюта страны основная, как в продукте */
   const wrapCur = (cfg, s) => cfg.cur ? (cfg.cur.pre ? cfg.cur.sym + s : s + ' ' + cfg.cur.sym) : '$' + s;
@@ -1438,6 +1442,12 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
       requestAnimationFrame(() => requestAnimationFrame(() => dirsRow.classList.add('in')));
       later(() => { dirsRow.classList.remove('enter', 'in'); Array.from(dirsRow.children).forEach(c => { c.style.transitionDelay = '0ms'; }); }, 800);
     }
+  }
+  /* ряд сегментов аудитории (как в продукте: под страной). on: 0 = «Все», 2 = сегмент конфига */
+  const audRowEl = document.getElementById('ctAud');
+  function setAud(cfg, on){
+    audRowEl.innerHTML = ['Все', 'Русскоязычные', cfg.aud.label].map(t => '<span class="ct-chip">' + t + '</span>').join('');
+    audRowEl.children[on].classList.add('on');
   }
   const fmt = n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
   const budgetEl = document.getElementById('ctBudget'), fillEl = document.getElementById('ctFill');
@@ -1509,7 +1519,7 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
     revEl.style.fontSize = t.length > 9 ? 'clamp(11px,3.6vw,18px)' : '';
     revEl.style.letterSpacing = t.length > 9 ? '-0.4px' : '';
   }
-  function drag(fromPct, toPct, cfg, dur, done){
+  function drag(fromPct, toPct, cfg, src, dur, done){
     knobEl.classList.add('drag'); cur.classList.add('tap');
     const t0 = performance.now();
     const step = now => {
@@ -1519,7 +1529,7 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
       const k = knobPos(pct); place(k.x, k.y);
       const ratio = 0.25 + 0.75 * e;
       budgetEl.textContent = moneyB(cfg, ratio);
-      tiles(cfg, cfg, ratio); /* расчет обновляется сразу - как в реальном калькуляторе */
+      tiles(cfg, src, ratio); /* расчет обновляется сразу - как в реальном калькуляторе */
       if (p < 1) rafs.push(requestAnimationFrame(step));
       else { knobEl.classList.remove('drag'); cur.classList.remove('tap'); done && done(); }
     };
@@ -1532,21 +1542,23 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
     }
     setDirs(cfg, 0);
     dirsRow.children[cfg.dir2].classList.add('on');
+    setAud(cfg, 2);   /* статичный кадр = финал цикла: сегмент выбран */
     barTo(cfg.fill);
     budgetEl.textContent = moneyB(cfg, 1);
-    tiles(cfg, cfg, 1);
+    tiles(cfg, cfg.aud, 1);
     checkEl.textContent = wrapCur(cfg, fmt(cfg.check));
     checkRow.classList.add('show');
-    roasEl.textContent = '~' + cfg.roas + ' раз';
+    roasEl.textContent = '~' + cfg.aud.roas + ' раз';
     roasRow.classList.add('show');
-    openBtn.setAttribute('href', '/calc?c=' + cfg.c + '&n=' + cfg.n + '&b=' + cfg.b);
+    openBtn.setAttribute('href', '/calc?c=' + cfg.c + '&n=' + cfg.n + '&b=' + cfg.b + '&a=' + cfg.aud.key);
   }
 
   function play(i){
     const cfg = CFG[i];
-    openBtn.setAttribute('href', '/calc?c=' + cfg.c + '&n=' + cfg.n + '&b=' + cfg.b);
+    openBtn.setAttribute('href', '/calc?c=' + cfg.c + '&n=' + cfg.n + '&b=' + cfg.b + '&a=' + cfg.aud.key);
     for (let k = 0; k < CFG.length; k++){ geoChips[k].classList.remove('on'); nicheChips[k].classList.remove('on'); }
     dirsRow.className = 'ct-chips'; dirsRow.innerHTML = '';
+    setAud(cfg, 0);   /* старт со «Все», сегмент кликнем по ходу */
     barTo(12);
     budgetEl.textContent = moneyB(cfg, 0.25);
     leadsEl.classList.add('rise'); revEl.classList.add('rise');
@@ -1573,14 +1585,21 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
       tileL.classList.add('flash'); tileR.classList.add('flash');
       later(() => { tileL.classList.remove('flash'); tileR.classList.remove('flash'); }, 500);
     }, 3960);
-    later(() => { const t = knobPos(12); flyTo(t.x, t.y, 460); }, 4400);
-    later(() => drag(12, cfg.fill, cfg, 850), 4950);
+    /* уточняем аудиторию - как в продукте: цифры пересчитываются под сегмент */
+    later(() => { const t = centerOf(audRowEl.children[2]); flyTo(t.x, t.y, 460, () => { tap(audRowEl.children[2]); audRowEl.children[0].classList.remove('on'); audRowEl.children[2].classList.add('on'); }); }, 4450);
+    later(() => {
+      tiles(cfg, cfg.aud, 0.25);
+      tileL.classList.add('flash'); tileR.classList.add('flash');
+      later(() => { tileL.classList.remove('flash'); tileR.classList.remove('flash'); }, 500);
+    }, 5000);
+    later(() => { const t = knobPos(12); flyTo(t.x, t.y, 460); }, 5500);
+    later(() => drag(12, cfg.fill, cfg, cfg.aud, 850), 6000);
     later(() => {
       tileL.classList.add('flash'); tileR.classList.add('flash');
       later(() => { tileL.classList.remove('flash'); tileR.classList.remove('flash'); }, 600);
-      later(() => { roasEl.textContent = '~' + cfg.roas + ' раз'; roasRow.classList.add('show'); }, 250);
+      later(() => { roasEl.textContent = '~' + cfg.aud.roas + ' раз'; roasRow.classList.add('show'); }, 250);
       later(() => { openBtn.classList.add('pump'); later(() => openBtn.classList.remove('pump'), 850); }, 650);
-    }, 5900);
+    }, 6950);
   }
 
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1589,7 +1608,7 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
   function loop(){
     if (!running) return;
     play(idx);
-    later(() => { idx = (idx + 1) % CFG.length; loop(); }, 8100);
+    later(() => { idx = (idx + 1) % CFG.length; loop(); }, 9150);
   }
   function start(){ if (!running){ running = true; loop(); } }
   function stop(){
@@ -1608,7 +1627,7 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
   } else { start(); }
 
   openBtn.addEventListener('click', () => {
-    try { if (typeof fbq === 'function') fbq('trackCustom', 'CalcTeaserClick', { config: CFG[idx].c + '/' + CFG[idx].n }); } catch(e){}
+    try { if (typeof fbq === 'function') fbq('trackCustom', 'CalcTeaserClick', { config: CFG[idx].c + '/' + CFG[idx].n + '/' + CFG[idx].aud.key }); } catch(e){}
   });
 })();
 
