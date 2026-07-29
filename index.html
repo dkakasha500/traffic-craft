@@ -225,7 +225,7 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 .stat-card{border-radius:20px;padding:36px 20px;text-align:center;background:var(--bg2)}
 .stat-ico{margin-bottom:16px}
 .stat-ico svg{width:26px;height:26px;stroke:var(--accent);stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 8px rgba(14,224,207,0.4))}
-.stat-num{font-weight:700;letter-spacing:-0.03em;font-size:clamp(36px,4vw,52px);color:var(--heading);line-height:1}
+.stat-num{font-weight:700;letter-spacing:-0.03em;font-size:clamp(36px,4vw,52px);color:var(--heading);line-height:1;font-variant-numeric:tabular-nums}
 .stat-num .unit{font-size:.4em;color:var(--txt2);font-weight:500;letter-spacing:0}
 .stat-label{font-size:14px;color:var(--txt);margin-top:8px;line-height:1.4;font-weight:500}
 .stats-sub{display:flex;justify-content:center;gap:32px;margin-top:32px;flex-wrap:wrap}
@@ -321,18 +321,23 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 .case-rows{display:grid;gap:0;overflow-wrap:break-word;word-break:break-word;margin-top:auto}
 .case-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-top:1px solid var(--brd)}
 .case-row-label{font-size:14px;color:var(--txt2)}
-.case-row-val{font-size:15px;font-weight:600;color:var(--heading);text-align:right;line-height:1.3;}
+.case-row-val{font-size:15px;font-weight:600;color:var(--heading);text-align:right;line-height:1.3;font-variant-numeric:tabular-nums}
 
-.case-row-val.green{color:var(--green)}
+.case-row-val.green{color:var(--green);text-shadow:0 0 14px rgba(52,211,153,.28)}
 .case-roi{margin-top:24px;padding:16px;border-radius:14px;background:var(--gold-soft);border:1px solid rgba(251,191,36,.15);text-align:center;box-shadow:inset 0 0 20px rgba(251,191,36,0.05)}
 .case-roi-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);opacity:.8;margin-bottom:4px}
-.case-roi-num{font-weight:700;letter-spacing:-0.03em;font-size:32px;color:var(--gold);line-height:1.2;text-shadow:0 0 24px rgba(251,191,36,.3)}
+.case-roi-num{font-weight:700;letter-spacing:-0.03em;font-size:32px;color:var(--gold);line-height:1.2;text-shadow:0 0 24px rgba(251,191,36,.3);font-variant-numeric:tabular-nums}
 .case-roi.glow{animation:goldGlow 1.5s ease 2}
 /* язык тизера в кейсах: градиентная кромка сверху + полоса окупаемости, набирающаяся вместе с числом */
-.case::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,rgba(14,224,207,.9),rgba(59,130,246,.75) 45%,rgba(251,191,36,.9));opacity:.75;z-index:1}
-.roi-track{height:4px;border-radius:100px;background:rgba(251,191,36,.14);margin-top:12px;overflow:hidden}
+.case::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,rgba(14,224,207,.9),rgba(59,130,246,.75) 45%,rgba(251,191,36,.9));opacity:.7;z-index:1;transition:opacity .3s,height .3s}
+@media(hover:hover){.case:hover::after{opacity:1;height:3px}}
+.roi-track{position:relative;height:4px;border-radius:100px;background:rgba(251,191,36,.14);margin-top:12px;overflow:hidden}
 .roi-track i{display:block;height:100%;width:0;border-radius:100px;background:linear-gradient(90deg,rgba(251,191,36,.55),#fbbf24);box-shadow:0 0 10px rgba(251,191,36,.35);transition:width 2s cubic-bezier(.22,1,.36,1)}
 .case.visible .roi-track i{width:100%}
+/* блик по полосе после заполнения - как отсвет на приборной панели */
+.roi-track::after{content:'';position:absolute;top:0;bottom:0;width:34px;left:-40px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.45),transparent);opacity:0}
+.case.visible .roi-track::after{animation:roiSheen 1.1s ease 2.15s 1}
+@keyframes roiSheen{0%{left:-40px;opacity:1}100%{left:110%;opacity:1}}
 @keyframes goldGlow{0%,100%{box-shadow:none}50%{box-shadow:0 0 24px rgba(234,179,8,.3)}}
 
 .cases-more{margin-top:40px;text-align:center;padding:48px 32px;border-radius:24px;display:flex;flex-direction:column;align-items:center;background:var(--bg2); border:1px solid var(--brd)}
@@ -417,9 +422,13 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 /* цепочка подхода: рельса вдоль иконок, заполняется по мере прокрутки - «чиним всю цепочку» буквально */
 .principles-rail{position:relative}
 .principles-rail::before{content:'';position:absolute;left:19.5px;top:44px;bottom:44px;width:1px;background:var(--brd)}
-.principles-rail .rail-fill{position:absolute;left:18px;top:44px;bottom:44px;width:3px;border-radius:3px;background:linear-gradient(180deg,#0ee0cf,rgba(59,130,246,.9));box-shadow:0 0 12px rgba(14,224,207,.35);transform:scaleY(0);transform-origin:top;pointer-events:none}
+.principles-rail .rail-fill{position:absolute;left:18px;top:44px;height:0;max-height:calc(100% - 88px);width:3px;border-radius:3px;background:linear-gradient(180deg,#0ee0cf,rgba(59,130,246,.9));box-shadow:0 0 12px rgba(14,224,207,.35);pointer-events:none}
+/* головка-комета на конце заполнения */
+.principles-rail .rail-fill::after{content:'';position:absolute;bottom:-3px;left:50%;transform:translateX(-50%);width:7px;height:7px;border-radius:50%;background:#0ee0cf;box-shadow:0 0 12px #0ee0cf,0 0 26px rgba(14,224,207,.5)}
 .principles-rail .principle-item{position:relative;z-index:1}
-.principles-rail .principle-ico{background:var(--bg2)}
+.principles-rail .principle-ico{background:var(--bg2);transition:border-color .45s,box-shadow .45s}
+/* иконка зажигается, когда рельса дошла до нее */
+.principles-rail .principle-ico.lit{border-color:#0ee0cf;box-shadow:0 0 14px rgba(14,224,207,.35),inset 0 0 10px rgba(14,224,207,.18)}
 .principle-ico svg{width:20px;height:20px;stroke:var(--accent);stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
 .principle-content{font-size:16px;color:var(--txt);line-height:1.65;padding-top:8px}
 .principle-content strong{color:var(--heading);font-weight:600}
@@ -1346,9 +1355,14 @@ if(ctaSecEl&&ctaBtnEl){
 const railEl=document.querySelector('.principles-rail');
 if(railEl){
   const railFill=document.createElement('div');railFill.className='rail-fill';railEl.appendChild(railFill);
+  const railIcos=railEl.querySelectorAll('.principle-ico');
   let railRaf=null;
-  /* старт - когда верх рельсы у 85% экрана, финиш - когда низ дошел до середины: заполняется по мере чтения */
-  const railUpd=()=>{railRaf=null;const r=railEl.getBoundingClientRect();const p=Math.max(0,Math.min(1,(innerHeight*.85-r.top)/(r.height+innerHeight*.35)));railFill.style.transform='scaleY('+p+')';};
+  /* старт - когда верх рельсы у 85% экрана, финиш - когда низ дошел до середины: заполняется по мере чтения.
+     Иконки зажигаются, когда головка проходит их центр */
+  const railUpd=()=>{railRaf=null;const r=railEl.getBoundingClientRect();const p=Math.max(0,Math.min(1,(innerHeight*.85-r.top)/(r.height+innerHeight*.35)));
+    railFill.style.height=(p*(r.height-88))+'px';
+    const tipY=r.top+44+p*(r.height-88);
+    railIcos.forEach(ic=>{const ir=ic.getBoundingClientRect();ic.classList.toggle('lit',tipY>=ir.top+ir.height/2)});};
   addEventListener('scroll',()=>{if(!railRaf)railRaf=requestAnimationFrame(railUpd)},{passive:true});
   railUpd();
 }
