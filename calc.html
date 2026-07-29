@@ -914,11 +914,11 @@ var DATA = {
        пластики и хирургии. check = выручка с пациента/семьи за первичный цикл,
        не цена одной консультации. ROAS держим умеренным. */
     pediatric: {name:'Педиатрия', l2b:0.55, b2s:0.55, dirs:{
-      consult:{name:'Консультация педиатра', check:90, cplMult:0.85},
+      consult:{name:'Консультация педиатра', check:130, cplMult:0.85},   /* чек = курс: первичка + повтор/анализы, не разовый визит */
       vaccine:{name:'Вакцинация', check:180, cplMult:0.90},
       checkup:{name:'Детский чекап', check:200, cplMult:1.00},
       acute:{name:'Лечение простуд и ОРВИ', check:150, cplMult:0.85},
-      home:{name:'Педиатр на дом', check:160, cplMult:1.10},
+      home:{name:'Педиатр на дом', check:190, cplMult:1.10},   /* выезд премиальнее приема */
       allergy:{name:'Детская аллергология', check:320, cplMult:1.05},
       gastro:{name:'Детская гастроэнтерология', check:340, cplMult:1.05},
       infant:{name:'Наблюдение ребенка до года', check:550, cplMult:1.20}
