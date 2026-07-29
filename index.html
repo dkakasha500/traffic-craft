@@ -327,6 +327,11 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 .case-roi-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);opacity:.8;margin-bottom:4px}
 .case-roi-num{font-weight:700;letter-spacing:-0.03em;font-size:32px;color:var(--gold);line-height:1.2;text-shadow:0 0 24px rgba(251,191,36,.3)}
 .case-roi.glow{animation:goldGlow 1.5s ease 2}
+/* язык тизера в кейсах: градиентная кромка сверху + полоса окупаемости, набирающаяся вместе с числом */
+.case::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,rgba(14,224,207,.9),rgba(59,130,246,.75) 45%,rgba(251,191,36,.9));opacity:.75;z-index:1}
+.roi-track{height:4px;border-radius:100px;background:rgba(251,191,36,.14);margin-top:12px;overflow:hidden}
+.roi-track i{display:block;height:100%;width:0;border-radius:100px;background:linear-gradient(90deg,rgba(251,191,36,.55),#fbbf24);box-shadow:0 0 10px rgba(251,191,36,.35);transition:width 2s cubic-bezier(.22,1,.36,1)}
+.case.visible .roi-track i{width:100%}
 @keyframes goldGlow{0%,100%{box-shadow:none}50%{box-shadow:0 0 24px rgba(234,179,8,.3)}}
 
 .cases-more{margin-top:40px;text-align:center;padding:48px 32px;border-radius:24px;display:flex;flex-direction:column;align-items:center;background:var(--bg2); border:1px solid var(--brd)}
@@ -845,10 +850,10 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
         <div class="case-badge">Многопрофильная клиника</div><h3 class="case-name">Клиника в Израиле</h3>
         <div class="case-tags"><span class="case-tag">пептиды</span><span class="case-tag">оземпик</span><span class="case-tag">гинекология</span><span class="case-tag">урология</span></div>
         <div class="case-rows">
-          <div class="case-row"><span class="case-row-label">Месячный бюджет</span><span class="case-row-val" style="text-align:right; line-height:1.3;">55 000 ILS<br><span style="color:var(--txt2);font-weight:500;font-size:13px">($15 000)</span></span></div>
-          <div class="case-row"><span class="case-row-label">Записи</span><span class="case-row-val green">200 в месяц</span></div>
+          <div class="case-row"><span class="case-row-label">Месячный бюджет</span><span class="case-row-val" style="text-align:right; line-height:1.3;"><span data-count="55000" data-suffix=" ILS">55 000 ILS</span><br><span style="color:var(--txt2);font-weight:500;font-size:13px">($15 000)</span></span></div>
+          <div class="case-row"><span class="case-row-label">Записи</span><span class="case-row-val green"><span data-count="200">200</span> в месяц</span></div>
         </div>
-        <div class="case-roi" data-glow><div class="case-roi-label">Окупаемость</div><div class="case-roi-num">850%</div></div>
+        <div class="case-roi" data-glow><div class="case-roi-label">Окупаемость</div><div class="case-roi-num"><span data-count="850" data-suffix="%">850%</span></div><div class="roi-track"><i></i></div></div>
       </div>
       
       <div class="case spotlight-card" data-case="1">
@@ -856,10 +861,10 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
         <div class="case-badge">Стоматология</div><h3 class="case-name">Стоматология в Дубае</h3>
         <div class="case-tags"><span class="case-tag">импланты</span><span class="case-tag">лечение</span><span class="case-tag">виниры</span></div>
         <div class="case-rows">
-          <div class="case-row"><span class="case-row-label">Месячный бюджет</span><span class="case-row-val" style="text-align:right; line-height:1.3;">75 000 AED<br><span style="color:var(--txt2);font-weight:500;font-size:13px">($20 400)</span></span></div>
-          <div class="case-row"><span class="case-row-label">Записи</span><span class="case-row-val green">180 в месяц</span></div>
+          <div class="case-row"><span class="case-row-label">Месячный бюджет</span><span class="case-row-val" style="text-align:right; line-height:1.3;"><span data-count="75000" data-suffix=" AED">75 000 AED</span><br><span style="color:var(--txt2);font-weight:500;font-size:13px">($20 400)</span></span></div>
+          <div class="case-row"><span class="case-row-label">Записи</span><span class="case-row-val green"><span data-count="180">180</span> в месяц</span></div>
         </div>
-        <div class="case-roi" data-glow><div class="case-roi-label">Окупаемость</div><div class="case-roi-num">от 900%</div></div>
+        <div class="case-roi" data-glow><div class="case-roi-label">Окупаемость</div><div class="case-roi-num"><span data-count="900" data-prefix="от " data-suffix="%">от 900%</span></div><div class="roi-track"><i></i></div></div>
       </div>
       
       <div class="case spotlight-card" data-case="2">
@@ -867,10 +872,10 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
         <div class="case-badge">Косметология</div><h3 class="case-name">Медцентр в Испании</h3>
         <div class="case-tags"><span class="case-tag">SMAS-лифтинг</span><span class="case-tag">Icoone</span><span class="case-tag">аппаратное омоложение</span><span class="case-tag">ботокс</span></div>
         <div class="case-rows">
-          <div class="case-row"><span class="case-row-label">Месячный бюджет</span><span class="case-row-val" style="text-align:right; line-height:1.3;">15 000 €<br><span style="color:var(--txt2);font-weight:500;font-size:13px">($16 300)</span></span></div>
-          <div class="case-row"><span class="case-row-label">Записи</span><span class="case-row-val green">250 в месяц</span></div>
+          <div class="case-row"><span class="case-row-label">Месячный бюджет</span><span class="case-row-val" style="text-align:right; line-height:1.3;"><span data-count="15000" data-suffix=" €">15 000 €</span><br><span style="color:var(--txt2);font-weight:500;font-size:13px">($16 300)</span></span></div>
+          <div class="case-row"><span class="case-row-label">Записи</span><span class="case-row-val green"><span data-count="250">250</span> в месяц</span></div>
         </div>
-        <div class="case-roi" data-glow><div class="case-roi-label">Окупаемость</div><div class="case-roi-num">от 700%</div></div>
+        <div class="case-roi" data-glow><div class="case-roi-label">Окупаемость</div><div class="case-roi-num"><span data-count="700" data-prefix="от " data-suffix="%">от 700%</span></div><div class="roi-track"><i></i></div></div>
       </div>
     </div>
     
@@ -1312,7 +1317,7 @@ if(ctaForm) { ctaForm.addEventListener('submit', function(e) {
 const ro=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');x.target.querySelectorAll('[data-pain]').forEach((n,i)=>setTimeout(()=>n.classList.add('revealed'),200+i*350));x.target.querySelectorAll('[data-glow]').forEach(g=>setTimeout(()=>g.classList.add('glow'),600))}})},{threshold:.1,rootMargin:'0px 0px -50px 0px'});
 document.querySelectorAll('[data-reveal]').forEach(el=>ro.observe(el));
 
-const co=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible')})},{threshold:.1});
+const co=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');x.target.querySelectorAll('[data-glow]').forEach(g=>setTimeout(()=>g.classList.add('glow'),700))}})},{threshold:.1});
 document.querySelectorAll('.case').forEach(el=>co.observe(el));
 
 const po=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible')})},{threshold:.2,rootMargin:'0px 0px -30px 0px'});
@@ -1329,7 +1334,9 @@ if(heroChartLine && typeof heroChartLine.getTotalLength === 'function') {
   setTimeout(() => { heroChartLine.style.transition = 'stroke-dashoffset 2.5s cubic-bezier(0.22, 1, 0.36, 1)'; heroChartLine.style.strokeDashoffset = '0'; }, 1200);
 }
 
-const cntO=new IntersectionObserver(e=>{e.forEach(x=>{if(!x.isIntersecting)return;const el=x.target,t=+el.dataset.count;if(!t||el.dataset.done)return;el.dataset.done='1';el.textContent='0';const dur=2000,s=performance.now();const step=n=>{const p=Math.min((n-s)/dur,1),ease=p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;let val=Math.round(ease*t).toLocaleString('ru-RU');if(el.dataset.plus)val+='+';el.textContent=val;if(p<1)requestAnimationFrame(step)};requestAnimationFrame(step)})},{threshold:.15});
+/* count-up чисел при появлении: data-count + опциональные data-prefix («от ») и data-suffix («%», « ILS»).
+   reduced-motion - сразу финальное значение без анимации */
+const cntO=new IntersectionObserver(e=>{e.forEach(x=>{if(!x.isIntersecting)return;const el=x.target,t=+el.dataset.count;if(!t||el.dataset.done)return;el.dataset.done='1';const pre=el.dataset.prefix||'',suf=el.dataset.suffix||(el.dataset.plus?'+':'');const fin=pre+t.toLocaleString('ru-RU')+suf;if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches){el.textContent=fin;return;}el.textContent=pre+'0'+suf;const dur=2000,s=performance.now();const step=n=>{const p=Math.min((n-s)/dur,1),ease=p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;el.textContent=p<1?pre+Math.round(ease*t).toLocaleString('ru-RU')+suf:fin;if(p<1)requestAnimationFrame(step)};requestAnimationFrame(step)})},{threshold:.15});
 document.querySelectorAll('[data-count]').forEach(el=>cntO.observe(el));
 
 /* pulse animation moved to inline script near SVG */
