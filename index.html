@@ -704,6 +704,8 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 .ct-budget{margin:12px 0 16px}
 .ct-budget-top{display:flex;justify-content:space-between;font-size:12.5px;color:var(--txt2);margin-bottom:7px}
 .ct-budget-top b{color:#fff;font-size:13.5px}
+#ctBudget.swap{animation:budSwap .5s ease}
+@keyframes budSwap{0%{color:#0ee0cf}100%{color:#fff}}
 .ct-track{height:6px;border-radius:4px;background:rgba(255,255,255,.07);overflow:hidden}
 .ct-fill{height:100%;width:0;border-radius:4px;background:linear-gradient(90deg,#0ee0cf,#3b82f6)}
 .ct-tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -1624,12 +1626,17 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
     dirsRow.className = 'ct-chips'; dirsRow.innerHTML = '';
     setAud(cfg, 0);   /* старт со «Все», сегмент кликнем по ходу */
     barTo(12);
-    budgetEl.textContent = moneyB(cfg, 0.25);
+    /* до выбора страны бюджет в долларах - валюта появится как следствие клика по стране */
+    budgetEl.textContent = '$' + fmt(Math.round(cfg.b * 0.25)) + '/мес';
     leadsEl.classList.add('rise'); revEl.classList.add('rise');
     leadsEl.textContent = '-'; revEl.textContent = '-';
     checkRow.classList.remove('show'); roasRow.classList.remove('show');
 
-    later(() => { const t = centerOf(geoChips[i]); flyTo(t.x, t.y, 560, () => { tap(geoChips[i]); geoChips[i].classList.add('on'); }); }, 80);
+    later(() => { const t = centerOf(geoChips[i]); flyTo(t.x, t.y, 560, () => {
+      tap(geoChips[i]); geoChips[i].classList.add('on');
+      /* выбрали страну - бюджет подстроился под ее валюту */
+      if (cfg.cur){ budgetEl.textContent = moneyB(cfg, 0.25); budgetEl.classList.add('swap'); setTimeout(() => budgetEl.classList.remove('swap'), 550); }
+    }); }, 80);
     /* аудитория - сразу после страны, как и стоит в продукте (цифр еще нет, только выбор) */
     later(() => { const t = centerOf(audRowEl.children[2]); flyTo(t.x, t.y, 460, () => { tap(audRowEl.children[2]); audRowEl.children[0].classList.remove('on'); audRowEl.children[2].classList.add('on'); }); }, 1100);
     later(() => { const t = centerOf(nicheChips[i]); flyTo(t.x, t.y, 500, () => { tap(nicheChips[i]); nicheChips[i].classList.add('on'); }); }, 2000);
