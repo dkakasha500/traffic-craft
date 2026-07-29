@@ -818,7 +818,7 @@ var DATA = {
        ВНИМАНИЕ: множители - оценки, заменить реальными из кабинетов, как и весь конфиг. */
     il: {name:'Израиль',   dot:'#3b82f6', mult:1.30, cap:16000, rec:3000, cpl:{dental:44, cosmo:28, multi:22, plastic:62,  hair:51,  rehab:29, ophthalmo:42, pediatric:26},
          aud:{all:{name:'Все'}, ru:{name:'Русскоязычные', cpl:0.90, cap:0.45}, loc:{name:'Ивритоязычные', cpl:1.25, cap:1.60}}},
-    ae: {name:'ОАЭ',       dot:'#16a34a', mult:1.35, cap:20000, rec:2500, cpl:{dental:64, cosmo:42, multi:31, plastic:90,  hair:74,  rehab:40, ophthalmo:61, pediatric:36},
+    ae: {name:'ОАЭ',       dot:'#16a34a', mult:1.35, cap:20000, rec:2500, leadCal:0.70, cpl:{dental:64, cosmo:42, multi:31, plastic:90,  hair:74,  rehab:40, ophthalmo:61, pediatric:36},
          aud:{all:{name:'Все'}, ru:{name:'Русскоязычные', cpl:0.85, cap:0.30}, ex:{name:'Экспаты (англ.)', cpl:1.30, cap:1.80}, loc:{name:'Местные (араб.)', cpl:1.70, cap:0.90}}},
     es: {name:'Испания',   dot:'#ef4444', mult:1.05, cap:18000, rec:2500, cpl:{dental:62, cosmo:40, multi:31, plastic:87,  hair:71,  rehab:40, ophthalmo:59, pediatric:35},
          aud:{all:{name:'Все'}, ru:{name:'Русскоязычные', cpl:0.85, cap:0.25}, loc:{name:'Испанцы', cpl:1.20, cap:1.70}, ex:{name:'Экспаты (англ.)', cpl:1.10, cap:0.55}}},
@@ -947,6 +947,10 @@ function tcCalc(state, D){
      (audCpl) и емкость рынка (audCap) - узкий сегмент дешевле, но выжигается раньше. */
   var aud = (c.aud && c.aud[state.aud]) ? c.aud[state.aud] : null;
   var audCpl = (aud && aud.cpl) || 1, audCap = (aud && aud.cap) || 1;
+  /* Калибровка единицы лида по стране (реальные данные кабинетов): лиды дешевле
+     и их больше, но конверсия в запись пропорционально ниже - записи, продажи,
+     выручка и ROAS не меняются. ae 0.70 - якорь: клиент 8 000 AED, ~80 лидов по ~100 AED */
+  var leadCal = c.leadCal || 1;
   var effMult = c.mult * regChk;
   var cplMult = 0, check = 0, i, d;
   for(i = 0; i < state.dirs.length; i++){
@@ -958,8 +962,8 @@ function tcCalc(state, D){
   cplMult /= state.dirs.length;
   check = check / state.dirs.length;
   if(state.checkOverride > 0) check = state.checkOverride;
-  var cpl = c.cpl[state.niche] * cplMult * sc.cpl * regCpm * audCpl;
-  var l2b = Math.min(n.l2b * sc.l2b, 0.95);
+  var cpl = c.cpl[state.niche] * cplMult * sc.cpl * regCpm * audCpl * leadCal;
+  var l2b = Math.min(n.l2b * sc.l2b, 0.95) * leadCal;
   var b2s = Math.min(n.b2s * sc.b2s, 0.95);
   /* Емкость рынка: аудитория конечна. До потолка - бюджет работает
      полностью и заявки растут вместе с ним. Выше потолка рынок уже выкуплен:
