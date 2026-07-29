@@ -195,8 +195,11 @@ h1{font-size:clamp(25px,3.6vw,38px);font-weight:700;letter-spacing:-.03em;line-h
 .hint{font-size:12.5px;color:var(--txt3);margin-top:8px}
 
 /* ===== бюджет: слайдер + пресеты ===== */
-.budget-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px}
-.budget-val{font-weight:700;font-size:26px;color:var(--heading);letter-spacing:-.02em;cursor:text;border-bottom:1px dashed var(--brd2)}
+.budget-top{display:flex;align-items:baseline;justify-content:flex-start;gap:12px;margin-bottom:10px}
+.budget-val{font-weight:700;font-size:26px;color:var(--heading);letter-spacing:-.02em;cursor:text;border-bottom:1px dashed var(--brd2);white-space:nowrap}
+.budget-top .budget-presets{margin-left:auto}
+.budget-usd{font-size:12.5px;color:var(--txt3);white-space:nowrap}
+.check-usd{font-size:12.5px;color:var(--txt3);margin-top:7px}
 .budget-val:hover{border-bottom-color:var(--accent)}
 .budget-presets{display:flex;gap:6px;flex-wrap:wrap}
 .preset{min-height:36px;padding:6px 13px;border-radius:100px;font-size:13px;font-weight:600;color:var(--txt2);background:var(--glass);border:1px solid var(--brd);cursor:pointer;transition:all .25s}
@@ -243,6 +246,9 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
 .big-item{background:rgba(255,255,255,.015);border:1px solid var(--brd);border-radius:16px;padding:22px 12px;text-align:center;overflow:hidden}
 .res-num{font-weight:700;letter-spacing:-.02em;color:var(--heading);line-height:1.12;overflow-wrap:break-word}
 .res-num.xl{font-size:clamp(20px,3vw,29px);letter-spacing:-.03em}
+/* длинные валютные строки («211-285к AED») - кегль меньше, чтобы не рвать плитку */
+.res-num.xl.sm1{font-size:clamp(17px,2.2vw,22px)}
+.res-num.xl.sm2{font-size:clamp(15px,1.7vw,17px)}
 .res-num.acc{color:var(--accent)}
 .res-num.gold{color:var(--gold)}
 .res-label{font-size:12px;color:var(--txt2);margin-top:6px;font-weight:500}
@@ -502,6 +508,8 @@ html.js-cursor input::-webkit-inner-spin-button,html.js-cursor input::-webkit-ou
 @media(max-width:360px){
   /* узкие телефоны: цифры и табы влезают целиком, без переносов и обрезки */
   .res-num.xl{font-size:18px}
+  .res-num.xl.sm1{font-size:16px}
+  .res-num.xl.sm2{font-size:14.5px}
   .big-item{padding:16px 8px}
   .scen button{font-size:11px;padding:9px 6px;letter-spacing:-.01em;flex:1 1 auto}
   .cta-form input{font-size:15px;padding:14px 16px}
@@ -586,6 +594,7 @@ html.js-cursor input::-webkit-inner-spin-button,html.js-cursor input::-webkit-ou
       <div class="step-title"><span class="num">04</span> Бюджет</div>
       <div class="budget-top">
         <div class="budget-val" id="budgetVal" role="button" tabindex="0" title="Нажмите, чтобы ввести точную сумму">$5 000</div>
+        <div class="budget-usd" id="budgetUsd" hidden></div>
         <div class="budget-presets" id="budgetPresets"></div>
       </div>
       <div class="slider-wrap">
@@ -599,7 +608,8 @@ html.js-cursor input::-webkit-inner-spin-button,html.js-cursor input::-webkit-ou
     <div class="step">
       <div class="step-title"><span class="num">05</span> Средний чек</div>
       <div class="step-sub">Выручка с пациента за курс, а не цена процедуры. Можно поправить.</div>
-      <div class="check-box"><span class="cur">$</span><input type="number" id="check" class="check-input" min="1" step="10" inputmode="numeric" aria-label="Средний чек - выручка с одного оплатившего пациента за курс"></div>
+      <div class="check-box"><span class="cur" id="checkCur">$</span><input type="number" id="check" class="check-input" min="1" step="10" inputmode="numeric" aria-label="Средний чек - выручка с одного оплатившего пациента за курс"></div>
+      <div class="check-usd" id="checkUsd" hidden></div>
     </div>
   </div>
 
@@ -1136,34 +1146,62 @@ function renderScen(){
 }
 
 function fmtInt(x){ return Math.round(x).toLocaleString('ru-RU'); }
-/* Крупные суммы - компактно ($1,2 млн вместо $1 200 000), чтобы не рвать плитку */
-function fmtMoney(x){
-  x = Math.round(x);
-  if(x >= 1000000) return '$' + (Math.round(x / 100000) / 10).toLocaleString('ru-RU') + ' млн';
-  return '$' + x.toLocaleString('ru-RU');
+/* ---------- валюты отображения ----------
+   Модель всегда считает в долларах, конвертация - только на экране.
+   В Дубае думают в дирхамах, в Израиле в шекелях, в Европе в евро - показываем
+   валюту страны, а доллар припиской рядом (бюджет, чек, сводка заявки).
+   Казахстан и США - доллары: там рынок и так считает в USD.
+   Турция - тоже доллары: лира волатильна, медицинский маркетинг считают в USD.
+   Курсы фиксированные (июль 2026), для прогноза с вилкой +-15% этого достаточно. */
+var CURRENCY = {
+  il: { sym: '₪', pre: true,  rate: 3.05 },   /* шекель */
+  ae: { sym: 'AED',    pre: false, rate: 3.67 },   /* дирхам, пег к доллару */
+  es: { sym: '€', pre: true,  rate: 0.88 },   /* евро */
+  de: { sym: '€', pre: true,  rate: 0.88 },
+  cy: { sym: '€', pre: true,  rate: 0.88 },
+  pl: { sym: 'zł', pre: false, rate: 3.79 }   /* злотый */
+};
+var CUR_USD = { sym: '$', pre: true, rate: 1 };
+function curCfg(){ return CURRENCY[state.country] || CUR_USD; }
+function curWrap(s, c){ return c.pre ? c.sym + s : s + ' ' + c.sym; }
+/* Одиночная сумма в валюте страны, крупное - компактно, чтобы не рвать плитки:
+   «36 700 AED», «110к AED», «€1,2 млн» */
+function fmtMoneyIn(x, c){
+  x = Math.round(x * c.rate);
+  var s;
+  if(x >= 1000000) s = (Math.round(x / 100000) / 10).toLocaleString('ru-RU') + ' млн';
+  else if(x >= 100000) s = Math.round(x / 1000).toLocaleString('ru-RU') + 'к';
+  else s = x.toLocaleString('ru-RU');
+  return curWrap(s, c);
 }
-/* Компактный диапазон денег для больших плиток: «$46-62к» / «$1,2-1,6 млн».
+function fmtMoney(x){ return fmtMoneyIn(x, curCfg()); }
+function fmtMoneyUsd(x){ return fmtMoneyIn(x, CUR_USD); }
+/* приписка «(≈ $X)» там, где основная валюта не доллар */
+function usdNote(x){ return curCfg() === CUR_USD ? '' : ' (≈ ' + fmtMoneyUsd(x) + ')'; }
+/* Компактный диапазон денег для больших плиток: «€46-62к» / «167-224к AED» / «₪1,2-1,6 млн».
    «к» = тысяч - короче «тыс.» и не рвет плитку на больших числах. */
 function fmtRangeMoney(lo, hi){
+  var c = curCfg();
+  lo *= c.rate; hi *= c.rate;
   var a, b;
   if(hi >= 1000000){
     var f = function(v){ return (Math.round(v / 100000) / 10).toLocaleString('ru-RU'); };
     a = f(lo); b = f(hi);
-    return a === b ? '~$' + a + ' млн' : '$' + a + '-' + b + ' млн';
+    return a === b ? '~' + curWrap(a + ' млн', c) : curWrap(a + '-' + b + ' млн', c);
   }
   if(hi >= 10000){
     a = Math.round(lo / 1000); b = Math.round(hi / 1000);
-    return a === b ? '~$' + a + 'к' : '$' + a + '-' + b + 'к';
+    return a === b ? '~' + curWrap(a + 'к', c) : curWrap(a + '-' + b + 'к', c);
   }
-  /* $1 000-$9 999: тоже компактно ($7,6-9,3к), иначе длинный диапазон рвет плитку */
+  /* 1 000-9 999: тоже компактно (7,6-9,3к), иначе длинный диапазон рвет плитку */
   if(hi >= 1000){
     var g = function(v){ return (Math.round(v / 100) / 10).toLocaleString('ru-RU'); };
     a = g(lo); b = g(hi);
-    return a === b ? '~$' + a + 'к' : '$' + a + '-' + b + 'к';
+    return a === b ? '~' + curWrap(a + 'к', c) : curWrap(a + '-' + b + 'к', c);
   }
-  /* до $1 000: один знак $ («$741-906»), а не «$741-$906» - иначе длинно и рвет на 2 строки */
+  /* до 1 000: один знак валюты («$741-906»), иначе длинно и рвет на 2 строки */
   a = Math.round(lo); b = Math.round(hi);
-  return a === b ? '~$' + a : '$' + a + '-' + b;
+  return a === b ? '~' + curWrap(String(a), c) : curWrap(a + '-' + b, c);
 }
 
 function renderChips(){
@@ -1245,7 +1283,13 @@ function budgetCfg(co){
   var cap = DATA.countries[co].cap || 20000;
   return { min: 500, max: niceRound(cap * 1.5), def: niceRound(cap * 0.4) };
 }
-function fmtBudgetShort(v){ return v < 1000 ? '$' + v : (v % 1000 === 0 ? '$' + (v / 1000) + 'k' : '$' + (Math.round(v / 100) / 10).toLocaleString('ru-RU') + 'k'); }
+/* короткая сумма для пресетов бюджета, в валюте страны: «$2к», «7,3к AED», «€1,8к» */
+function fmtBudgetShort(v){
+  var c = curCfg(), lv = Math.round(v * c.rate);
+  if(lv < 1000) return curWrap(String(lv), c);
+  var s = (lv % 1000 === 0) ? (lv / 1000) + 'к' : (Math.round(lv / 100) / 10).toLocaleString('ru-RU') + 'к';
+  return curWrap(s, c);
+}
 /* синхронизирует слайдер (min/max/подписи) и бюджетные пресеты с текущей страной */
 function applyBudgetRange(){
   var cfg = budgetCfg(state.country), s = document.getElementById('budget');
@@ -1311,12 +1355,25 @@ function animNum(id, target, fmt){
 function update(){
   var r = tcCalc(state, DATA);
   if(!r) return;
+  var cc = curCfg();
   var bv = document.getElementById('budgetVal');
   if(!bv.querySelector('input')) bv.textContent = fmtMoney(state.budget);
   document.getElementById('budget').setAttribute('aria-valuetext', fmtMoney(state.budget) + ' в месяц');
+  /* доллар припиской рядом с местной валютой (бюджет и чек) */
+  var bu = document.getElementById('budgetUsd');
+  if(bu){ bu.hidden = (cc === CUR_USD); if(cc !== CUR_USD) bu.textContent = '≈ ' + fmtMoneyUsd(state.budget); }
   paintSlider();
   var checkEl = document.getElementById('check');
-  if(document.activeElement !== checkEl) checkEl.value = Math.round(r.check);
+  var curEl = document.getElementById('checkCur');
+  if(curEl && curEl.textContent !== cc.sym){
+    curEl.textContent = cc.sym;
+    /* символ длиннее «$» (AED, zł) - мельче кегль и цифры правее, чтобы не слипалось */
+    curEl.style.fontSize = cc.sym.length > 1 ? '13px' : '';
+    checkEl.style.paddingLeft = (cc.sym.length === 1 ? 32 : 26 + cc.sym.length * 9) + 'px';
+  }
+  if(document.activeElement !== checkEl) checkEl.value = Math.round(r.check * cc.rate);
+  var cu = document.getElementById('checkUsd');
+  if(cu){ cu.hidden = (cc === CUR_USD); if(cc !== CUR_USD) cu.textContent = '≈ ' + fmtMoneyUsd(r.check); }
 
   /* вырожденные диапазоны на малых бюджетах: '2-2' -> '~2', '0-0' -> '<1'
      (продажи дробные, 0.3 продажи в месяц = продажа раз в 3 месяца - честнее '<1', чем ноль) */
@@ -1328,8 +1385,14 @@ function update(){
   };
   var rangeMoneyBig = function(v){ return fmtRangeMoney(v * r.lo, v * r.hi); };
 
-  /* большие плитки: заявки и выручка (выручка - компактным диапазоном) */
+  /* большие плитки: заявки и выручка (выручка - компактным диапазоном).
+     Валютные строки бывают длинными («211-285к AED») - подбираем кегль под длину */
   animNum('rLeads', r.leads, rangeInt);
+  var revEl = document.getElementById('rRevenue');
+  var revLen = rangeMoneyBig(r.revenue).length;
+  revEl.classList.remove('sm1', 'sm2');
+  if(revLen > 9) revEl.classList.add('sm2');
+  else if(revLen > 7) revEl.classList.add('sm1');
   animNum('rRevenue', r.revenue, rangeMoneyBig);
   /* воронка 4 ступени: заявки → записи → продажи → выручка, с конверсией между ними */
   animNum('fLeads', r.leads, rangeInt);
@@ -1354,7 +1417,7 @@ function update(){
   document.getElementById('printHead').innerHTML =
     '<b>Traffic Craft - прогноз рекламы для клиники</b><br>' +
     geoName + ' · ' + DATA.niches[state.niche].name + ' · ' + dirNames + '<br>' +
-    'Бюджет ' + fmtMoney(state.budget) + '/мес · средний чек ' + fmtMoney(r.check) +
+    'Бюджет ' + fmtMoney(state.budget) + '/мес' + usdNote(state.budget) + ' · средний чек ' + fmtMoney(r.check) + usdNote(r.check) +
     ' · сценарий «' + DATA.scenarios[state.scenario].name + '» · traffic-craft.com/calc';
   /* критичное предупреждение о выжигании: видно всегда, когда бюджет выше потолка рынка */
   var resBurn = document.getElementById('resBurn');
@@ -1384,7 +1447,7 @@ function update(){
   if(capSoftEl){
     if(!r.overCap && r.cap && state.budget >= r.cap * 0.8){
       capSoftEl.hidden = false;
-      capSoftEl.innerHTML = 'Близко к потолку рынка (~<b>' + fmtMoney(r.cap) + '</b>/мес). Выше - каждый доллар работает слабее.';
+      capSoftEl.innerHTML = 'Близко к потолку рынка (~<b>' + fmtMoney(r.cap) + '</b>/мес). Выше - отдача с бюджета падает.';
     } else {
       capSoftEl.hidden = true;
     }
@@ -1493,19 +1556,21 @@ document.getElementById('budgetVal').addEventListener('keydown', function(e){
 document.getElementById('budgetVal').addEventListener('click', function(){
   var el = this;
   if(el.querySelector('input')) return;
-  var cur = state.budget, cfg = budgetCfg(state.country);
+  var cur = state.budget, cfg = budgetCfg(state.country), cc = curCfg();
   el.innerHTML = '';
   var inp = document.createElement('input');
-  /* границы ручного ввода = диапазон текущей страны, иначе слайдер рассинхронизируется */
-  inp.type = 'number'; inp.min = cfg.min; inp.max = cfg.max; inp.step = 100; inp.value = cur;
+  /* границы ручного ввода = диапазон текущей страны, иначе слайдер рассинхронизируется;
+     вводим в валюте страны, храним в долларах */
+  inp.type = 'number'; inp.min = Math.round(cfg.min * cc.rate); inp.max = Math.round(cfg.max * cc.rate); inp.step = 100; inp.value = Math.round(cur * cc.rate);
   inp.setAttribute('inputmode', 'numeric');
-  inp.setAttribute('aria-label', 'Месячный бюджет, точное значение');
+  inp.setAttribute('aria-label', 'Месячный бюджет, точное значение' + (cc === CUR_USD ? '' : ', в валюте ' + cc.sym));
   inp.style.cssText = 'width:130px;background:var(--glass);border:1px solid var(--accent);border-radius:10px;color:var(--heading);font:inherit;font-size:20px;font-weight:700;padding:2px 10px';
   el.appendChild(inp);
   inp.focus(); inp.select();
   function commit(){
     var cfg = budgetCfg(state.country);
     var v = parseInt(inp.value, 10);
+    if(isFinite(v)) v = Math.round(v / cc.rate);
     if(!(v >= cfg.min)) v = cur;
     state.budget = Math.min(Math.max(v, cfg.min), cfg.max);
     document.getElementById('budget').value = state.budget;
@@ -1516,10 +1581,13 @@ document.getElementById('budgetVal').addEventListener('click', function(){
   inp.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); inp.blur(); } });
 });
 document.getElementById('check').addEventListener('input', function(){
-  /* кламп чека централизованно: до $100 000. Нижняя граница низкая - у кого-то чек и $10 */
+  /* поле в валюте страны, храним в долларах. Кламп чека централизованно: до $100 000.
+     Нижняя граница низкая - у кого-то чек и $10 */
+  var c = curCfg();
   var raw = toInt(this.value);
-  if(!isNaN(raw) && raw > LIMITS.checkMax){ this.value = LIMITS.checkMax; }  /* отражаем потолок в поле */
-  state.checkOverride = validCheck(this.value);
+  var maxLocal = Math.round(LIMITS.checkMax * c.rate);
+  if(!isNaN(raw) && raw > maxLocal){ this.value = maxLocal; raw = maxLocal; }  /* отражаем потолок в поле */
+  state.checkOverride = isNaN(raw) ? 0 : validCheck(Math.round(raw / c.rate));
   update();
 });
 /* Enter в поле чека - подтвердить и убрать фокус (иначе кажется, что ничего не произошло) */
@@ -1528,7 +1596,7 @@ document.getElementById('check').addEventListener('keydown', function(e){
 });
 document.getElementById('check').addEventListener('blur', function(){
   var v = parseInt(this.value, 10);
-  if(!(v >= LIMITS.checkMin)){ state.checkOverride = 0; update(); }
+  if(!(v > 0 && Math.round(v / curCfg().rate) >= LIMITS.checkMin)){ state.checkOverride = 0; update(); }
 });
 function copyFallback(text){
   var t = document.createElement('textarea');
@@ -1597,10 +1665,10 @@ function calcSummary(){
   var r = tcCalc(state, DATA);
   return 'Калькулятор: ' + DATA.countries[state.country].name + ', ' + DATA.niches[state.niche].name +
     ', ' + state.dirs.map(function(k){ return DATA.niches[state.niche].dirs[k].name; }).join(' + ') +
-    ', бюджет ' + fmtMoney(state.budget) +
-    (r ? ', чек ' + fmtMoney(r.check) + (state.checkOverride > 0 ? ' (вручную)' : '') : '') +
+    ', бюджет ' + fmtMoney(state.budget) + usdNote(state.budget) +
+    (r ? ', чек ' + fmtMoney(r.check) + usdNote(r.check) + (state.checkOverride > 0 ? ' (вручную)' : '') : '') +
     ', сценарий «' + DATA.scenarios[state.scenario].name + '»' +
-    (r ? ' → прогноз ' + fmtInt(r.leads) + ' заявок, ' + (r.sales < 0.5 ? 'менее 1' : fmtInt(r.sales)) + ' продаж, выручка ' + fmtMoney(r.revenue) : '');
+    (r ? ' → прогноз ' + fmtInt(r.leads) + ' заявок, ' + (r.sales < 0.5 ? 'менее 1' : fmtInt(r.sales)) + ' продаж, выручка ' + fmtMoney(r.revenue) + usdNote(r.revenue) : '');
 }
 
 /* ---------- WhatsApp: мгновенный контакт с предзаполненным расчетом ---------- */

@@ -54,7 +54,9 @@ function boot(opts = {}) {
   slider.value = '10000';
   slider.dispatchEvent(new t.w.Event('input', { bubbles: true }));
   await sleep(60); /* rAF-троттлинг */
-  assert.ok(t.d.getElementById('budgetVal').textContent.includes('10'), 'бюджет обновился: ' + t.d.getElementById('budgetVal').textContent);
+  /* ae показывает бюджет в дирхамах: сверяем через форматтер страницы */
+  assert.strictEqual(t.d.getElementById('budgetVal').textContent, t.w.fmtMoney(10000), 'бюджет обновился: ' + t.d.getElementById('budgetVal').textContent);
+  assert.ok(t.d.getElementById('budgetUsd').textContent.includes('$10 000'.replace(' ', ' ')) || t.d.getElementById('budgetUsd').textContent.includes('10'), 'долларовая приписка у бюджета: ' + t.d.getElementById('budgetUsd').textContent);
   Array.from(t.d.getElementById('scenToggle').children)[2].click();
   await sleep(320); /* дебаунс hash */
   assert.ok(t.w.location.hash.includes('s=aggr'), 'сценарий в hash: ' + t.w.location.hash);
@@ -74,7 +76,9 @@ function boot(opts = {}) {
   for (const part of ['name=Тест Тестович', 'phone=+7 777 000 11 22', 'project=Калькулятор: Израиль', 'eventId=calc_', 'pageUrl=https://traffic-craft.com/calc']) {
     assert.ok(body.includes(part), 'в заявке есть ' + part.split('=')[0] + ': ' + body);
   }
-  assert.ok(body.includes('чек $'), 'чек в сводке');
+  /* il считает в шекелях, доллар - припиской */
+  assert.ok(body.includes('чек ₪'), 'чек в сводке в шекелях: ' + body);
+  assert.ok(body.includes('(≈ $'), 'долларовая приписка в сводке');
   const lead = t.fbqCalls().find(c => c[0] === 'track' && c[1] === 'Lead');
   assert.ok(lead, 'пиксель Lead отправлен (через стаб-очередь — сценарий адблока)');
   assert.ok(lead[3] && /^calc_/.test(lead[3].eventID), 'eventID для дедупликации');

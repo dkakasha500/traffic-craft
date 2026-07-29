@@ -693,7 +693,7 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 @media(max-width:860px){
   .calc-teaser{grid-template-columns:1fr;gap:26px;padding:28px 20px}
   .ct-btn{width:100%;justify-content:center}
-  .ct-lbl{font-size:9.5px;letter-spacing:.5px;white-space:nowrap}
+  .ct-lbl{font-size:9px;letter-spacing:.2px;white-space:nowrap}
   .ct-demo{padding:16px}
   .ct-winbar{margin:-16px -16px 14px}
 }
@@ -1407,12 +1407,17 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
 (function(){
   const demo = document.getElementById('ctDemo');
   if (!demo) return;
-  /* цифры посчитаны реальной моделью calc.html для ДВУХ выбранных услуг (base) */
+  /* цифры посчитаны реальной моделью calc.html для ДВУХ выбранных услуг (base).
+     Деньги - в валюте страны, как в самом калькуляторе (сверено с DOM calc.html):
+     rLo/rHi - выручка в тысячах местной валюты, check - местная целиком; cur:null = доллары */
   const CFG = [
-    { c:'ae', n:'dental', b:10000, geo:'ОАЭ',       niche:'Стоматология',    dirs:['Импланты','Виниры','Ортодонтия'], dir2:1, more:'+4 услуги', fill:55, lLo:90,  lHi:122, rLo:55, rHi:74, check:3375, roas:'6,4', s:{lLo:98,lHi:133,rLo:57,rHi:78,check:3240} },
-    { c:'kz', n:'cosmo',  b:3000,  geo:'Казахстан', niche:'Косметология',    dirs:['Инъекции','SMAS-лифтинг','Аппаратная'], dir2:2, more:'+5 услуг', fill:50, lLo:244, lHi:330, rLo:14, rHi:19, check:231,  roas:'5,5', s:{lLo:258,lHi:348,rLo:12,rHi:16,check:189} },
-    { c:'es', n:'multi',  b:8000,  geo:'Испания',   niche:'Многопрофильная', dirs:['Гинекология','Чекапы','Урология'], dir2:1, more:'+5 услуг', fill:45, lLo:244, lHi:330, rLo:25, rHi:34, check:578,  roas:'3,7', s:{lLo:231,lHi:312,rLo:33,rHi:44,check:788} }
+    { c:'ae', n:'dental', b:10000, cur:{sym:'AED',pre:false,rate:3.67}, geo:'ОАЭ',       niche:'Стоматология',    dirs:['Импланты','Виниры','Ортодонтия'], dir2:1, more:'+4 услуги', fill:55, lLo:90,  lHi:122, rLo:201, rHi:272, check:12386, roas:'6,4', s:{lLo:98,lHi:133,rLo:211,rHi:285,check:11891} },
+    { c:'kz', n:'cosmo',  b:3000,  cur:null,                            geo:'Казахстан', niche:'Косметология',    dirs:['Инъекции','SMAS-лифтинг','Аппаратная'], dir2:2, more:'+5 услуг', fill:50, lLo:244, lHi:330, rLo:14, rHi:19, check:231,  roas:'5,5', s:{lLo:258,lHi:348,rLo:12,rHi:16,check:189} },
+    { c:'es', n:'multi',  b:8000,  cur:{sym:'€',pre:true,rate:0.88},    geo:'Испания',   niche:'Многопрофильная', dirs:['Гинекология','Чекапы','Урология'], dir2:1, more:'+5 услуг', fill:45, lLo:244, lHi:330, rLo:22, rHi:30, check:508,  roas:'3,7', s:{lLo:231,lHi:312,rLo:29,rHi:39,check:693} }
   ];
+  /* валюта страны основная, как в продукте */
+  const wrapCur = (cfg, s) => cfg.cur ? (cfg.cur.pre ? cfg.cur.sym + s : s + ' ' + cfg.cur.sym) : '$' + s;
+  const moneyB = (cfg, ratio) => wrapCur(cfg, String(Math.round(cfg.b * (cfg.cur ? cfg.cur.rate : 1) * ratio)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ')) + '/мес';
   const geoRow = document.getElementById('ctGeo'), nicheRow = document.getElementById('ctNiche');
   CFG.forEach(cfg => {
     geoRow.insertAdjacentHTML('beforeend', '<span class="ct-chip">' + cfg.geo + '</span>');
@@ -1495,9 +1500,13 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
   }
   /* тяга бегунка: заливка, бегунок, курсор и сумма движутся одним rAF с инерцией */
   /* плитки: значения src при полном бюджете, масштаб ratio (ниже потолка модель линейна) */
-  function tiles(src, ratio){
+  function tiles(cfg, src, ratio){
     leadsEl.textContent = Math.round(src.lLo * ratio) + '-' + Math.round(src.lHi * ratio);
-    revEl.textContent = '$' + Math.round(src.rLo * ratio) + '-' + Math.round(src.rHi * ratio) + 'к';
+    const t = wrapCur(cfg, Math.round(src.rLo * ratio) + '-' + Math.round(src.rHi * ratio) + 'к');
+    revEl.textContent = t;
+    /* длинные валютные строки («201-272к AED») - мельче, чтобы не резались о край плитки */
+    revEl.style.fontSize = t.length > 9 ? 'clamp(11px,3.6vw,18px)' : '';
+    revEl.style.letterSpacing = t.length > 9 ? '-0.4px' : '';
   }
   function drag(fromPct, toPct, cfg, dur, done){
     knobEl.classList.add('drag'); cur.classList.add('tap');
@@ -1508,8 +1517,8 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
       barTo(pct);
       const k = knobPos(pct); place(k.x, k.y);
       const ratio = 0.25 + 0.75 * e;
-      budgetEl.textContent = '$' + fmt(Math.round(cfg.b * ratio)) + '/мес';
-      tiles(cfg, ratio); /* расчет обновляется сразу - как в реальном калькуляторе */
+      budgetEl.textContent = moneyB(cfg, ratio);
+      tiles(cfg, cfg, ratio); /* расчет обновляется сразу - как в реальном калькуляторе */
       if (p < 1) rafs.push(requestAnimationFrame(step));
       else { knobEl.classList.remove('drag'); cur.classList.remove('tap'); done && done(); }
     };
@@ -1523,10 +1532,9 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
     setDirs(cfg, 0);
     dirsRow.children[cfg.dir2].classList.add('on');
     barTo(cfg.fill);
-    budgetEl.textContent = '$' + fmt(cfg.b) + '/мес';
-    leadsEl.textContent = cfg.lLo + '-' + cfg.lHi;
-    revEl.textContent = '$' + cfg.rLo + '-' + cfg.rHi + 'к';
-    checkEl.textContent = '$' + fmt(cfg.check);
+    budgetEl.textContent = moneyB(cfg, 1);
+    tiles(cfg, cfg, 1);
+    checkEl.textContent = wrapCur(cfg, fmt(cfg.check));
     checkRow.classList.add('show');
     roasEl.textContent = '~' + cfg.roas + ' раз';
     roasRow.classList.add('show');
@@ -1539,7 +1547,7 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
     for (let k = 0; k < CFG.length; k++){ geoChips[k].classList.remove('on'); nicheChips[k].classList.remove('on'); }
     dirsRow.className = 'ct-chips'; dirsRow.innerHTML = '';
     barTo(12);
-    budgetEl.textContent = '$' + fmt(Math.round(cfg.b * 0.25)) + '/мес';
+    budgetEl.textContent = moneyB(cfg, 0.25);
     leadsEl.classList.add('rise'); revEl.classList.add('rise');
     leadsEl.textContent = '-'; revEl.textContent = '-';
     checkRow.classList.remove('show'); roasRow.classList.remove('show');
@@ -1551,16 +1559,16 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
     later(() => {
       /* расчет живет сразу: после первой услуги - чек и цифры для нее (при стартовом бюджете) */
       checkRow.classList.add('show');
-      count(checkEl, { lo: cfg.s.check, hi: cfg.s.check }, 400, (el, a) => { el.textContent = '$' + fmt(a); });
+      count(checkEl, { lo: cfg.s.check, hi: cfg.s.check }, 400, (el, a) => { el.textContent = wrapCur(cfg, fmt(a)); });
       leadsEl.classList.remove('rise'); revEl.classList.remove('rise');
-      tiles(cfg.s, 0.25);
+      tiles(cfg, cfg.s, 0.25);
     }, 3080);
     /* в калькуляторе можно выбрать несколько услуг - кликаем вторую */
     later(() => { const t = centerOf(dirsRow.children[cfg.dir2]); flyTo(t.x, t.y, 360, () => { tap(dirsRow.children[cfg.dir2]); dirsRow.children[cfg.dir2].classList.add('on'); }); }, 3450);
     later(() => {
       /* пересчет под две услуги: чек усредняется, плитки вспыхивают новыми цифрами */
-      checkEl.textContent = '$' + fmt(cfg.check);
-      tiles(cfg, 0.25);
+      checkEl.textContent = wrapCur(cfg, fmt(cfg.check));
+      tiles(cfg, cfg, 0.25);
       tileL.classList.add('flash'); tileR.classList.add('flash');
       later(() => { tileL.classList.remove('flash'); tileR.classList.remove('flash'); }, 500);
     }, 3960);
