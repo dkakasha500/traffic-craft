@@ -431,7 +431,6 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 /* ховер: вся энергия собирается в одной иконке, остальные уходят на второй план */
 @media(hover:hover){
   .principles-rail:has(.principle-item:hover) .principle-item:not(:hover){opacity:.38}
-  .principles-rail:has(.principle-item:hover) .rail-flow{opacity:0}
   .principles-rail:has(.principle-item:hover) .principle-item:not(:hover) .principle-ico{border-color:var(--brd2,rgba(255,255,255,.14));box-shadow:none}
   .principles-rail .principle-item:hover .principle-ico{border-color:#0ee0cf;box-shadow:0 0 24px rgba(14,224,207,.65),0 0 48px rgba(14,224,207,.28),inset 0 0 12px rgba(14,224,207,.25);transform:scale(1.1)}
 }
@@ -1366,18 +1365,41 @@ if(railEl && !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)
   const railFlow=document.createElement('div');railFlow.className='rail-flow';railEl.appendChild(railFlow);
   const railIcos=railEl.querySelectorAll('.principle-ico');
   const CYCLE=3600;
-  let railRun=false,railRaf=null;
+  let railRun=false,railRaf=null,railP=0,railLast=null;
+  /* ховер: энергия кратчайшим путем стягивается в выбранную иконку, впитывается
+     и замирает; после увода курсора - вытекает из нее и продолжает путь */
+  let hoverIco=null,absorbed=false;
   const railStep=now=>{
     railRaf=null;
+    const dt=railLast==null?16:Math.min(now-railLast,50);railLast=now;
     const r=railEl.getBoundingClientRect(),h=r.height-88;
-    const p=(now%CYCLE)/CYCLE,y=44+p*h;
+    if(hoverIco){
+      const ir=hoverIco.getBoundingClientRect();
+      const tp=Math.max(0,Math.min(1,(ir.top-r.top+ir.height/2-44)/h));
+      if(absorbed){ railP=tp; }
+      else{
+        const dir=(tp-railP>=0)?1:-1;
+        railP+=dir*(dt/CYCLE)*4;   /* энергия спешит к элементу, даже вверх */
+        if((dir>0&&railP>=tp)||(dir<0&&railP<=tp)){railP=tp;absorbed=true;}
+      }
+    } else {
+      railP+=dt/CYCLE; if(railP>1)railP-=1;
+    }
+    const y=44+railP*h;
     railFlow.style.transform='translateY('+(y-38)+'px)';
-    railFlow.style.opacity=Math.min(1,Math.min(p,1-p)*7);   /* мягкий вход и уход на краях цикла */
-    railIcos.forEach(ic=>{const ir=ic.getBoundingClientRect();const c=ir.top-r.top+ir.height/2;ic.classList.toggle('near',Math.abs(c-y)<34)});
+    railFlow.style.opacity=absorbed?0:(hoverIco?1:Math.min(1,Math.min(railP,1-railP)*7));
+    railIcos.forEach(ic=>{const ir=ic.getBoundingClientRect();const c=ir.top-r.top+ir.height/2;ic.classList.toggle('near',!absorbed&&Math.abs(c-y)<34)});
     if(railRun)railRaf=requestAnimationFrame(railStep);
   };
+  if(window.matchMedia&&matchMedia('(hover: hover)').matches){
+    railEl.querySelectorAll('.principle-item').forEach(it=>{
+      const ic=it.querySelector('.principle-ico');
+      it.addEventListener('mouseenter',()=>{hoverIco=ic;absorbed=false;});
+      it.addEventListener('mouseleave',()=>{if(hoverIco===ic){hoverIco=null;absorbed=false;}});
+    });
+  }
   new IntersectionObserver(es=>{es.forEach(x=>{
-    if(x.isIntersecting){if(!railRun){railRun=true;railRaf=requestAnimationFrame(railStep);}}
+    if(x.isIntersecting){if(!railRun){railRun=true;railLast=null;railRaf=requestAnimationFrame(railStep);}}
     else{railRun=false;if(railRaf)cancelAnimationFrame(railRaf);railRaf=null;}
   })},{threshold:.15}).observe(railEl);
 }
