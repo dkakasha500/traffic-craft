@@ -1475,16 +1475,16 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
 (function(){
   const demo = document.getElementById('ctDemo');
   if (!demo) return;
-  /* цифры посчитаны реальной моделью calc.html для ДВУХ выбранных услуг (base).
-     Деньги - в валюте страны, как в самом калькуляторе (сверено с DOM calc.html):
+  /* цифры посчитаны реальной моделью calc.html: СМЕЛЫЙ сценарий, выбранный сегмент ЦА
+     (сверено с DOM calc.html; кнопка ведет на /calc с теми же a= и s=aggr - цифры совпадут).
      rLo/rHi - выручка в тысячах местной валюты, check - местная целиком; cur:null = доллары */
   const CFG = [
-    { c:'ae', n:'dental', b:10000, cur:{sym:'AED',pre:false,rate:3.67}, geo:'ОАЭ',       niche:'Стоматология',    dirs:['Импланты','Виниры','Ортодонтия'], dir2:1, more:'+4 услуги', fill:55, lLo:129, lHi:174, rLo:201, rHi:272, check:12386, roas:'6,4', s:{lLo:141,lHi:190,rLo:211,rHi:285,check:11891},
-      aud:{ key:'ex',  label:'Экспаты (англ.)', lLo:99,  lHi:134, rLo:154, rHi:209, roas:'5',   s:{lLo:108,lHi:146,rLo:162,rHi:219} } },
-    { c:'kz', n:'cosmo',  b:3000,  cur:null,                            geo:'Казахстан', niche:'Косметология',    dirs:['Инъекции','SMAS-лифтинг','Аппаратная'], dir2:2, more:'+5 услуг', fill:50, lLo:244, lHi:330, rLo:14, rHi:19, check:231,  roas:'5,5', s:{lLo:258,lHi:348,rLo:12,rHi:16,check:189},
-      aud:{ key:'loc', label:'Казахоязычные',   lLo:232, lHi:314, rLo:13,  rHi:18,  roas:'5,3', s:{lLo:245,lHi:332,rLo:12,rHi:16} } },
-    { c:'es', n:'multi',  b:8000,  cur:{sym:'€',pre:true,rate:0.88},    geo:'Испания',   niche:'Многопрофильная', dirs:['Гинекология','Чекапы','Урология'], dir2:1, more:'+5 услуг', fill:45, lLo:244, lHi:330, rLo:22, rHi:30, check:508,  roas:'3,7', s:{lLo:231,lHi:312,rLo:29,rHi:39,check:693},
-      aud:{ key:'loc', label:'Испанцы',         lLo:203, lHi:275, rLo:19,  rHi:25,  roas:'3,1', s:{lLo:192,lHi:260,rLo:24,rHi:32} } }
+    { c:'ae', n:'dental', b:10000, cur:{sym:'AED',pre:false,rate:3.67}, geo:'ОАЭ',       niche:'Стоматология',    dirs:['Импланты','Виниры','Ортодонтия'], dir2:1, more:'+4 услуги', fill:55, check:12386, s:{check:11891},
+      aud:{ key:'ex',  label:'Экспаты (англ.)', lLo:106, lHi:159, rLo:193, rHi:289, roas:'6,6', s:{lLo:116,lHi:173,rLo:202,rHi:303} } },
+    { c:'kz', n:'cosmo',  b:3000,  cur:null,                            geo:'Казахстан', niche:'Косметология',    dirs:['Инъекции','SMAS-лифтинг','Аппаратная'], dir2:2, more:'+5 услуг', fill:50, check:231,  s:{check:189},
+      aud:{ key:'loc', label:'Казахоязычные',   lLo:249, lHi:373, rLo:17,  rHi:25,  roas:'7',   s:{lLo:262,lHi:394,rLo:14,rHi:22} } },
+    { c:'es', n:'multi',  b:8000,  cur:{sym:'€',pre:true,rate:0.88},    geo:'Испания',   niche:'Многопрофильная', dirs:['Гинекология','Чекапы','Урология'], dir2:1, more:'+5 услуг', fill:45, check:508,  s:{check:693},
+      aud:{ key:'loc', label:'Испанцы',         lLo:217, lHi:326, rLo:23,  rHi:35,  roas:'4,1', s:{lLo:206,lHi:309,rLo:30,rHi:45} } }
   ];
   /* валюта страны основная, как в продукте */
   const wrapCur = (cfg, s) => cfg.cur ? (cfg.cur.pre ? cfg.cur.sym + s : s + ' ' + cfg.cur.sym) : '$' + s;
@@ -1616,12 +1616,12 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
     checkRow.classList.add('show');
     roasEl.textContent = '~' + cfg.aud.roas + ' раз';
     roasRow.classList.add('show');
-    openBtn.setAttribute('href', '/calc?c=' + cfg.c + '&n=' + cfg.n + '&b=' + cfg.b + '&a=' + cfg.aud.key);
+    openBtn.setAttribute('href', '/calc?c=' + cfg.c + '&n=' + cfg.n + '&b=' + cfg.b + '&a=' + cfg.aud.key + '&s=aggr');
   }
 
   function play(i){
     const cfg = CFG[i];
-    openBtn.setAttribute('href', '/calc?c=' + cfg.c + '&n=' + cfg.n + '&b=' + cfg.b + '&a=' + cfg.aud.key);
+    openBtn.setAttribute('href', '/calc?c=' + cfg.c + '&n=' + cfg.n + '&b=' + cfg.b + '&a=' + cfg.aud.key + '&s=aggr');
     for (let k = 0; k < CFG.length; k++){ geoChips[k].classList.remove('on'); nicheChips[k].classList.remove('on'); }
     dirsRow.className = 'ct-chips'; dirsRow.innerHTML = '';
     setAud(cfg, 0);   /* старт со «Все», сегмент кликнем по ходу */
