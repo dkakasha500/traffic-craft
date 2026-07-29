@@ -261,7 +261,8 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 .problem-card{display:flex;gap:20px;padding:28px;border-radius:16px;}
 .problem-card+.problem-card{margin-top:16px}
 .problem-num{font-weight:700;letter-spacing:-0.03em;font-size:28px;color:rgba(255,255,255,0.05);line-height:1;flex-shrink:0;width:28px;transition:color 1s ease, text-shadow 1s ease}
-.problem-num.revealed{color:var(--red);text-shadow:0 0 20px rgba(239, 68, 68, 0.4)}
+.problem-num.revealed{color:var(--red);text-shadow:0 0 20px rgba(239, 68, 68, 0.4);animation:painPop .55s cubic-bezier(.22,1,.36,1)}
+@keyframes painPop{0%{transform:scale(1)}40%{transform:scale(1.28);text-shadow:0 0 34px rgba(239,68,68,.75)}100%{transform:scale(1)}}
 .problem-txt{font-size:16px;color:var(--txt);line-height:1.7}
 .clinics-card{border-radius:24px;padding:40px;background:var(--bg2);border:1px solid var(--brd)}
 .clinics-card-title{font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
@@ -413,6 +414,12 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 .principle-item.visible{opacity:1;transform:translateY(0)}
 @media(hover:hover){.principle-item:hover{transform:translateX(10px)}}
 .principle-ico{width:40px;height:40px;border-radius:12px;background:var(--glass-bg);border:1px solid var(--accent-mid);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:inset 0 0 10px rgba(14,224,207,0.1)}
+/* цепочка подхода: рельса вдоль иконок, заполняется по мере прокрутки - «чиним всю цепочку» буквально */
+.principles-rail{position:relative}
+.principles-rail::before{content:'';position:absolute;left:19.5px;top:44px;bottom:44px;width:1px;background:var(--brd)}
+.principles-rail .rail-fill{position:absolute;left:18px;top:44px;bottom:44px;width:3px;border-radius:3px;background:linear-gradient(180deg,#0ee0cf,rgba(59,130,246,.9));box-shadow:0 0 12px rgba(14,224,207,.35);transform:scaleY(0);transform-origin:top;pointer-events:none}
+.principles-rail .principle-item{position:relative;z-index:1}
+.principles-rail .principle-ico{background:var(--bg2)}
 .principle-ico svg{width:20px;height:20px;stroke:var(--accent);stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
 .principle-content{font-size:16px;color:var(--txt);line-height:1.65;padding-top:8px}
 .principle-content strong{color:var(--heading);font-weight:600}
@@ -663,6 +670,7 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 .ct-scope{margin-top:18px;font-size:13px;color:var(--txt3)}
 .ct-scope b{color:var(--txt2);font-weight:600}
 .ct-btn.pump{animation:ctPump .8s ease-out}
+.btn-pump{animation:ctPump .8s ease-out}   /* разовый pump любой кнопки - тот же язык, что у тизера */
 @keyframes ctPump{0%{box-shadow:0 0 0 0 rgba(14,224,207,.5)}100%{box-shadow:0 0 0 22px rgba(14,224,207,0)}}
 .ct-demo{background:linear-gradient(180deg,#0c1219,#080d13);border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:20px;pointer-events:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.04), 0 18px 40px rgba(0,0,0,.35)}
 .ct-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
@@ -1012,7 +1020,7 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
       <p class="body-text">Мы разбираем клинику на части: врачи, услуги, цены, сильные и слабые стороны. Потом собираем рекламу <strong>под конкретную клинику</strong> — чтобы пациент увидел свою проблему, узнал себя и записался.</p>
       <p class="body-text">Если заявки есть, но люди не доходят — разбираемся, где теряются: в переписке, на этапе записи, на ценах.</p>
     </div>
-    <div style="display:flex;flex-direction:column;justify-content:space-between">
+    <div class="principles-rail" style="display:flex;flex-direction:column;justify-content:space-between">
       <div class="principle-item" data-principle><div class="principle-ico"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentcolor" stroke-width="1.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div class="principle-content">Цель — <strong>выручка и оплаты</strong>, а&nbsp;не CTR и дешёвые заявки</div></div>
       <div class="principle-item" data-principle><div class="principle-ico"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentcolor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v8m-4-4h8"/></svg></div><div class="principle-content">Минимум <strong>5 сегментов</strong> аудитории — работаем с каждым отдельно</div></div>
       <div class="principle-item" data-principle><div class="principle-ico"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentcolor" stroke-width="1.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg></div><div class="principle-content"><strong>Ретаргет</strong>, который добирает тех, кто сомневался</div></div>
@@ -1322,6 +1330,24 @@ document.querySelectorAll('.case').forEach(el=>co.observe(el));
 
 const po=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible')})},{threshold:.2,rootMargin:'0px 0px -30px 0px'});
 document.querySelectorAll('[data-principle]').forEach(el=>po.observe(el));
+
+/* CTA: разовый pump кнопки при появлении секции - тот же акцент, что у тизера */
+const ctaSecEl=document.getElementById('cta'),ctaBtnEl=document.getElementById('ctaSubmitBtn');
+if(ctaSecEl&&ctaBtnEl){
+  const cbO=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting&&!ctaBtnEl.dataset.pumped){ctaBtnEl.dataset.pumped='1';setTimeout(()=>{ctaBtnEl.classList.add('btn-pump');setTimeout(()=>ctaBtnEl.classList.remove('btn-pump'),900)},800)}})},{threshold:.4});
+  cbO.observe(ctaSecEl);
+}
+
+/* рельса принципов: заполнение привязано к прокрутке (rAF-троттлинг, без layout-дерганий) */
+const railEl=document.querySelector('.principles-rail');
+if(railEl){
+  const railFill=document.createElement('div');railFill.className='rail-fill';railEl.appendChild(railFill);
+  let railRaf=null;
+  /* старт - когда верх рельсы у 85% экрана, финиш - когда низ дошел до середины: заполняется по мере чтения */
+  const railUpd=()=>{railRaf=null;const r=railEl.getBoundingClientRect();const p=Math.max(0,Math.min(1,(innerHeight*.85-r.top)/(r.height+innerHeight*.35)));railFill.style.transform='scaleY('+p+')';};
+  addEventListener('scroll',()=>{if(!railRaf)railRaf=requestAnimationFrame(railUpd)},{passive:true});
+  railUpd();
+}
 
 const sections=document.querySelectorAll('section[id]'),navLinks=document.querySelectorAll('.nav-links a');
 const no2=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){navLinks.forEach(l=>l.classList.remove('active'));const a=document.querySelector('.nav-links a[data-section="'+x.target.id+'"]');if(a)a.classList.add('active')}})},{threshold:.2,rootMargin:'-100px 0px -50% 0px'});
