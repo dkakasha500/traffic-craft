@@ -422,8 +422,9 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 /* цепочка подхода: рельса вдоль иконок, заполняется по мере прокрутки - «чиним всю цепочку» буквально */
 .principles-rail{position:relative}
 .principles-rail::before{content:'';position:absolute;left:19.5px;top:44px;bottom:44px;width:1px;background:linear-gradient(180deg,rgba(14,224,207,.35),rgba(59,130,246,.28))}
-/* бегущий по линии сгусток энергии - анимация живет сама, без привязки к скроллу */
-.principles-rail .rail-flow{position:absolute;left:18px;top:0;width:3px;height:76px;border-radius:3px;background:linear-gradient(180deg,transparent,#0ee0cf 42%,rgba(59,130,246,.95) 58%,transparent);box-shadow:0 0 14px rgba(14,224,207,.45);pointer-events:none;will-change:transform}
+/* бегущий по линии сгусток - веретено: толстая середина, сходящая на нет к концам.
+   Линия в этом месте будто раздувается - «червяк под кожей» (проходит ПОД иконками) */
+.principles-rail .rail-flow{position:absolute;left:16px;top:0;width:8px;height:96px;border-radius:50%;background:radial-gradient(closest-side at 50% 50%,#eafffd 0%,#0ee0cf 30%,rgba(14,224,207,.7) 55%,rgba(59,130,246,.3) 75%,transparent 100%);box-shadow:0 0 18px rgba(14,224,207,.4);pointer-events:none;will-change:transform}
 .principles-rail .principle-item{position:relative;z-index:1}
 .principles-rail .principle-ico{background:var(--bg2);transition:border-color .4s,box-shadow .4s,transform .3s,opacity .3s}
 /* вспышка иконки, когда сгусток проходит сквозь нее */
@@ -1386,7 +1387,7 @@ if(railEl && !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)
       railP+=dt/CYCLE; if(railP>1)railP-=1;
     }
     const y=44+railP*h;
-    railFlow.style.transform='translateY('+(y-38)+'px)';
+    railFlow.style.transform='translateY('+(y-48)+'px)';
     railFlow.style.opacity=absorbed?0:(hoverIco?1:Math.min(1,Math.min(railP,1-railP)*7));
     railIcos.forEach(ic=>{const ir=ic.getBoundingClientRect();const c=ir.top-r.top+ir.height/2;ic.classList.toggle('near',!absorbed&&Math.abs(c-y)<34)});
     if(railRun)railRaf=requestAnimationFrame(railStep);
