@@ -939,7 +939,7 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
         <div class="ct-track" id="ctTrack"><div class="ct-fill" id="ctFill"></div><div class="ct-knob" id="ctKnob"></div></div>
       </div>
       <div class="ct-tiles">
-        <div class="ct-tile" id="ctTileL"><div class="ct-num acc" id="ctLeads">-</div><div class="ct-lbl">живых заявок</div></div>
+        <div class="ct-tile" id="ctTileL"><div class="ct-num acc" id="ctLeads">-</div><div class="ct-lbl">заявок</div></div>
         <div class="ct-tile" id="ctTileR"><div class="ct-num gold" id="ctRev">-</div><div class="ct-lbl">выручки в месяц</div></div>
       </div>
       <div class="ct-roas" id="ctRoasRow">Реклама окупается <b id="ctRoas">~0 раз</b></div>
@@ -1499,15 +1499,17 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
   const demo = document.getElementById('ctDemo');
   if (!demo) return;
   /* цифры посчитаны реальной моделью calc.html: СМЕЛЫЙ сценарий, выбранный сегмент ЦА
-     (сверено с DOM calc.html; кнопка ведет на /calc с теми же a= и s=aggr - цифры совпадут).
-     rLo/rHi - выручка в тысячах местной валюты, check - местная целиком; cur:null = доллары */
+     (сверено с DOM calc.html; кнопка ведет на /calc с теми же d=, a= и s=aggr - цифры совпадут).
+     ОАЭ - косметология с рус сегментом: лид в демо ~99 AED, как в реальных кабинетах.
+     rLo/rHi - выручка в тысячах местной валюты, check - местная целиком; cur:null = доллары.
+     aud.chips - ряд сегментов, aud.tap - какой кликает курсор */
   const CFG = [
-    { c:'ae', n:'dental', b:10000, cur:{sym:'AED',pre:false,rate:3.67}, geo:'ОАЭ',       niche:'Стоматология',    dirs:['Импланты','Виниры','Ортодонтия'], dir2:1, more:'+4 услуги', fill:55, check:12386, s:{check:11891},
-      aud:{ key:'ex',  label:'Экспаты (англ.)', lLo:106, lHi:159, rLo:193, rHi:289, roas:'6,6', s:{lLo:116,lHi:173,rLo:202,rHi:303} } },
-    { c:'kz', n:'cosmo',  b:3000,  cur:null,                            geo:'Казахстан', niche:'Косметология',    dirs:['Инъекции','SMAS-лифтинг','Аппаратная'], dir2:2, more:'+5 услуг', fill:50, check:231,  s:{check:189},
-      aud:{ key:'loc', label:'Казахоязычные',   lLo:249, lHi:373, rLo:17,  rHi:25,  roas:'7',   s:{lLo:262,lHi:394,rLo:14,rHi:22} } },
-    { c:'es', n:'multi',  b:8000,  cur:{sym:'€',pre:true,rate:0.88},    geo:'Испания',   niche:'Многопрофильная', dirs:['Гинекология','Чекапы','Урология'], dir2:1, more:'+5 услуг', fill:45, check:508,  s:{check:693},
-      aud:{ key:'loc', label:'Испанцы',         lLo:217, lHi:326, rLo:23,  rHi:35,  roas:'4,1', s:{lLo:206,lHi:309,rLo:30,rHi:45} } }
+    { c:'ae', n:'cosmo', b:5000, cur:{sym:'AED',pre:false,rate:3.67}, geo:'ОАЭ',       niche:'Косметология',    dirs:['Инъекции','SMAS-лифтинг','Аппаратная'], dir2:1, more:'+5 услуг', fill:38, check:3840, s:{check:2230}, dirsQ:'inject.smas',
+      aud:{ key:'ru',  tap:1, chips:['Все','Русскоязычные','Экспаты (англ.)'], lLo:148, lHi:223, rLo:116, rHi:175, roas:'7,9', s:{lLo:202,lHi:303,rLo:92,rHi:138} } },
+    { c:'kz', n:'rehab', b:3000, cur:null,                            geo:'Казахстан', niche:'Реабилитация',    dirs:['Лечение спины','Суставы','Остеопатия'], dir2:1, more:'+3 услуги', fill:50, check:399,  s:{check:378}, dirsQ:'spine.joints',
+      aud:{ key:'loc', tap:2, chips:['Все','Русскоязычные','Казахоязычные'],   lLo:211, lHi:317, rLo:21,  rHi:32,  roas:'8,8', s:{lLo:216,lHi:325,rLo:21,rHi:31} } },
+    { c:'es', n:'multi', b:8000, cur:{sym:'€',pre:true,rate:0.88},    geo:'Испания',   niche:'Многопрофильная', dirs:['Гинекология','Чекапы','Урология'], dir2:1, more:'+5 услуг', fill:45, check:508,  s:{check:693}, dirsQ:'gyn.checkup',
+      aud:{ key:'loc', tap:2, chips:['Все','Русскоязычные','Испанцы'],         lLo:217, lHi:326, rLo:23,  rHi:35,  roas:'4,1', s:{lLo:206,lHi:309,rLo:30,rHi:45} } }
   ];
   /* валюта страны основная, как в продукте */
   const wrapCur = (cfg, s) => cfg.cur ? (cfg.cur.pre ? cfg.cur.sym + s : s + ' ' + cfg.cur.sym) : '$' + s;
@@ -1532,10 +1534,10 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
       later(() => { dirsRow.classList.remove('enter', 'in'); Array.from(dirsRow.children).forEach(c => { c.style.transitionDelay = '0ms'; }); }, 800);
     }
   }
-  /* ряд сегментов аудитории (как в продукте: под страной). on: 0 = «Все», 2 = сегмент конфига */
+  /* ряд сегментов аудитории (как в продукте: под страной). on: 0 = «Все», cfg.aud.tap = сегмент конфига */
   const audRowEl = document.getElementById('ctAud');
   function setAud(cfg, on){
-    audRowEl.innerHTML = ['Все', 'Русскоязычные', cfg.aud.label].map(t => '<span class="ct-chip">' + t + '</span>').join('');
+    audRowEl.innerHTML = cfg.aud.chips.map(t => '<span class="ct-chip">' + t + '</span>').join('');
     audRowEl.children[on].classList.add('on');
   }
   const fmt = n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
@@ -1631,7 +1633,7 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
     }
     setDirs(cfg, 0);
     dirsRow.children[cfg.dir2].classList.add('on');
-    setAud(cfg, 2);   /* статичный кадр = финал цикла: сегмент выбран */
+    setAud(cfg, cfg.aud.tap);   /* статичный кадр = финал цикла: сегмент выбран */
     barTo(cfg.fill);
     budgetEl.textContent = moneyB(cfg, 1);
     tiles(cfg, cfg.aud, 1);
@@ -1639,12 +1641,12 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
     checkRow.classList.add('show');
     roasEl.textContent = '~' + cfg.aud.roas + ' раз';
     roasRow.classList.add('show');
-    openBtn.setAttribute('href', '/calc?c=' + cfg.c + '&n=' + cfg.n + '&b=' + cfg.b + '&a=' + cfg.aud.key + '&s=aggr');
+    openBtn.setAttribute('href', '/calc?c=' + cfg.c + '&n=' + cfg.n + '&d=' + cfg.dirsQ + '&b=' + cfg.b + '&a=' + cfg.aud.key + '&s=aggr');
   }
 
   function play(i){
     const cfg = CFG[i];
-    openBtn.setAttribute('href', '/calc?c=' + cfg.c + '&n=' + cfg.n + '&b=' + cfg.b + '&a=' + cfg.aud.key + '&s=aggr');
+    openBtn.setAttribute('href', '/calc?c=' + cfg.c + '&n=' + cfg.n + '&d=' + cfg.dirsQ + '&b=' + cfg.b + '&a=' + cfg.aud.key + '&s=aggr');
     for (let k = 0; k < CFG.length; k++){ geoChips[k].classList.remove('on'); nicheChips[k].classList.remove('on'); }
     dirsRow.className = 'ct-chips'; dirsRow.innerHTML = '';
     setAud(cfg, 0);   /* старт со «Все», сегмент кликнем по ходу */
@@ -1661,7 +1663,7 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
       if (cfg.cur){ budgetEl.textContent = moneyB(cfg, 0.25); budgetEl.classList.add('swap'); setTimeout(() => budgetEl.classList.remove('swap'), 550); }
     }); }, 80);
     /* аудитория - сразу после страны, как и стоит в продукте (цифр еще нет, только выбор) */
-    later(() => { const t = centerOf(audRowEl.children[2]); flyTo(t.x, t.y, 460, () => { tap(audRowEl.children[2]); audRowEl.children[0].classList.remove('on'); audRowEl.children[2].classList.add('on'); }); }, 1100);
+    later(() => { const a = audRowEl.children[cfg.aud.tap]; const t = centerOf(a); flyTo(t.x, t.y, 460, () => { tap(a); audRowEl.children[0].classList.remove('on'); a.classList.add('on'); }); }, 1100);
     later(() => { const t = centerOf(nicheChips[i]); flyTo(t.x, t.y, 500, () => { tap(nicheChips[i]); nicheChips[i].classList.add('on'); }); }, 2000);
     later(() => setDirs(cfg, -1, true), 2650);
     later(() => { const t = centerOf(dirsRow.children[0]); flyTo(t.x, t.y, 460, () => { tap(dirsRow.children[0]); dirsRow.children[0].classList.add('on'); }); }, 3300);
