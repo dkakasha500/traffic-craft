@@ -211,6 +211,7 @@ h1{font-size:clamp(25px,3.6vw,38px);font-weight:700;letter-spacing:-.03em;line-h
 .cur-toggle{display:inline-flex;border:1px solid rgba(255,255,255,.1);border-radius:100px;overflow:hidden}
 .cur-toggle button{font-size:10.5px;font-weight:700;padding:3px 10px;background:transparent;border:none;color:var(--txt3);cursor:pointer;font-family:inherit;transition:all .2s}
 .cur-toggle button.on{background:rgba(14,224,207,.12);color:var(--accent)}
+.res-title .cur-toggle{margin-left:auto;letter-spacing:normal;text-transform:none}
 /* долларовая приписка - в одну строку с пилюлей чека */
 .check-usd{display:inline-block;font-size:12px;color:var(--txt3);margin-left:10px;vertical-align:middle}
 .check-usd[hidden]{display:none}
@@ -656,7 +657,7 @@ html.js-cursor input::-webkit-inner-spin-button,html.js-cursor input::-webkit-ou
   </div><!-- /left-col -->
 
   <div class="res-border"><div class="res" id="res" role="region" aria-label="Результаты расчета">
-    <div class="res-title">Прогноз в месяц <span class="res-tag" id="resTag"></span></div>
+    <div class="res-title">Прогноз в месяц <span class="res-tag" id="resTag"></span><div class="cur-toggle ct-res" id="curToggle2" hidden><button type="button" data-m="local">AED</button><button type="button" data-m="usd">$</button></div></div>
     <div class="scen" id="scenToggle" role="group" aria-label="Сценарий прогноза"></div>
     <div class="scen-hint" id="scenHint"></div>
     <!-- Уровень 1: ответ за 1 секунду -->
@@ -1458,17 +1459,19 @@ function update(){
   var r = tcCalc(state, DATA);
   if(!r) return;
   var cc = curCfg();
-  /* переключатель валюты: подпись местной кнопки = символ страны; для долларовых стран скрыт */
-  var ctg = document.getElementById('curToggle');
-  if(ctg){
-    var hasLocal = !!CURRENCY[state.country];
+  /* переключатели валюты (у бюджета и у результата, синхронные):
+     подпись местной кнопки = символ страны; для долларовых стран скрыты */
+  var hasLocal = !!CURRENCY[state.country];
+  ['curToggle', 'curToggle2'].forEach(function(id){
+    var ctg = document.getElementById(id);
+    if(!ctg) return;
     ctg.hidden = !hasLocal;
     if(hasLocal){
       ctg.children[0].textContent = CURRENCY[state.country].sym;
       ctg.children[0].classList.toggle('on', state.curMode !== 'usd');
       ctg.children[1].classList.toggle('on', state.curMode === 'usd');
     }
-  }
+  });
   var bv = document.getElementById('budgetVal');
   if(!bv.querySelector('input')) bv.textContent = fmtMoney(state.budget);
   document.getElementById('budget').setAttribute('aria-valuetext', fmtMoney(state.budget) + ' в месяц');
@@ -1662,10 +1665,13 @@ function loadState(){
 /* ---------- события ---------- */
 /* слайдер: rAF-троттлинг - пересчет не чаще кадра, а не на каждый пиксель */
 var budgetRaf = null;
-document.getElementById('curToggle').addEventListener('click', function(e){
-  var b = e.target.closest('button'); if(!b) return;
-  state.curMode = (b.dataset.m === 'usd') ? 'usd' : undefined;
-  update();
+['curToggle', 'curToggle2'].forEach(function(id){
+  var el = document.getElementById(id);
+  if(el) el.addEventListener('click', function(e){
+    var b = e.target.closest('button'); if(!b) return;
+    state.curMode = (b.dataset.m === 'usd') ? 'usd' : undefined;
+    update();
+  });
 });
 document.getElementById('budget').addEventListener('input', function(){
   state.budget = parseInt(this.value, 10);

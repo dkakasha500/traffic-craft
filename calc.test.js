@@ -76,6 +76,13 @@ function boot(opts = {}) {
   assert.ok(t.d.getElementById('budgetUsd').hidden, 'в долларовом режиме приписка не нужна');
   curT.children[0].click();
   assert.ok(t.d.getElementById('budgetVal').textContent.includes('AED'), 'обратно в дирхамы');
+  /* второй тумблер (в результате) синхронен и переключает плитку выручки */
+  const curT2 = t.d.getElementById('curToggle2');
+  assert.ok(!curT2.hidden, 'тумблер у результата виден');
+  curT2.children[1].click();
+  assert.ok(t.d.getElementById('rRevenue').textContent.includes('$'), 'выручка в долларах: ' + t.d.getElementById('rRevenue').textContent);
+  assert.ok(curT.children[1].className.includes('on'), 'тумблеры синхронны');
+  curT2.children[0].click();
   Array.from(t.d.getElementById('scenToggle').children)[2].click();
   await sleep(320); /* дебаунс hash */
   assert.ok(t.w.location.hash.includes('s=aggr'), 'сценарий в hash: ' + t.w.location.hash);
