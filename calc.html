@@ -155,8 +155,11 @@ h1{font-size:clamp(25px,3.6vw,38px);font-weight:700;letter-spacing:-.03em;line-h
 .card{background:var(--bg2);border:1px solid var(--brd);border-radius:24px;padding:24px;margin-top:26px}
 .step{margin-bottom:13px}
 .step:last-child{margin-bottom:0}
-/* заголовки шагов скрыты - ряды читаются сами, как в демо на главной */
-.step-title{display:none}
+/* мини-метки групп: тихие, без номеров и капса - структура без тяжести.
+   Между группами тонкий разделитель, чтобы ряды пилюль не сливались в кашу */
+.step-title{font-size:11.5px;font-weight:600;letter-spacing:.4px;color:var(--txt3);margin-bottom:8px;text-transform:none}
+.step-title .num{display:none}
+.step + .step{border-top:1px solid rgba(255,255,255,.05);padding-top:14px}
 .step-title .num{color:var(--accent)}
 /* короткая подсказка под заголовком шага - всегда видна, снимает вопросы без перегруза */
 .step-sub{font-size:12px;color:var(--txt3);line-height:1.45;margin:0 0 9px}
@@ -608,7 +611,6 @@ html.js-cursor input::-webkit-inner-spin-button,html.js-cursor input::-webkit-ou
       </div>
     </div>
     <div class="step">
-      <div class="step-title"><span class="num">04</span> Бюджет</div>
       <div class="budget-top">
         <span class="b-label">Бюджет</span>
         <div class="budget-usd" id="budgetUsd" hidden></div>
@@ -624,7 +626,6 @@ html.js-cursor input::-webkit-inner-spin-button,html.js-cursor input::-webkit-ou
       <div class="cap-warn" id="capWarn" hidden></div>
     </div>
     <div class="step">
-      <div class="step-title"><span class="num">05</span> Средний чек</div>
       <div class="check-box"><span class="check-tick">✓</span><span class="check-lbl">Подставлен под услугу:</span><span class="cur" id="checkCur">$</span><input type="number" id="check" class="check-input" min="1" step="10" inputmode="numeric" aria-label="Средний чек - выручка с одного оплатившего пациента за курс"></div>
       <div class="step-sub" style="margin:8px 0 0">Выручка с пациента за курс, а не цена процедуры. Можно поправить.</div>
       <div class="check-usd" id="checkUsd" hidden></div>
