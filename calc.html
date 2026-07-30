@@ -341,7 +341,8 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
 .res-block p{font-size:13px;line-height:1.55;color:var(--txt)}
 .res-block p b{color:var(--heading);font-weight:600}
 /* спокойное предупреждение о выжигании внутри результата - заметно, но без тревоги */
-.res-burn{margin:14px 0 4px;padding:11px 14px;border-radius:12px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.3);font-size:12.5px;line-height:1.5;color:var(--txt)}
+/* дубль плашки потолка в результатах скрыт - предупреждение одно, у слайдера (точка действия) */
+.res-burn{display:none}
 .res-burn b{color:var(--gold);font-weight:600}
 
 /* ===== CTA ===== */
