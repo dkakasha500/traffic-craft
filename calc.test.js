@@ -33,7 +33,10 @@ function boot(opts = {}) {
   assert.deepStrictEqual(t.errors, [], 'ошибки исполнения: ' + t.errors);
   assert.strictEqual(t.d.getElementById('countryChips').children.length, 9, '9 стран');
   assert.strictEqual(t.d.getElementById('nicheChips').children.length, 8, '8 ниш');
-  assert.strictEqual(t.d.getElementById('dirChips').children.length, 7, '7 направлений в стоматологии');
+  /* услуги свернуты как в демо: 4 + кнопка «+3 еще», клик раскрывает все 7 */
+  assert.strictEqual(t.d.getElementById('dirChips').children.length, 5, 'свернуто: 4 услуги + «еще»');
+  Array.from(t.d.getElementById('dirChips').children).find(b => b.textContent.includes('еще')).click();
+  assert.strictEqual(t.d.getElementById('dirChips').children.length, 7, 'раскрыто: 7 направлений в стоматологии');
   assert.notStrictEqual(t.d.getElementById('rLeads').textContent, '—', 'заявки посчитаны');
   assert.ok(/\d{4}/.test(t.d.getElementById('footerYear').textContent), 'год в подвале');
   assert.ok(t.d.getElementById('check').value > 0, 'чек подставлен');

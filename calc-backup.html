@@ -255,16 +255,7 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
 .scen{display:flex;gap:4px;background:rgba(255,255,255,.04);border:1px solid var(--brd);border-radius:100px;padding:4px;margin-bottom:18px;width:100%}
 .scen button{flex:1;border:none;background:transparent;color:var(--txt2);font-size:12.5px;font-weight:600;padding:9px 8px;border-radius:100px;cursor:pointer;transition:all .25s;white-space:nowrap;min-height:38px;overflow:hidden;text-overflow:ellipsis}
 .scen button.on{background:var(--accent-soft);color:var(--white);box-shadow:inset 0 0 0 1px var(--accent-mid)}
-/* --- разгрузка по принципу демо: просто = приятно. Все скрыто CSS-ом, копия до правок: calc-backup.html --- */
-.scen-hint{display:none}          /* подсказка сценария теперь в title кнопок */
-.live-badge{display:none}         /* «расчет обновляется сразу» - и так видно */
-.res-tag{display:none}            /* бейдж конфига дублировал выбор слева */
-.slider-marks{display:none}
-.budget-presets{display:none}     /* слайдер + клик-ввод + рекомендация достаточно */
-/* воронка без дублей плиток: только записи и продажи */
-.funnel .frow:first-child,.funnel .frow:last-child{display:none}
-.verdict .v2{display:block;font-size:11.5px;color:var(--txt3);margin-top:4px}
-.chip.ghost{border-style:dashed;color:var(--txt3);background:transparent}
+.scen-hint{font-size:12px;color:var(--txt3);margin:-10px 0 16px}
 .big2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;margin-bottom:20px}
 .big-item{background:rgba(255,255,255,.015);border:1px solid var(--brd);border-radius:16px;padding:22px 12px;text-align:center;overflow:hidden}
 /* тинты плиток как в демо на главной: teal у заявок, gold у выручки */
@@ -635,7 +626,8 @@ html.js-cursor input::-webkit-inner-spin-button,html.js-cursor input::-webkit-ou
       <div class="cap-warn" id="capWarn" hidden></div>
     </div>
     <div class="step">
-      <div class="check-box" title="Выручка с пациента за курс, а не цена процедуры. Можно поправить."><span class="check-tick">✓</span><span class="check-lbl">Средний чек:</span><span class="cur" id="checkCur">$</span><input type="number" id="check" class="check-input" min="1" step="10" inputmode="numeric" aria-label="Средний чек - выручка с одного оплатившего пациента за курс"></div>
+      <div class="check-box"><span class="check-tick">✓</span><span class="check-lbl">Подставлен под услугу:</span><span class="cur" id="checkCur">$</span><input type="number" id="check" class="check-input" min="1" step="10" inputmode="numeric" aria-label="Средний чек - выручка с одного оплатившего пациента за курс"></div>
+      <div class="step-sub" style="margin:8px 0 0">Выручка с пациента за курс, а не цена процедуры. Можно поправить.</div>
       <div class="check-usd" id="checkUsd" hidden></div>
     </div>
   </div>
@@ -1195,7 +1187,6 @@ function renderScen(){
     var b = document.createElement('button'); b.type = 'button';
     b.className = state.scenario === k ? 'on' : '';
     b.textContent = DATA.scenarios[k].name;
-    b.title = SCEN_HINTS[k] || '';   /* подсказка сценария - тултипом вместо строки под кнопками */
     b.setAttribute('aria-pressed', state.scenario === k ? 'true' : 'false');
     b.onclick = function(){ state.scenario = k; renderScen(); update(); };
     el.appendChild(b);
@@ -1314,20 +1305,14 @@ function renderChips(){
     b.setAttribute('aria-pressed', state.niche === k ? 'true' : 'false');
     b.textContent = n.name;
     b.onclick = function(){
-      if(state.niche !== k){ state.niche = k; state.dirs = [Object.keys(DATA.niches[k].dirs)[0]]; state.checkOverride = 0; state._dirsOpen = false; }
+      if(state.niche !== k){ state.niche = k; state.dirs = [Object.keys(DATA.niches[k].dirs)[0]]; state.checkOverride = 0; }
       renderChips(); update();
     };
     el.appendChild(b);
   });
   el = document.getElementById('dirChips'); el.innerHTML = '';
   var dirs = DATA.niches[state.niche].dirs;
-  /* как в демо: первые 4 услуги + «еще N» (выбранные видны всегда), клик раскрывает список */
-  var dirKeys = Object.keys(dirs);
-  var shownKeys = dirKeys;
-  if(!state._dirsOpen && dirKeys.length > 5){
-    shownKeys = dirKeys.filter(function(k, i){ return i < 4 || state.dirs.indexOf(k) >= 0; });
-  }
-  shownKeys.forEach(function(k){
+  Object.keys(dirs).forEach(function(k){
     var b = document.createElement('button'); b.type = 'button';
     var isOn = state.dirs.indexOf(k) >= 0;
     b.className = 'chip' + (isOn ? ' on' : '');
@@ -1342,13 +1327,6 @@ function renderChips(){
     };
     el.appendChild(b);
   });
-  if(shownKeys.length < dirKeys.length){
-    var moreB = document.createElement('button'); moreB.type = 'button';
-    moreB.className = 'chip ghost';
-    moreB.textContent = '+' + (dirKeys.length - shownKeys.length) + ' еще';
-    moreB.onclick = function(){ state._dirsOpen = true; renderChips(); };
-    el.appendChild(moreB);
-  }
   /* мультивыбор: счетчик выбранных + переключатель "выбрать все / оставить одно" */
   var dcEl = document.getElementById('dirCount'); if(dcEl) dcEl.textContent = state.dirs.length;
   var dirAllBtn = document.getElementById('dirAll');
@@ -1501,8 +1479,8 @@ function update(){
   document.getElementById('bSales').style.width = Math.max(Math.round(r.l2b * r.b2s * 100), 4) + '%';
   /* вердикт: сильный, но честный - до расходов клиники */
   document.getElementById('verdict').innerHTML =
-    'Реклама окупается <b>~' + (Math.round(r.roas * 10) / 10).toLocaleString('ru-RU') + ' раз</b> по выручке, до ваших расходов.' +
-    '<span class="v2">Дальше все решает воронка внутри клиники.</span>';
+    'Реклама окупается <b>~' + (Math.round(r.roas * 10) / 10).toLocaleString('ru-RU') + ' раз</b> по выручке, до ваших расходов. ' +
+    'Дальше все решает воронка внутри клиники.';
   /* бейдж выбранной конфигурации в заголовке результата */
   var dirNames = state.dirs.map(function(k){ return DATA.niches[state.niche].dirs[k].name; }).join(' + ');
   var cObj = DATA.countries[state.country];
