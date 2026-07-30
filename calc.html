@@ -1015,11 +1015,9 @@ function tcCalc(state, D){
      считаем от ПОЛНОГО бюджета, поэтому переспенд честно роняет окупаемость. */
   var cap = (c.cap || 1e9) * audCap;
   var B = state.budget, effBudget = B, overCap = B > cap;
-  if(overCap){
-    var over = B - cap;
-    var band1 = Math.min(over, cap * 0.5), band2 = Math.max(0, over - cap * 0.5);
-    effBudget = cap + band1 * 0.06 + band2 * 0.02;
-  }
+  /* Выше потолка - жесткое плато: аудитория выкуплена, дополнительный бюджет уходит
+     в частоту показов и НЕ приносит новых людей. «Реально сработает» не растет. */
+  if(overCap){ effBudget = cap; }
   var leads = effBudget / cpl;
   var bookings = leads * l2b;
   var sales = bookings * b2s;
@@ -1539,7 +1537,7 @@ function update(){
   if(resBurn){
     if(r.overCap){
       resBurn.hidden = false;
-      resBurn.innerHTML = 'Бюджет выше ' + capW + ' (~<b>' + fmtMoney(r.cap) + '</b>/мес): реально работает ~<b>' + fmtMoney(r.effBudget) + '</b>, остальное почти впустую. Расти лучше вширь - новыми городами' + (state.aud === 'all' ? '' : ' или соседними аудиториями') + '.';
+      resBurn.innerHTML = 'Бюджет выше ' + capW + ': реально работает ~<b>' + fmtMoney(r.cap) + '</b>/мес, остальное почти впустую. Расти лучше вширь - новыми городами' + (state.aud === 'all' ? '' : ' или соседними аудиториями') + '.';
     } else {
       resBurn.hidden = true;
     }
@@ -1553,7 +1551,7 @@ function update(){
   if(capEl){
     if(r.overCap){
       capEl.hidden = false;
-      capEl.innerHTML = 'Бюджет выше ' + capW + ' (~' + fmtMoney(r.cap) + '/мес): реально сработает ~<b>' + fmtMoney(r.effBudget) + '</b>, дальше отдача падает. Растите вширь: добавляйте города, а не бюджет.';
+      capEl.innerHTML = 'Бюджет выше ' + capW + ': реально сработает ~<b>' + fmtMoney(r.cap) + '</b>/мес, дальше отдача не растет. Растите вширь: добавляйте города, а не бюджет.';
     } else {
       capEl.hidden = true;
     }
