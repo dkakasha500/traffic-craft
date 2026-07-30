@@ -33,10 +33,7 @@ function boot(opts = {}) {
   assert.deepStrictEqual(t.errors, [], 'ошибки исполнения: ' + t.errors);
   assert.strictEqual(t.d.getElementById('countryChips').children.length, 9, '9 стран');
   assert.strictEqual(t.d.getElementById('nicheChips').children.length, 8, '8 ниш');
-  /* услуги свернуты как в демо: 4 + кнопка «+3 еще», клик раскрывает все 7 */
-  assert.strictEqual(t.d.getElementById('dirChips').children.length, 5, 'свернуто: 4 услуги + «еще»');
-  Array.from(t.d.getElementById('dirChips').children).find(b => b.textContent.includes('еще')).click();
-  assert.strictEqual(t.d.getElementById('dirChips').children.length, 7, 'раскрыто: 7 направлений в стоматологии');
+  assert.strictEqual(t.d.getElementById('dirChips').children.length, 7, '7 направлений в стоматологии');
   assert.notStrictEqual(t.d.getElementById('rLeads').textContent, '—', 'заявки посчитаны');
   assert.ok(/\d{4}/.test(t.d.getElementById('footerYear').textContent), 'год в подвале');
   assert.ok(t.d.getElementById('check').value > 0, 'чек подставлен');
@@ -71,6 +68,14 @@ function boot(opts = {}) {
   /* ae показывает бюджет в дирхамах: сверяем через форматтер страницы */
   assert.strictEqual(t.d.getElementById('budgetVal').textContent, t.w.fmtMoney(10000), 'бюджет обновился: ' + t.d.getElementById('budgetVal').textContent);
   assert.ok(t.d.getElementById('budgetUsd').textContent.includes('$10 000'.replace(' ', ' ')) || t.d.getElementById('budgetUsd').textContent.includes('10'), 'долларовая приписка у бюджета: ' + t.d.getElementById('budgetUsd').textContent);
+  /* переключатель валюты: доллар и обратно в дирхамы */
+  const curT = t.d.getElementById('curToggle');
+  assert.ok(!curT.hidden, 'переключатель валюты виден для ОАЭ');
+  curT.children[1].click();
+  assert.ok(t.d.getElementById('budgetVal').textContent.includes('$'), 'долларовый режим: ' + t.d.getElementById('budgetVal').textContent);
+  assert.ok(t.d.getElementById('budgetUsd').hidden, 'в долларовом режиме приписка не нужна');
+  curT.children[0].click();
+  assert.ok(t.d.getElementById('budgetVal').textContent.includes('AED'), 'обратно в дирхамы');
   Array.from(t.d.getElementById('scenToggle').children)[2].click();
   await sleep(320); /* дебаунс hash */
   assert.ok(t.w.location.hash.includes('s=aggr'), 'сценарий в hash: ' + t.w.location.hash);

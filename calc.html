@@ -207,6 +207,10 @@ h1{font-size:clamp(25px,3.6vw,38px);font-weight:700;letter-spacing:-.03em;line-h
 .budget-val{margin-left:auto;font-weight:700;font-size:16.5px;color:var(--heading);letter-spacing:-.01em;cursor:text;border-bottom:1px dashed var(--brd2);white-space:nowrap}
 .budget-presets{margin-top:10px}
 .budget-usd{font-size:12px;color:var(--txt3);white-space:nowrap}
+/* мини-переключатель валюты: местная / доллар */
+.cur-toggle{display:inline-flex;border:1px solid rgba(255,255,255,.1);border-radius:100px;overflow:hidden}
+.cur-toggle button{font-size:10.5px;font-weight:700;padding:3px 10px;background:transparent;border:none;color:var(--txt3);cursor:pointer;font-family:inherit;transition:all .2s}
+.cur-toggle button.on{background:rgba(14,224,207,.12);color:var(--accent)}
 .check-usd{font-size:12.5px;color:var(--txt3);margin-top:7px}
 .budget-val:hover{border-bottom-color:var(--accent)}
 .budget-presets{display:flex;gap:6px;flex-wrap:wrap}
@@ -624,6 +628,7 @@ html.js-cursor input::-webkit-inner-spin-button,html.js-cursor input::-webkit-ou
     <div class="step">
       <div class="budget-top">
         <span class="b-label">Бюджет</span>
+        <div class="cur-toggle" id="curToggle" hidden><button type="button" data-m="local">AED</button><button type="button" data-m="usd">$</button></div>
         <div class="budget-usd" id="budgetUsd" hidden></div>
         <div class="budget-val" id="budgetVal" role="button" tabindex="0" title="Нажмите, чтобы ввести точную сумму">$5 000</div>
       </div>
@@ -1222,7 +1227,9 @@ var CURRENCY = {
   pl: { sym: 'zł', pre: false, rate: 3.79 }   /* злотый */
 };
 var CUR_USD = { sym: '$', pre: true, rate: 1 };
-function curCfg(){ return CURRENCY[state.country] || CUR_USD; }
+/* Режим отображения: местная валюта страны (дефолт) или доллары - переключатель у бюджета.
+   Для долларовых стран (kz/us/tr) переключатель скрыт. */
+function curCfg(){ return (state.curMode === 'usd') ? CUR_USD : (CURRENCY[state.country] || CUR_USD); }
 function curWrap(s, c){ return c.pre ? c.sym + s : s + ' ' + c.sym; }
 /* Одиночная сумма в валюте страны, крупное - компактно, чтобы не рвать плитки:
    «36 700 AED», «110к AED», «€1,2 млн» */
@@ -1316,20 +1323,15 @@ function renderChips(){
     b.setAttribute('aria-pressed', state.niche === k ? 'true' : 'false');
     b.textContent = n.name;
     b.onclick = function(){
-      if(state.niche !== k){ state.niche = k; state.dirs = [Object.keys(DATA.niches[k].dirs)[0]]; state.checkOverride = 0; state._dirsOpen = false; }
+      if(state.niche !== k){ state.niche = k; state.dirs = [Object.keys(DATA.niches[k].dirs)[0]]; state.checkOverride = 0; }
       renderChips(); update();
     };
     el.appendChild(b);
   });
   el = document.getElementById('dirChips'); el.innerHTML = '';
   var dirs = DATA.niches[state.niche].dirs;
-  /* как в демо: первые 4 услуги + «еще N» (выбранные видны всегда), клик раскрывает список */
-  var dirKeys = Object.keys(dirs);
-  var shownKeys = dirKeys;
-  if(!state._dirsOpen && dirKeys.length > 5){
-    shownKeys = dirKeys.filter(function(k, i){ return i < 4 || state.dirs.indexOf(k) >= 0; });
-  }
-  shownKeys.forEach(function(k){
+  /* все услуги разом - как страны и ниши: единый принцип, теги легкие */
+  Object.keys(dirs).forEach(function(k){
     var b = document.createElement('button'); b.type = 'button';
     var isOn = state.dirs.indexOf(k) >= 0;
     b.className = 'chip' + (isOn ? ' on' : '');
@@ -1344,13 +1346,6 @@ function renderChips(){
     };
     el.appendChild(b);
   });
-  if(shownKeys.length < dirKeys.length){
-    var moreB = document.createElement('button'); moreB.type = 'button';
-    moreB.className = 'chip ghost';
-    moreB.textContent = '+' + (dirKeys.length - shownKeys.length) + ' еще';
-    moreB.onclick = function(){ state._dirsOpen = true; renderChips(); };
-    el.appendChild(moreB);
-  }
   /* мультивыбор: счетчик выбранных + переключатель "выбрать все / оставить одно" */
   var dcEl = document.getElementById('dirCount'); if(dcEl) dcEl.textContent = state.dirs.length;
   var dirAllBtn = document.getElementById('dirAll');
@@ -1457,6 +1452,17 @@ function update(){
   var r = tcCalc(state, DATA);
   if(!r) return;
   var cc = curCfg();
+  /* переключатель валюты: подпись местной кнопки = символ страны; для долларовых стран скрыт */
+  var ctg = document.getElementById('curToggle');
+  if(ctg){
+    var hasLocal = !!CURRENCY[state.country];
+    ctg.hidden = !hasLocal;
+    if(hasLocal){
+      ctg.children[0].textContent = CURRENCY[state.country].sym;
+      ctg.children[0].classList.toggle('on', state.curMode !== 'usd');
+      ctg.children[1].classList.toggle('on', state.curMode === 'usd');
+    }
+  }
   var bv = document.getElementById('budgetVal');
   if(!bv.querySelector('input')) bv.textContent = fmtMoney(state.budget);
   document.getElementById('budget').setAttribute('aria-valuetext', fmtMoney(state.budget) + ' в месяц');
@@ -1564,6 +1570,7 @@ function buildHash(){
   return ['c=' + state.country, 'n=' + state.niche, 'd=' + state.dirs.join('.'), 'b=' + state.budget, 's=' + state.scenario,
     (state.country === 'us' && state.usRegion !== 'avg') ? 'ur=' + state.usRegion : '',
     state.aud !== 'all' ? 'a=' + state.aud : '',
+    state.curMode === 'usd' ? 'cur=usd' : '',
     state.checkOverride > 0 ? 'ch=' + state.checkOverride : ''].filter(Boolean).join('&');
 }
 function shareUrl(){
@@ -1592,6 +1599,7 @@ function applyParsed(h){
     else if(k === 's'){ if(isScenario(v)) state.scenario = v; }
     else if(k === 'ur'){ state._urCand = v; }
     else if(k === 'a'){ state._audCand = v; }
+    else if(k === 'cur'){ state.curMode = (v === 'usd') ? 'usd' : undefined; }
   });
   /* регион США применяем, только если страна США и регион реальный */
   var usC = DATA.countries[state.country];
@@ -1637,6 +1645,7 @@ function loadState(){
       if(isScenario(saved.scenario)) state.scenario = saved.scenario;
       if(isUsRegion(saved.usRegion)) state.usRegion = saved.usRegion;
       if(isAud(state.country, saved.aud)) state.aud = saved.aud;
+      if(saved.curMode === 'usd') state.curMode = 'usd';
       return;                                                 /* 3. память прошлого визита */
     }
   } catch(e){}
@@ -1647,6 +1656,11 @@ function loadState(){
 /* ---------- события ---------- */
 /* слайдер: rAF-троттлинг - пересчет не чаще кадра, а не на каждый пиксель */
 var budgetRaf = null;
+document.getElementById('curToggle').addEventListener('click', function(e){
+  var b = e.target.closest('button'); if(!b) return;
+  state.curMode = (b.dataset.m === 'usd') ? 'usd' : undefined;
+  update();
+});
 document.getElementById('budget').addEventListener('input', function(){
   state.budget = parseInt(this.value, 10);
   if(budgetRaf) return;
