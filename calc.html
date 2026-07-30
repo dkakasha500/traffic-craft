@@ -1537,7 +1537,7 @@ function update(){
   if(resBurn){
     if(r.overCap){
       resBurn.hidden = false;
-      resBurn.innerHTML = 'Бюджет выше ' + capW + ': реально работает ~<b>' + fmtMoney(r.cap) + '</b>/мес, остальное почти впустую. Расти лучше вширь - новыми городами' + (state.aud === 'all' ? '' : ' или соседними аудиториями') + '.';
+      resBurn.innerHTML = 'Бюджет выше ' + capW + ': сработает ~<b>' + fmtMoney(r.cap) + '</b>/мес, остальное - впустую. Расти лучше вширь - новыми городами' + (state.aud === 'all' ? '' : ' или соседними аудиториями') + '.';
     } else {
       resBurn.hidden = true;
     }
@@ -1551,7 +1551,7 @@ function update(){
   if(capEl){
     if(r.overCap){
       capEl.hidden = false;
-      capEl.innerHTML = 'Бюджет выше ' + capW + ': реально сработает ~<b>' + fmtMoney(r.cap) + '</b>/мес, дальше отдача не растет. Растите вширь: добавляйте города, а не бюджет.';
+      capEl.innerHTML = 'Бюджет выше ' + capW + ': сработает ~<b>' + fmtMoney(r.cap) + '</b>/мес, дальше отдача не растет. Растите вширь: города, а не бюджет.';
     } else {
       capEl.hidden = true;
     }
