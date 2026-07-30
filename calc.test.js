@@ -49,7 +49,7 @@ function boot(opts = {}) {
   t.clickChip('countryChips', 'ОАЭ');
   assert.notStrictEqual(t.d.getElementById('rLeads').textContent, leadsBefore, 'смена страны меняет прогноз');
   t.clickChip('nicheChips', 'Космет');
-  assert.ok(t.onChip('dirChips').textContent.includes('✓'), 'направление с галочкой');
+  assert.ok(t.onChip('dirChips'), 'выбранное направление подсвечено (без галочек - минимализм)');
   t.clickChip('dirChips', 'SMAS');
   const dirsOn = Array.from(t.d.getElementById('dirChips').children).filter(b => b.className.includes('on'));
   assert.strictEqual(dirsOn.length, 2, 'два направления выбраны');
