@@ -52,12 +52,12 @@ function boot(opts = {}) {
   assert.strictEqual(dirsOn.length, 2, 'два направления выбраны');
   /* сегмент аудитории: чип меняет прогноз, попадает в hash, сбрасывается сменой страны */
   const audLeadsBefore = t.d.getElementById('rLeads').textContent;
-  const audChip = Array.from(t.d.getElementById('audChips').children).find(b => b.textContent === 'Русскоязычные');
+  const audChip = Array.from(t.d.getElementById('audChips').children).find(b => b.textContent === 'Рус');
   assert.ok(audChip, 'чип аудитории отрендерен');
   audChip.click();
   assert.notStrictEqual(t.d.getElementById('rLeads').textContent, audLeadsBefore, 'сегмент меняет прогноз');
   assert.ok(t.w.buildHash().includes('a=ru'), 'сегмент в hash');
-  assert.ok(t.d.getElementById('resTag').textContent.includes('Русскоязычные'), 'сегмент в бейдже');
+  assert.ok(t.d.getElementById('resTag').textContent.includes('Рус'), 'сегмент в бейдже');
   t.clickChip('countryChips', 'Израиль');
   assert.strictEqual(t.w.state.aud, 'all', 'смена страны сбрасывает сегмент');
   t.clickChip('countryChips', 'ОАЭ');

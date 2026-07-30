@@ -1505,11 +1505,11 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
      aud.chips - ряд сегментов, aud.tap - какой кликает курсор */
   const CFG = [
     { c:'ae', n:'cosmo', b:5000, cur:{sym:'AED',pre:false,rate:3.67}, geo:'ОАЭ',       niche:'Косметология',    dirs:['Инъекции','SMAS-лифтинг','Аппаратная'], dir2:1, more:'+5 услуг', fill:38, check:3840, s:{check:2230}, dirsQ:'inject.smas',
-      aud:{ key:'ru',  tap:1, chips:['Все','Русскоязычные','Экспаты (англ.)'], lLo:148, lHi:223, rLo:116, rHi:175, roas:'7,9', s:{lLo:202,lHi:303,rLo:92,rHi:138} } },
+      aud:{ key:'ru',  tap:1, chips:['Все','Рус','Англ'], lLo:148, lHi:223, rLo:116, rHi:175, roas:'7,9', s:{lLo:202,lHi:303,rLo:92,rHi:138} } },
     { c:'kz', n:'rehab', b:3000, cur:null,                            geo:'Казахстан', niche:'Реабилитация',    dirs:['Лечение спины','Суставы','Остеопатия'], dir2:1, more:'+3 услуги', fill:50, check:399,  s:{check:378}, dirsQ:'spine.joints',
-      aud:{ key:'loc', tap:2, chips:['Все','Русскоязычные','Казахоязычные'],   lLo:211, lHi:317, rLo:21,  rHi:32,  roas:'8,8', s:{lLo:216,lHi:325,rLo:21,rHi:31} } },
+      aud:{ key:'loc', tap:2, chips:['Все','Рус','Каз'],   lLo:211, lHi:317, rLo:21,  rHi:32,  roas:'8,8', s:{lLo:216,lHi:325,rLo:21,rHi:31} } },
     { c:'es', n:'multi', b:8000, cur:{sym:'€',pre:true,rate:0.88},    geo:'Испания',   niche:'Многопрофильная', dirs:['Гинекология','Чекапы','Урология'], dir2:1, more:'+5 услуг', fill:45, check:508,  s:{check:693}, dirsQ:'gyn.checkup',
-      aud:{ key:'loc', tap:2, chips:['Все','Русскоязычные','Испанцы'],         lLo:217, lHi:326, rLo:23,  rHi:35,  roas:'4,1', s:{lLo:206,lHi:309,rLo:30,rHi:45} } }
+      aud:{ key:'loc', tap:2, chips:['Все','Рус','Исп'],         lLo:217, lHi:326, rLo:23,  rHi:35,  roas:'4,1', s:{lLo:206,lHi:309,rLo:30,rHi:45} } }
   ];
   /* валюта страны основная, как в продукте */
   const wrapCur = (cfg, s) => cfg.cur ? (cfg.cur.pre ? cfg.cur.sym + s : s + ' ' + cfg.cur.sym) : '$' + s;
