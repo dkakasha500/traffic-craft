@@ -153,12 +153,12 @@ h1{font-size:clamp(25px,3.6vw,38px);font-weight:700;letter-spacing:-.03em;line-h
 
 /* ===== карточка шагов ===== */
 .card{background:var(--bg2);border:1px solid var(--brd);border-radius:24px;padding:24px;margin-top:26px}
-.step{margin-bottom:20px}
+.step{margin-bottom:16px}
 .step:last-child{margin-bottom:0}
 .step-title{font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--txt2);margin-bottom:7px;display:flex;align-items:center;gap:8px}
 .step-title .num{color:var(--accent)}
 /* короткая подсказка под заголовком шага - всегда видна, снимает вопросы без перегруза */
-.step-sub{font-size:12.5px;color:var(--txt3);line-height:1.45;margin:0 0 12px}
+.step-sub{font-size:12px;color:var(--txt3);line-height:1.45;margin:0 0 9px}
 /* индикатор живого пересчета: результат обновляется сразу */
 .live-badge{display:inline-flex;align-items:center;gap:8px;font-size:12px;color:var(--txt2);font-weight:500;margin-bottom:18px}
 .live-badge .dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2s infinite;flex-shrink:0}
@@ -244,6 +244,9 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
 .scen-hint{font-size:12px;color:var(--txt3);margin:-10px 0 16px}
 .big2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;margin-bottom:20px}
 .big-item{background:rgba(255,255,255,.015);border:1px solid var(--brd);border-radius:16px;padding:22px 12px;text-align:center;overflow:hidden}
+/* тинты плиток как в демо на главной: teal у заявок, gold у выручки */
+.big-item:first-child{background:linear-gradient(180deg,rgba(14,224,207,.07),rgba(14,224,207,.015))}
+.big-item:last-child{background:linear-gradient(180deg,rgba(251,191,36,.07),rgba(251,191,36,.015))}
 .res-num{font-weight:700;letter-spacing:-.02em;color:var(--heading);line-height:1.12;overflow-wrap:break-word}
 .res-num.xl{font-size:clamp(20px,3vw,29px);letter-spacing:-.03em}
 /* длинные валютные строки («211-285к AED») - кегль меньше, чтобы не рвать плитку */
@@ -262,7 +265,9 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
 .fbar{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--accent),var(--blue));width:0%;transition:width .6s cubic-bezier(.22,1,.36,1)}
 .fbar.gold{background:linear-gradient(90deg,var(--gold),#f59e0b)}
 /* вердикт */
-.verdict{margin:16px 0 18px;padding:1px 0 1px 14px;border-left:2px solid var(--accent-mid);color:var(--txt);font-size:13.5px;line-height:1.5;text-align:left}
+/* вердикт в языке демо: по центру, окупаемость - главный акцент */
+.verdict{margin:18px 0;padding:0;color:var(--txt2);font-size:13px;line-height:1.55;text-align:center}
+.verdict b{font-size:16.5px;letter-spacing:-.01em}
 .verdict b{color:var(--accent)}
 .verdict .gold{color:var(--gold)}
 .res-sub{display:flex;justify-content:center;gap:22px;flex-wrap:wrap;font-size:13.5px;color:var(--txt2)}
@@ -344,8 +349,8 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
   /* воздух по всей странице: сетка, карточки, шаги, панель результата */
   .layout{gap:28px;margin-top:28px}
   .card{padding:34px 32px}
-  .step{margin-bottom:28px}
-  .step-title{margin-bottom:10px}
+  .step{margin-bottom:22px}
+  .step-title{margin-bottom:9px}
   .res{padding:36px 34px}
   .head{padding-top:10px}
   /* CTA-блок */
