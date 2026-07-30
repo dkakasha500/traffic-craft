@@ -851,10 +851,10 @@ var DATA = {
   countries: {
     /* aud - сегменты аудитории страны: рус диаспора / местные / экспаты.
        cpl - множитель цены заявки, cap - множитель емкости (доля аудитории в рынке).
-       rec - рекомендуемый СТАРТОВЫЙ месячный бюджет, USD (якорь: Дубай ~8 000 AED = ~$2 200).
+       rec - рекомендуемый СТАРТОВЫЙ месячный бюджет, USD. Калибр Павла: ОАЭ старт 15-20к AED при минимуме входа 8к, т.е. ~25-35% потолка рынка.
        'all' = смесь аудиторий, текущие средние цифры (кейсы TC - смесь кампаний).
        ВНИМАНИЕ: множители - оценки, заменить реальными из кабинетов, как и весь конфиг. */
-    il: {name:'Израиль',   dot:'#3b82f6', mult:1.30, cap:16000, rec:3000, cpl:{dental:44, cosmo:28, multi:22, plastic:62,  hair:51,  rehab:29, ophthalmo:42, pediatric:26},
+    il: {name:'Израиль',   dot:'#3b82f6', mult:1.30, cap:16000, rec:6000, cpl:{dental:44, cosmo:28, multi:22, plastic:62,  hair:51,  rehab:29, ophthalmo:42, pediatric:26},
          aud:{all:{name:'Все'}, ru:{name:'Рус', cpl:0.90, cap:0.45}, loc:{name:'Иврит', cpl:1.25, cap:1.60}}},
     ae: {name:'ОАЭ',       dot:'#16a34a', mult:1.35, cap:20000, rec:5000,   /* старт по Павлу: 15-20к AED, минимум входа 8к */
          /* считаем ПРОСТО лид (не квал): по Дубаю сырой лид ~100 AED в целом.
@@ -862,19 +862,19 @@ var DATA = {
          leadCal:{def:0.70, dental:0.35, multi:0.93, plastic:0.30, hair:0.33, ophthalmo:0.35},
          cpl:{dental:64, cosmo:42, multi:31, plastic:90,  hair:74,  rehab:40, ophthalmo:61, pediatric:36},
          aud:{all:{name:'Все'}, ru:{name:'Рус', cpl:0.85, cap:0.30}, ex:{name:'Англ', cpl:1.30, cap:1.80}, loc:{name:'Араб', cpl:1.70, cap:0.90}}},
-    es: {name:'Испания',   dot:'#ef4444', mult:1.05, cap:18000, rec:2500, cpl:{dental:62, cosmo:40, multi:31, plastic:87,  hair:71,  rehab:40, ophthalmo:59, pediatric:35},
+    es: {name:'Испания',   dot:'#ef4444', mult:1.05, cap:18000, rec:5000, cpl:{dental:62, cosmo:40, multi:31, plastic:87,  hair:71,  rehab:40, ophthalmo:59, pediatric:35},
          aud:{all:{name:'Все'}, ru:{name:'Рус', cpl:0.85, cap:0.25}, loc:{name:'Исп', cpl:1.20, cap:1.70}, ex:{name:'Англ', cpl:1.10, cap:0.55}}},
-    de: {name:'Германия',  dot:'#facc15', mult:1.25, cap:22000, rec:3000, cpl:{dental:72, cosmo:46, multi:48, plastic:101, hair:83,  rehab:62, ophthalmo:68, pediatric:42},
+    de: {name:'Германия',  dot:'#facc15', mult:1.25, cap:22000, rec:6000, cpl:{dental:72, cosmo:46, multi:48, plastic:101, hair:83,  rehab:62, ophthalmo:68, pediatric:42},
          aud:{all:{name:'Все'}, ru:{name:'Рус', cpl:0.85, cap:0.35}, loc:{name:'Нем', cpl:1.30, cap:1.70}}},
-    cy: {name:'Кипр',      dot:'#fb923c', mult:1.08, cap:2500,  rec:1000, cpl:{dental:40, cosmo:26, multi:22, plastic:56,  hair:46,  rehab:29, ophthalmo:38, pediatric:24},
+    cy: {name:'Кипр',      dot:'#fb923c', mult:1.08, cap:2500,  rec:1500, cpl:{dental:40, cosmo:26, multi:22, plastic:56,  hair:46,  rehab:29, ophthalmo:38, pediatric:24},
          aud:{all:{name:'Все'}, ru:{name:'Рус', cpl:0.85, cap:0.40}, ex:{name:'Англ', cpl:1.15, cap:0.90}, loc:{name:'Греч', cpl:1.25, cap:1.30}}},
-    pl: {name:'Польша',    dot:'#fb7185', mult:0.72, cap:9000,  rec:1500, cpl:{dental:26, cosmo:17, multi:15, plastic:36,  hair:30,  rehab:20, ophthalmo:25, pediatric:16},
+    pl: {name:'Польша',    dot:'#fb7185', mult:0.72, cap:9000,  rec:3000, cpl:{dental:26, cosmo:17, multi:15, plastic:36,  hair:30,  rehab:20, ophthalmo:25, pediatric:16},
          aud:{all:{name:'Все'}, ru:{name:'Рус', cpl:0.85, cap:0.40}, loc:{name:'Пол', cpl:1.20, cap:1.60}}},
-    tr: {name:'Турция',    dot:'#e11d48', mult:0.50, cap:12000, rec:1500, cpl:{dental:22, cosmo:15, multi:12, plastic:31,  hair:25,  rehab:16, ophthalmo:21, pediatric:13},
+    tr: {name:'Турция',    dot:'#e11d48', mult:0.50, cap:12000, rec:3000, cpl:{dental:22, cosmo:15, multi:12, plastic:31,  hair:25,  rehab:16, ophthalmo:21, pediatric:13},
          aud:{all:{name:'Все'}, ru:{name:'Рус', cpl:0.90, cap:0.45}, loc:{name:'Тур', cpl:1.15, cap:1.70}}},
-    kz: {name:'Казахстан', dot:'#06b6d4', mult:0.42, cap:4000,  rec:1500, cpl:{dental:14, cosmo:11, multi:9,  plastic:20,  hair:16,  rehab:12, ophthalmo:13, pediatric:10},
+    kz: {name:'Казахстан', dot:'#06b6d4', mult:0.42, cap:4000,  rec:2000, cpl:{dental:14, cosmo:11, multi:9,  plastic:20,  hair:16,  rehab:12, ophthalmo:13, pediatric:10},
          aud:{all:{name:'Все'}, ru:{name:'Рус', cpl:0.95, cap:0.70}, loc:{name:'Каз', cpl:1.05, cap:0.80}}},
-    us: {name:'США',       dot:'#6366f1', mult:1.60, cap:35000, rec:5000, cpl:{dental:90, cosmo:52, multi:55, plastic:126, hair:103, rehab:72, ophthalmo:86, pediatric:50},
+    us: {name:'США',       dot:'#6366f1', mult:1.60, cap:35000, rec:10000, cpl:{dental:90, cosmo:52, multi:55, plastic:126, hair:103, rehab:72, ophthalmo:86, pediatric:50},
          aud:{all:{name:'Все'}, ru:{name:'Рус', cpl:0.80, cap:0.15}, loc:{name:'Англоязычные', cpl:1.15, cap:1.40}},
          /* США огромные и неоднородные - CPM пляшет в разы по штатам/метро.
             cpm - множитель цены заявки, chk - множитель чека региона. */
