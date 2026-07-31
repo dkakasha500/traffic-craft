@@ -59,8 +59,8 @@ html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent;-webkit-text
 body{font-family:-apple-system,BlinkMacSystemFont,'Inter',system-ui,sans-serif;background:var(--bg);color:var(--txt);line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden}
 /* фоновые слои как на главной: черный фон + свечения-орбы по углам + сетка, центр чистый */
 .bg-grid{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(var(--brd) 1px, transparent 1px), linear-gradient(90deg, var(--brd) 1px, transparent 1px);background-size:60px 60px;opacity:.25;mask-image:radial-gradient(circle at 50% 30%, black, transparent 75%);-webkit-mask-image:radial-gradient(circle at 50% 30%, black, transparent 75%)}
-.bg-orb1{position:fixed;top:-12%;left:-18%;width:820px;height:820px;z-index:0;pointer-events:none;background:radial-gradient(circle,rgba(59,130,246,.07) 0%,transparent 55%);animation:floatOrb 16s ease-in-out infinite alternate;will-change:transform}
-.bg-orb2{position:fixed;bottom:-18%;right:-16%;width:900px;height:900px;z-index:0;pointer-events:none;background:radial-gradient(circle,rgba(14,224,207,.05) 0%,transparent 55%);animation:floatOrb 22s ease-in-out infinite alternate-reverse;will-change:transform}
+.bg-orb1{position:fixed;top:-12%;left:-18%;width:820px;height:820px;z-index:0;pointer-events:none;background:radial-gradient(circle,rgba(59,130,246,.07) 0%,transparent 55%);animation:floatOrb 16s ease-in-out infinite alternate}
+.bg-orb2{position:fixed;bottom:-18%;right:-16%;width:900px;height:900px;z-index:0;pointer-events:none;background:radial-gradient(circle,rgba(14,224,207,.05) 0%,transparent 55%);animation:floatOrb 22s ease-in-out infinite alternate-reverse}
 @keyframes floatOrb{0%{transform:translate(0,0)}100%{transform:translate(40px,40px)}}
 .ctn,nav,main,header,footer,.sticky-res{position:relative;z-index:1}
 a{color:inherit;text-decoration:none}
