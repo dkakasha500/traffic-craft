@@ -2014,24 +2014,26 @@ update();
   function showCursor(){ if (!isCursorActive) { document.body.classList.remove('cursor-hidden'); isCursorActive = true; } }
   function hideCursor(){ document.body.classList.add('cursor-hidden'); isCursorActive = false; }
 
+  /* мышь шлет до 1000 событий/сек: в обработчике только координаты, запись стилей - в rAF;
+     простой ловим меткой времени вместо тысяч setTimeout */
+  var lastMoveT = 0;
   window.addEventListener('mousemove', function(e){
     /* системный курсор прячем только когда кастомный уже есть где рисовать -
        иначе после перезагрузки страницы до первого движения нет НИКАКОГО курсора */
-    document.documentElement.classList.add('js-cursor');
-    mouseX = e.clientX; mouseY = e.clientY;
-    cursorDot.style.transform = 'translate3d(' + mouseX + 'px,' + mouseY + 'px,0) translate(-50%,-50%)';
-    outlineX = outlineX < 0 ? mouseX : outlineX; outlineY = outlineY < 0 ? mouseY : outlineY;
-    showCursor();
+    if (!isCursorActive){ document.documentElement.classList.add('js-cursor'); showCursor(); }
+    mouseX = e.clientX; mouseY = e.clientY; lastMoveT = performance.now();
+    if (outlineX < 0){ outlineX = mouseX; outlineY = mouseY; }
     if (!cursorRafId) startCursorLoop();
-    clearTimeout(cursorIdle);
-    cursorIdle = setTimeout(function(){ if (cursorRafId) { cancelAnimationFrame(cursorRafId); cursorRafId = null; } }, 150);
-  });
+  }, { passive: true });
 
   function startCursorLoop(){
     var step = function(){
+      cursorDot.style.transform = 'translate3d(' + mouseX + 'px,' + mouseY + 'px,0) translate(-50%,-50%)';
       outlineX += (mouseX - outlineX) * 0.45;
       outlineY += (mouseY - outlineY) * 0.45;
       cursorOutline.style.transform = 'translate3d(' + outlineX + 'px,' + outlineY + 'px,0) translate(-50%,-50%)';
+      /* хвост доехал и мышь замерла - цикл спит до следующего движения */
+      if (performance.now() - lastMoveT > 150 && Math.abs(mouseX - outlineX) + Math.abs(mouseY - outlineY) < 0.5){ cursorRafId = null; return; }
       cursorRafId = requestAnimationFrame(step);
     };
     cursorRafId = requestAnimationFrame(step);

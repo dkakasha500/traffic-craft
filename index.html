@@ -116,7 +116,7 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 ::-webkit-scrollbar-thumb:hover{background:var(--accent)}
 *:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
 
-.scroll-progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg, var(--accent), var(--blue));z-index:1001;width:0%;pointer-events:none;box-shadow:0 0 12px var(--accent)}
+.scroll-progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg, var(--accent), var(--blue));z-index:1001;width:100%;transform:scaleX(0);transform-origin:0 50%;pointer-events:none;box-shadow:0 0 12px var(--accent)}
 
 .nav{position:fixed;top:0;left:0;right:0;z-index:999;padding:22px 0;padding-top:calc(22px + env(safe-area-inset-top));transition:transform .4s cubic-bezier(.22,1,.36,1), background .4s, padding .4s, border .4s}
 .nav.scrolled{padding:14px 0;padding-top:calc(14px + env(safe-area-inset-top));background:rgba(0, 0, 0, .86)}
@@ -1209,20 +1209,23 @@ if (window.matchMedia("(pointer: fine)").matches && cursorDot && cursorOutline) 
     document.body.classList.add('cursor-hidden'); isCursorActive = false;
   }
 
+  /* мышь шлет до 1000 событий/сек: в обработчике - только координаты, вся запись стилей
+     в rAF-цикле (не чаще кадра); простой ловим меткой времени, без тысяч setTimeout */
+  let lastMoveT = 0;
   window.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX; mouseY = e.clientY;
-    cursorDot.style.transform = 'translate3d(' + mouseX + 'px,' + mouseY + 'px,0) translate(-50%,-50%)';
-    showCursor();
+    mouseX = e.clientX; mouseY = e.clientY; lastMoveT = performance.now();
+    if (!isCursorActive) showCursor();
     if (!cursorRafId) startCursorLoop();
-    clearTimeout(cursorIdle);
-    cursorIdle = setTimeout(() => { if (cursorRafId) { cancelAnimationFrame(cursorRafId); cursorRafId = null; } }, 150);
-  });
+  }, { passive: true });
 
   function startCursorLoop() {
     const step = () => {
+      cursorDot.style.transform = 'translate3d(' + mouseX + 'px,' + mouseY + 'px,0) translate(-50%,-50%)';
       outlineX += (mouseX - outlineX) * 0.45;
       outlineY += (mouseY - outlineY) * 0.45;
       cursorOutline.style.transform = 'translate3d(' + outlineX + 'px,' + outlineY + 'px,0) translate(-50%,-50%)';
+      /* хвост доехал и мышь замерла - цикл спит до следующего движения */
+      if (performance.now() - lastMoveT > 150 && Math.abs(mouseX - outlineX) + Math.abs(mouseY - outlineY) < 0.5) { cursorRafId = null; return; }
       cursorRafId = requestAnimationFrame(step);
     };
     cursorRafId = requestAnimationFrame(step);
@@ -1265,7 +1268,7 @@ window.addEventListener('scroll', () => {
     else { nav.classList.remove('scrolled', 'nav-hidden'); }
   }
   lastScrollY = currentScrollY;
-  if(scrollProgress) scrollProgress.style.width = (currentScrollY / (document.documentElement.scrollHeight - innerHeight) * 100) + '%';
+  if(scrollProgress) scrollProgress.style.transform = 'scaleX(' + (currentScrollY / (document.documentElement.scrollHeight - innerHeight)) + ')';
 }, {passive:true});
 
 /* Spotlight: подсветку видно только на карте под курсором (::before включается на :hover) -
