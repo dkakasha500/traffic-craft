@@ -7,10 +7,13 @@
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
 n.callMethod.apply(n,arguments):n.queue.push(arguments)};
 if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
+n.queue=[];}(window, document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
+/* скрипт пикселя - лениво: в idle или при первом действии; события копятся в стабе fbq */
+(function(){var done=false;function load(){if(done)return;done=true;var t=document.createElement('script');t.async=true;t.src='https://connect.facebook.net/en_US/fbevents.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(t,s)}
+if('requestIdleCallback' in window)requestIdleCallback(load,{timeout:3000});else setTimeout(load,2500);
+['pointerdown','keydown','touchstart','scroll'].forEach(function(ev){addEventListener(ev,load,{once:true,passive:true})});})();
+
 /* Дедупликация: каждому событию - уникальный eventID (браузер+сервер схлопываются) */
 !function(){var f=window.fbq;function E(n){return String(n||'ev')+'.'+Date.now()+'.'+Math.random().toString(36).slice(2,10);}
 var w=function(){var a=[].slice.call(arguments);if((a[0]==='track'||a[0]==='trackCustom')&&(!(a[3]&&typeof a[3]==='object')||!a[3].eventID)){a[3]=Object.assign({},(a[3]&&typeof a[3]==='object')?a[3]:null,{eventID:E(a[1])});}
