@@ -1256,27 +1256,37 @@ window.addEventListener('scroll', () => {
   if(scrollProgress) scrollProgress.style.width = (currentScrollY / (document.documentElement.scrollHeight - innerHeight) * 100) + '%';
 });
 
+/* Spotlight: подсветку видно только на карте под курсором (::before включается на :hover) -
+   поэтому слушаем mousemove НА КАЖДОЙ карте и меряем только ее (1 замер за кадр вместо
+   геометрии всех карточек страницы - главный источник подлагиваний на десктопе) */
 const cards = document.querySelectorAll('.spotlight-card, .case'), dashWrap = document.getElementById('heroDashWrap');
-let spotlightRAF = null;
-window.addEventListener('mousemove', (e) => {
-  if(window.innerWidth > 960) {
-    if(spotlightRAF) return;
-    spotlightRAF = requestAnimationFrame(() => {
-      cards.forEach(card => {
-        const rect = card.getBoundingClientRect();
-        if(rect.top < window.innerHeight && rect.bottom > 0) {
-          card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
-          card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
-        }
-      });
-      if(dashWrap && window.scrollY < window.innerHeight) {
-        const rect = dashWrap.getBoundingClientRect(), cx = rect.width/2, cy = rect.height/2;
-        dashWrap.style.transform = `perspective(1000px) rotateX(${((e.clientY - rect.top - cy) / cy) * -6}deg) rotateY(${((e.clientX - rect.left - cx) / cx) * 6}deg)`;
-      }
-      spotlightRAF = null;
+if (window.matchMedia && matchMedia('(hover: hover)').matches) {
+  let spotRaf = null, spotX = 0, spotY = 0, spotCard = null;
+  cards.forEach(card => card.addEventListener('mousemove', (e) => {
+    spotX = e.clientX; spotY = e.clientY; spotCard = card;
+    if (spotRaf) return;
+    spotRaf = requestAnimationFrame(() => {
+      spotRaf = null;
+      const rect = spotCard.getBoundingClientRect();
+      spotCard.style.setProperty('--mouse-x', (spotX - rect.left) + 'px');
+      spotCard.style.setProperty('--mouse-y', (spotY - rect.top) + 'px');
     });
+  }, { passive: true }));
+  /* параллакс хиро-дашборда - отдельно и только внутри хиро (1 замер за кадр) */
+  const heroEl2 = document.getElementById('hero');
+  if (dashWrap && heroEl2) {
+    let dashRaf = null, dashX = 0, dashY = 0;
+    heroEl2.addEventListener('mousemove', (e) => {
+      dashX = e.clientX; dashY = e.clientY;
+      if (dashRaf) return;
+      dashRaf = requestAnimationFrame(() => {
+        dashRaf = null;
+        const rect = dashWrap.getBoundingClientRect(), cx = rect.width / 2, cy = rect.height / 2;
+        dashWrap.style.transform = `perspective(1000px) rotateX(${((dashY - rect.top - cy) / cy) * -6}deg) rotateY(${((dashX - rect.left - cx) / cx) * 6}deg)`;
+      });
+    }, { passive: true });
   }
-});
+}
 if(dashWrap) dashWrap.addEventListener('mouseleave', () => dashWrap.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`);
 
 const ctaForm = document.getElementById('ctaForm');
@@ -1368,16 +1378,23 @@ if(railEl && !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)
   const railIcos=railEl.querySelectorAll('.principle-ico');
   const CYCLE=3600;
   let railRun=false,railRaf=null,railP=0,railLast=null;
+  /* геометрия меряется ОДИН раз (и на resize), а не 6 замеров каждый кадр */
+  let railGeo=null;
+  const measureRail=()=>{
+    const r=railEl.getBoundingClientRect();
+    railGeo={h:r.height-88,icons:Array.prototype.map.call(railIcos,ic=>{const ir=ic.getBoundingClientRect();return ir.top-r.top+ir.height/2;})};
+  };
+  addEventListener('resize',()=>{railGeo=null;},{passive:true});
   /* ховер: энергия кратчайшим путем стягивается в выбранную иконку, впитывается
      и замирает; после увода курсора - вытекает из нее и продолжает путь */
-  let hoverIco=null,absorbed=false;
+  let hoverIdx=-1,absorbed=false;
   const railStep=now=>{
     railRaf=null;
     const dt=railLast==null?16:Math.min(now-railLast,50);railLast=now;
-    const r=railEl.getBoundingClientRect(),h=r.height-88;
-    if(hoverIco){
-      const ir=hoverIco.getBoundingClientRect();
-      const tp=Math.max(0,Math.min(1,(ir.top-r.top+ir.height/2-44)/h));
+    if(!railGeo)measureRail();
+    const h=railGeo.h;
+    if(hoverIdx>=0){
+      const tp=Math.max(0,Math.min(1,(railGeo.icons[hoverIdx]-44)/h));
       if(absorbed){ railP=tp; }
       else{
         const dir=(tp-railP>=0)?1:-1;
@@ -1389,15 +1406,14 @@ if(railEl && !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)
     }
     const y=44+railP*h;
     railFlow.style.transform='translateY('+(y-48)+'px)';
-    railFlow.style.opacity=absorbed?0:(hoverIco?1:Math.min(1,Math.min(railP,1-railP)*7));
-    railIcos.forEach(ic=>{const ir=ic.getBoundingClientRect();const c=ir.top-r.top+ir.height/2;ic.classList.toggle('near',!absorbed&&Math.abs(c-y)<34)});
+    railFlow.style.opacity=absorbed?0:(hoverIdx>=0?1:Math.min(1,Math.min(railP,1-railP)*7));
+    railIcos.forEach((ic,i)=>{ic.classList.toggle('near',!absorbed&&Math.abs(railGeo.icons[i]-y)<34)});
     if(railRun)railRaf=requestAnimationFrame(railStep);
   };
   if(window.matchMedia&&matchMedia('(hover: hover)').matches){
-    railEl.querySelectorAll('.principle-item').forEach(it=>{
-      const ic=it.querySelector('.principle-ico');
-      it.addEventListener('mouseenter',()=>{hoverIco=ic;absorbed=false;});
-      it.addEventListener('mouseleave',()=>{if(hoverIco===ic){hoverIco=null;absorbed=false;}});
+    railEl.querySelectorAll('.principle-item').forEach((it,idx)=>{
+      it.addEventListener('mouseenter',()=>{hoverIdx=idx;absorbed=false;});
+      it.addEventListener('mouseleave',()=>{if(hoverIdx===idx){hoverIdx=-1;absorbed=false;}});
     });
   }
   new IntersectionObserver(es=>{es.forEach(x=>{
@@ -1613,12 +1629,15 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
   }
   function drag(fromPct, toPct, cfg, src, dur, done){
     knobEl.classList.add('drag'); cur.classList.add('tap');
+    /* геометрия трека меряется один раз на тягу, а не каждый кадр */
+    const dR = demo.getBoundingClientRect(), tR = trackEl.getBoundingClientRect();
+    const kx = pct => tR.left - dR.left + tR.width * pct / 100, ky = tR.top - dR.top + tR.height / 2;
     const t0 = performance.now();
     const step = now => {
       const p = Math.min((now - t0) / dur, 1), e = ease(p);
       const pct = fromPct + (toPct - fromPct) * e;
       barTo(pct);
-      const k = knobPos(pct); place(k.x, k.y);
+      place(kx(pct), ky);
       const ratio = 0.25 + 0.75 * e;
       budgetEl.textContent = moneyB(cfg, ratio);
       tiles(cfg, src, ratio); /* расчет обновляется сразу - как в реальном калькуляторе */
