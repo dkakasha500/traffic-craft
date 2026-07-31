@@ -215,6 +215,7 @@ h1{font-size:clamp(25px,3.6vw,38px);font-weight:700;letter-spacing:-.03em;line-h
 /* долларовая приписка - в одну строку с пилюлей чека */
 .check-usd{display:inline-block;font-size:12px;color:var(--txt3);margin-left:10px;vertical-align:middle}
 .check-usd[hidden]{display:none}
+.check-warn{margin-top:7px;font-size:11.5px;line-height:1.45;color:#d9b64a}
 /* без системных стрелочек у числового поля - минимализм, ввод с клавиатуры */
 .check-input::-webkit-inner-spin-button,.check-input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
 .check-input{-moz-appearance:textfield;appearance:textfield}
@@ -652,6 +653,7 @@ html.js-cursor input::-webkit-inner-spin-button,html.js-cursor input::-webkit-ou
     <div class="step">
       <div class="check-box" title="Выручка с пациента за курс, а не цена процедуры. Можно поправить."><span class="check-lbl">Средний чек:</span><span class="cur" id="checkCur">$</span><input type="number" id="check" class="check-input" min="1" step="10" inputmode="numeric" aria-label="Средний чек - выручка с одного оплатившего пациента за курс"></div>
       <div class="check-usd" id="checkUsd" hidden></div>
+      <div class="check-warn" id="checkWarn" hidden>Чек сильно выше типового для этой услуги - конверсия в продажу будет ниже, прогноз оптимистичен.</div>
     </div>
   </div>
 
@@ -1490,6 +1492,12 @@ function update(){
   if(document.activeElement !== checkEl) checkEl.value = Math.round(r.check * cc.rate);
   var cu = document.getElementById('checkUsd');
   if(cu){ cu.hidden = (cc === CUR_USD); if(cc !== CUR_USD) cu.textContent = '≈ ' + fmtMoneyUsd(r.check); }
+  /* ручной чек в разы выше типового: конверсии модели к нему неприменимы - честно предупреждаем */
+  var cwEl = document.getElementById('checkWarn');
+  if(cwEl){
+    var autoR = state.checkOverride > 0 ? tcCalc(Object.assign({}, state, { checkOverride: 0 }), DATA) : null;
+    cwEl.hidden = !(autoR && r.check > autoR.check * 2.5);
+  }
 
   /* вырожденные диапазоны на малых бюджетах: '2-2' -> '~2', '0-0' -> '<1'
      (продажи дробные, 0.3 продажи в месяц = продажа раз в 3 месяца - честнее '<1', чем ноль) */
