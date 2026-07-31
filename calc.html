@@ -76,7 +76,7 @@ button{font-family:inherit}
 .presets{margin-top:24px}
 .presets-label{font-size:13.5px;color:var(--txt);margin-bottom:11px;font-weight:500}
 .presets-row{display:flex;gap:8px;flex-wrap:wrap}
-.preset-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:14px;font-size:14px;font-weight:600;color:var(--txt);background:var(--bg2);border:1px solid var(--brd);cursor:pointer;transition:all .25s;font-family:inherit}
+.preset-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:14px;font-size:14px;font-weight:600;color:var(--txt);background:var(--bg2);border:1px solid var(--brd);cursor:pointer;transition:color .25s,background-color .25s,border-color .25s,box-shadow .25s,transform .25s;font-family:inherit}
 @media(hover:hover){.preset-btn:hover{border-color:var(--accent-mid);color:var(--white);transform:translateY(-1px)}}
 .preset-btn:active{transform:scale(.98)}
 .preset-btn .pdot{width:8px;height:8px;border-radius:50%;flex-shrink:0;box-shadow:0 0 6px currentColor}
@@ -128,7 +128,7 @@ button{font-family:inherit}
 @media(max-width:480px){.logo{font-size:20px;gap:10px}.logo-mark{width:36px;height:36px}}
 /* меню шапки - как на главной */
 .nav-links{display:flex;gap:32px;list-style:none;margin:0;padding:0}
-.nav-links a{color:var(--txt);font-size:14px;font-weight:500;transition:all .3s;position:relative;padding-bottom:4px}
+.nav-links a{color:var(--txt);font-size:14px;font-weight:500;transition:color .3s;position:relative;padding-bottom:4px}
 .nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1px;background:var(--white);transition:width .3s}
 @media(hover:hover){.nav-links a:hover{color:var(--white)}}
 .nav-links a.active{color:var(--white)}
@@ -187,7 +187,7 @@ h1{font-size:clamp(25px,3.6vw,38px);font-weight:700;letter-spacing:-.03em;line-h
 /* услуги - компактные теги по содержимому, как в демо (не полосы на всю ширину) */
 #dirChips{display:flex;flex-wrap:wrap;gap:8px}
 /* чипы демо-размера: компактные пилюли; на тач-экранах чуть крупнее (см. медиа ниже) */
-.chip{min-height:36px;padding:7px 15px;border-radius:100px;font-size:13.5px;font-weight:600;color:var(--txt);background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);cursor:pointer;transition:all .25s;user-select:none;display:inline-flex;align-items:center;gap:6px}
+.chip{min-height:36px;padding:7px 15px;border-radius:100px;font-size:13.5px;font-weight:600;color:var(--txt);background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);cursor:pointer;transition:color .25s,background-color .25s,border-color .25s,box-shadow .25s,transform .25s;user-select:none;display:inline-flex;align-items:center;gap:6px}
 @media(hover:none){.chip{min-height:40px;padding:9px 16px;font-size:14px}}
 @media(hover:hover){.chip:hover{border-color:var(--brd2);color:var(--white)}}
 .chip.on{background:rgba(14,224,207,.12);border-color:var(--accent);color:var(--white);box-shadow:inset 0 0 0 1px var(--accent-mid),0 0 14px rgba(14,224,207,.14)}
@@ -212,7 +212,7 @@ h1{font-size:clamp(25px,3.6vw,38px);font-weight:700;letter-spacing:-.03em;line-h
 .budget-usd{font-size:12px;color:var(--txt3);white-space:nowrap}
 /* мини-переключатель валюты: местная / доллар */
 .cur-toggle{display:inline-flex;border:1px solid rgba(255,255,255,.1);border-radius:100px;overflow:hidden}
-.cur-toggle button{font-size:10.5px;font-weight:700;padding:3px 10px;background:transparent;border:none;color:var(--txt3);cursor:pointer;font-family:inherit;transition:all .2s}
+.cur-toggle button{font-size:10.5px;font-weight:700;padding:3px 10px;background:transparent;border:none;color:var(--txt3);cursor:pointer;font-family:inherit;transition:color .2s,background-color .2s}
 .cur-toggle button.on{background:rgba(14,224,207,.12);color:var(--accent)}
 .res-title .cur-toggle{margin-left:auto;letter-spacing:normal;text-transform:none}
 /* долларовая приписка - в одну строку с пилюлей чека */
@@ -224,7 +224,7 @@ h1{font-size:clamp(25px,3.6vw,38px);font-weight:700;letter-spacing:-.03em;line-h
 .check-input{-moz-appearance:textfield;appearance:textfield}
 .budget-val:hover{border-bottom-color:var(--accent)}
 .budget-presets{display:flex;gap:6px;flex-wrap:wrap}
-.preset{min-height:36px;padding:6px 13px;border-radius:100px;font-size:13px;font-weight:600;color:var(--txt3);background:transparent;border:1px dashed rgba(255,255,255,.16);cursor:pointer;transition:all .25s}
+.preset{min-height:36px;padding:6px 13px;border-radius:100px;font-size:13px;font-weight:600;color:var(--txt3);background:transparent;border:1px dashed rgba(255,255,255,.16);cursor:pointer;transition:color .25s,background-color .25s,border-color .25s}
 @media(hover:hover){.preset:hover{color:var(--white);border-color:var(--brd2)}}
 .preset.on{color:var(--accent);border-color:var(--accent-mid);background:var(--accent-soft)}
 .slider-wrap{position:relative;padding:6px 0 2px}
