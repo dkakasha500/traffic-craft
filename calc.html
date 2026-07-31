@@ -573,9 +573,7 @@ html.js-cursor input::-webkit-inner-spin-button,html.js-cursor input::-webkit-ou
 /* Фоновая вкладка не жжет батарею: все вечные анимации на паузе, пока вкладку не видно
    (Zen/Firefox продолжают компоситить анимации скрытых вкладок) */
 .tab-hidden *,.tab-hidden *::before,.tab-hidden *::after{animation-play-state:paused !important}
-/* низ страницы не рендерится, пока не доскроллили */
-.cta{content-visibility:auto;contain-intrinsic-size:auto 700px}
-.footer{content-visibility:auto;contain-intrinsic-size:auto 500px}
+/* content-visibility на низ снят: кнопка 'Получить разбор' прыгает к #cta - якорь должен попадать точно */
 </style>
 </head>
 <body>
