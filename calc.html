@@ -1414,6 +1414,7 @@ function applyBudgetRange(){
   renderPresets();
 }
 function renderPresets(){
+  return;   /* пресеты скрыты дизайном (.budget-presets display:none) - рендер не нужен; вернуть: убрать этот return */
   var el = document.getElementById('budgetPresets'); el.innerHTML = '';
   var cfg = budgetCfg(state.country);
   /* 4 удобных значения внутри диапазона страны */
@@ -1551,13 +1552,6 @@ function update(){
   var geoName = cObj.name + ((cObj.regions && cObj.regions[state.usRegion] && state.usRegion !== 'avg') ? ' · ' + cObj.regions[state.usRegion].name : '');
   var audTag = (state.aud !== 'all' && cObj.aud && cObj.aud[state.aud]) ? ' · ' + cObj.aud[state.aud].name : '';
   document.getElementById('resTag').innerHTML = flagHtml(state.country) + geoName + audTag + ' · ' + DATA.niches[state.niche].name + ' · ' + dirNames;
-  /* печатная шапка (видна только в PDF) */
-  /* шапка печати/PDF: сводка конфигурации со страной, регионом, нишей, направлениями, бюджетом, чеком и сценарием */
-  document.getElementById('printHead').innerHTML =
-    '<b>Traffic Craft - прогноз рекламы для клиники</b><br>' +
-    geoName + audTag + ' · ' + DATA.niches[state.niche].name + ' · ' + dirNames + '<br>' +
-    'Бюджет ' + fmtMoney(state.budget) + '/мес' + usdNote(state.budget) + ' · средний чек ' + fmtMoney(r.check) + usdNote(r.check) +
-    ' · сценарий «' + DATA.scenarios[state.scenario].name + '» · traffic-craft.com/calc';
   /* критичное предупреждение о выжигании: видно всегда, когда бюджет выше потолка рынка */
   var capW = state.aud === 'all' ? 'потолка рынка' : 'потолка этой аудитории';
   var resBurn = document.getElementById('resBurn');
@@ -1593,10 +1587,35 @@ function update(){
     }
   }
   renderRecBudget();
-  updateWa();
+  scheduleTail();
   if(calcInteracted) trackConfigured();
   saveHash();
 }
+
+/* Тяжелый хвост update: WhatsApp-ссылка (вторая модель + encodeURIComponent) и печатная
+   шапка не нужны на каждом кадре слайдера - собираем через 200мс тишины.
+   Первый вызов немедленный (ссылки готовы с загрузки), перед печатью - принудительно. */
+var tailTimer = null, tailInit = false;
+function heavyTail(){
+  var r = tcCalc(state, DATA);
+  if(!r) return;
+  var dirNames = state.dirs.map(function(k){ return DATA.niches[state.niche].dirs[k].name; }).join(' + ');
+  var cObj = DATA.countries[state.country];
+  var geoName = cObj.name + ((cObj.regions && cObj.regions[state.usRegion] && state.usRegion !== 'avg') ? ' · ' + cObj.regions[state.usRegion].name : '');
+  var audTag = (state.aud !== 'all' && cObj.aud && cObj.aud[state.aud]) ? ' · ' + cObj.aud[state.aud].name : '';
+  document.getElementById('printHead').innerHTML =
+    '<b>Traffic Craft - прогноз рекламы для клиники</b><br>' +
+    geoName + audTag + ' · ' + DATA.niches[state.niche].name + ' · ' + dirNames + '<br>' +
+    'Бюджет ' + fmtMoney(state.budget) + '/мес' + usdNote(state.budget) + ' · средний чек ' + fmtMoney(r.check) + usdNote(r.check) +
+    ' · сценарий «' + DATA.scenarios[state.scenario].name + '» · traffic-craft.com/calc';
+  updateWa();
+}
+function scheduleTail(){
+  if(!tailInit){ tailInit = true; heavyTail(); return; }
+  clearTimeout(tailTimer);
+  tailTimer = setTimeout(heavyTail, 200);
+}
+window.addEventListener('beforeprint', heavyTail);
 
 /* ---------- ссылка на расчет + запоминание между визитами ---------- */
 var STORAGE_KEY = 'tc_calc_v1';

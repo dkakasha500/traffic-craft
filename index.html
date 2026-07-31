@@ -1261,14 +1261,19 @@ if (window.matchMedia("(pointer: fine)").matches && cursorDot && cursorOutline) 
 
 const nav = document.getElementById('nav'), scrollProgress = document.getElementById('scrollProgress');
 let lastScrollY = window.scrollY;
+let navScrollRaf = null;
 window.addEventListener('scroll', () => {
-  const currentScrollY = window.scrollY;
-  if(nav) {
-    if(currentScrollY > 60) { nav.classList.add('scrolled'); if (window.innerWidth > 960 && currentScrollY > lastScrollY && currentScrollY > 300) { nav.classList.add('nav-hidden'); } else { nav.classList.remove('nav-hidden'); } }
-    else { nav.classList.remove('scrolled', 'nav-hidden'); }
-  }
-  lastScrollY = currentScrollY;
-  if(scrollProgress) scrollProgress.style.transform = 'scaleX(' + (currentScrollY / (document.documentElement.scrollHeight - innerHeight)) + ')';
+  if (navScrollRaf) return;
+  navScrollRaf = requestAnimationFrame(() => {
+    navScrollRaf = null;
+    const currentScrollY = window.scrollY;
+    if(nav) {
+      if(currentScrollY > 60) { nav.classList.add('scrolled'); if (window.innerWidth > 960 && currentScrollY > lastScrollY && currentScrollY > 300) { nav.classList.add('nav-hidden'); } else { nav.classList.remove('nav-hidden'); } }
+      else { nav.classList.remove('scrolled', 'nav-hidden'); }
+    }
+    lastScrollY = currentScrollY;
+    if(scrollProgress) scrollProgress.style.transform = 'scaleX(' + (currentScrollY / (document.documentElement.scrollHeight - innerHeight)) + ')';
+  });
 }, {passive:true});
 
 /* Spotlight: подсветку видно только на карте под курсором (::before включается на :hover) -
