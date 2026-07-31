@@ -116,7 +116,7 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 .scroll-progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg, var(--accent), var(--blue));z-index:1001;width:0%;pointer-events:none;box-shadow:0 0 12px var(--accent)}
 
 .nav{position:fixed;top:0;left:0;right:0;z-index:999;padding:22px 0;padding-top:calc(22px + env(safe-area-inset-top));transition:transform .4s cubic-bezier(.22,1,.36,1), background .4s, padding .4s, border .4s}
-.nav.scrolled{padding:14px 0;padding-top:calc(14px + env(safe-area-inset-top));background:rgba(0, 0, 0, .74);backdrop-filter:blur(10px)}
+.nav.scrolled{padding:14px 0;padding-top:calc(14px + env(safe-area-inset-top));background:rgba(0, 0, 0, .86)}
 .nav.nav-hidden{transform:translateY(-100%)}
 .nav-in{display:flex;align-items:center;justify-content:space-between}
 
@@ -164,7 +164,7 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 .hero{min-height:100vh; min-height:100svh; display:flex;align-items:center;padding:110px 0 60px;position:relative;overflow:hidden;background:radial-gradient(ellipse at 50% -20%, rgba(14,224,207,0.1) 0%, var(--bg) 60%)}
 .hero-glow-1{position:absolute;top:-10%;left:-20%;width:900px;height:900px;background:radial-gradient(circle,rgba(59,130,246,.12) 0%,transparent 50%);pointer-events:none;animation:floatOrb 15s ease-in-out infinite alternate;will-change:transform}
 .hero-glow-2{position:absolute;bottom:-15%;right:-15%;width:1000px;height:1000px;background:radial-gradient(circle,rgba(14,224,207,.08) 0%,transparent 50%);pointer-events:none;animation:floatOrb 20s ease-in-out infinite alternate-reverse;will-change:transform}
-@keyframes floatOrb { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(50px, 50px) scale(1.1); } }
+@keyframes floatOrb { 0% { transform: translate(0, 0); } 100% { transform: translate(50px, 50px); } }
 .hero-grid-bg {position:absolute;inset:0;background-image:linear-gradient(var(--brd) 1px, transparent 1px), linear-gradient(90deg, var(--brd) 1px, transparent 1px);background-size:60px 60px;opacity:0.3;mask-image:radial-gradient(circle at center, black, transparent 80%);-webkit-mask-image:radial-gradient(circle at center, black, transparent 80%);pointer-events:none}
 
 .hero-layout{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center;position:relative;z-index:2;perspective:1000px}
@@ -757,6 +757,8 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 /* Фоновая вкладка не жжет батарею: все вечные анимации на паузе, пока вкладку не видно
    (Zen/Firefox продолжают компоситить анимации скрытых вкладок) */
 .tab-hidden *,.tab-hidden *::before,.tab-hidden *::after{animation-play-state:paused !important}
+.hero.offstage .hero-glow-1,.hero.offstage .hero-glow-2{animation-play-state:paused}
+.marquee-wrap.mq-paused .marquee-track{animation-play-state:paused}
 </style>
 </head>
 <body>
@@ -1462,7 +1464,10 @@ window.addEventListener('scroll',()=>{
 const heroEl=document.getElementById('hero');
 const animBorder=document.querySelector('.animated-border');
 const noiseEl=document.querySelector('.noise-overlay');
-if(heroEl&&animBorder){const hO=new IntersectionObserver(e=>{if(!e[0].isIntersecting){animBorder.classList.add('paused');if(noiseEl)noiseEl.style.display='none'}else{animBorder.classList.remove('paused');if(noiseEl)noiseEl.style.display=''}},{threshold:0});hO.observe(heroEl);}
+if(heroEl&&animBorder){const hO=new IntersectionObserver(e=>{if(!e[0].isIntersecting){animBorder.classList.add('paused');heroEl.classList.add('offstage');if(noiseEl)noiseEl.style.display='none'}else{animBorder.classList.remove('paused');heroEl.classList.remove('offstage');if(noiseEl)noiseEl.style.display=''}},{threshold:0});hO.observe(heroEl);}
+/* бегущая строка ниш: пауза, когда ее не видно */
+const mqWrap=document.querySelector('.marquee-wrap');
+if(mqWrap&&'IntersectionObserver' in window){new IntersectionObserver(e=>{mqWrap.classList.toggle('mq-paused',!e[0].isIntersecting)},{threshold:0}).observe(mqWrap);}
 
 document.querySelectorAll('.case').forEach(c=>{c.style.cursor='pointer';c.addEventListener('click',()=>{document.getElementById('cta').scrollIntoView({behavior:'smooth'})})});
 
