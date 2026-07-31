@@ -235,7 +235,9 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 .stats-sub-item{font-size:13px;color:var(--txt2);display:flex;align-items:center;gap:8px}
 .stats-sub-item svg{width:16px;height:16px;stroke:var(--accent);stroke-width:1.5;fill:none;opacity:.8}
 
-.marquee-wrap{overflow:hidden;padding:32px 0;border-top:1px solid var(--brd);border-bottom:1px solid var(--brd);background:var(--bg2);margin-top:var(--sec-pad-sm)}
+/* contain: перерисовка бегущей ленты заперта внутри полосы - не инвалидирует соседей
+   (критично для софтверного рендера Firefox/Zen) */
+.marquee-wrap{overflow:hidden;padding:32px 0;border-top:1px solid var(--brd);border-bottom:1px solid var(--brd);background:var(--bg2);margin-top:var(--sec-pad-sm);contain:layout paint style}
 .marquee-track{display:flex;gap:64px;width:max-content;animation:marquee 12.5s linear infinite;will-change:transform}
 @media(hover:hover){.marquee-wrap:hover .marquee-track{animation-play-state:paused}}
 .marquee-item{display:flex;align-items:center;gap:12px;font-size:15px;color:var(--txt);font-weight:500;white-space:nowrap}
