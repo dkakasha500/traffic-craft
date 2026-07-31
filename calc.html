@@ -96,7 +96,7 @@ button{font-family:inherit}
 @media print{.presets{display:none}}
 
 /* ===== двухколоночный layout: настройки слева, результат справа ===== */
-.layout{display:grid;grid-template-columns:1fr 420px;gap:20px;align-items:start;margin-top:20px}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:20px;align-items:start;margin-top:20px}   /* minmax(0,..): длинные nowrap-строки не распирают колонку */
 .left-col{display:flex;flex-direction:column;gap:16px}
 .layout .card{margin-top:0}
 .layout .res-border{margin-top:0;position:sticky;top:16px}
@@ -111,7 +111,7 @@ button{font-family:inherit}
 .ci-list li::before{content:'';position:absolute;left:0;top:3px;width:18px;height:18px;border-radius:50%;background:var(--accent-soft);border:1px solid var(--accent-mid)}
 .ci-list li::after{content:'';position:absolute;left:6px;top:8px;width:6px;height:3px;border-left:2px solid var(--accent);border-bottom:2px solid var(--accent);transform:rotate(-45deg)}
 @media(max-width:999px){
-  .layout{grid-template-columns:1fr;gap:0}
+  .layout{grid-template-columns:minmax(0,1fr);gap:0}
   .left-col{gap:0}
   .layout .card{margin-top:26px}
   .layout .res-border{position:static;margin-top:26px}
@@ -205,7 +205,7 @@ h1{font-size:clamp(25px,3.6vw,38px);font-weight:700;letter-spacing:-.03em;line-h
 
 /* ===== бюджет: слайдер + пресеты ===== */
 /* бюджет как в демо: лейбл слева, сумма справа, трек под ними, пресеты ниже */
-.budget-top{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.budget-top{display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap}
 .b-label{font-size:12.5px;color:var(--txt2);font-weight:500}
 .budget-val{margin-left:auto;font-weight:700;font-size:16.5px;color:var(--heading);letter-spacing:-.01em;cursor:text;border-bottom:1px dashed var(--brd2);white-space:nowrap}
 .budget-presets{margin-top:10px}
