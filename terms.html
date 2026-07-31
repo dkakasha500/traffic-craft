@@ -92,7 +92,7 @@ html.js-cursor *:focus { cursor: none !important; }
 .cursor-dot { width: 6px; height: 6px; background: var(--accent); transition: opacity 0.15s, width 0.15s, height 0.15s; box-shadow: 0 0 10px var(--accent); }
 .cursor-outline { width: 40px; height: 40px; border: 1px solid rgba(14,224,207,0.5); transition: width 0.3s cubic-bezier(.22,1,.36,1), height 0.3s cubic-bezier(.22,1,.36,1), background 0.3s, border-color 0.3s, opacity 0.3s; }
 body.cursor-hover .cursor-dot { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
-body.cursor-hover .cursor-outline { width: 64px; height: 64px; background: rgba(14,224,207,0.1); border-color: var(--accent); -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px); mix-blend-mode: screen; }
+body.cursor-hover .cursor-outline { width: 64px; height: 64px; background: rgba(14,224,207,0.1); border-color: var(--accent); }
 body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 !important; }
 
 @media(min-width:768px){
@@ -100,6 +100,8 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
   .content{padding:40px 0 80px}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important}}
+/* Фоновая вкладка не жжет батарею: вечные анимации на паузе, пока вкладку не видно */
+.tab-hidden *,.tab-hidden *::before,.tab-hidden *::after{animation-play-state:paused !important}
 </style>
 </head>
 <body>
@@ -384,6 +386,11 @@ if (window.matchMedia("(pointer: fine)").matches && cursorDot && cursorOutline) 
     if(fbp) localStorage.setItem('_fbp', fbp); else fbp = localStorage.getItem('_fbp');
   } catch(e){}
 })();
+</script>
+<script>/* пауза вечных анимаций в фоновой вкладке */
+document.addEventListener('visibilitychange', function(){
+  document.documentElement.classList.toggle('tab-hidden', document.hidden);
+});
 </script>
 </body>
 </html>
