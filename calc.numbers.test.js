@@ -115,6 +115,22 @@ const g = id => (d.getElementById(id) || {}).textContent || '';
       checked++; if (all.errs.length) fails.push({ cfg: 'edge-us-' + reg, errs: all.errs });
     }
 
+    /* гонка: смена страны при фокусе в чеке - после blur поле догоняет расчет новой страны */
+    w.location.hash = '#c=ae&n=cosmo&d=inject&b=5000&s=base';
+    w.dispatchEvent(new w.Event('hashchange'));
+    await sleep(140);
+    { const errs = [];
+      const chk2 = d.getElementById('check');
+      chk2.focus();
+      Array.from(d.getElementById('countryChips').children).find(b => b.textContent.includes('Израиль')).click();
+      await sleep(80);
+      chk2.blur(); d.getElementById('budget').focus();
+      await sleep(80);
+      const rIl = w.tcCalc(w.state, w.DATA);
+      const want = String(Math.round(rIl.check * 3.05));
+      if (chk2.value !== want) errs.push('чек не догнал страну после blur: поле "' + chk2.value + '" vs ' + want);
+      checked++; if (errs.length) fails.push({ cfg: 'edge-чек-фокус-гонка', errs }); }
+
     /* рекламный пресет без d=: смена ниши не должна оставлять чужие дирки (был мертвый экран) */
     w.location.hash = '#c=ae&n=cosmo&b=10000';
     w.dispatchEvent(new w.Event('hashchange'));

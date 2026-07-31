@@ -458,7 +458,7 @@ html.js-cursor input::-webkit-inner-spin-button,html.js-cursor input::-webkit-ou
   :root{--bg:#fff;--bg2:#fff;--white:#111;--dark:#fff;--accent:#0a8f85;--accent-soft:#e6f7f5;--accent-mid:#9adcd6;--gold:#8a6d00;--green:#1a7f37;--txt:#333;--txt2:#555;--txt3:#777;--heading:#111;--brd:#ccc;--brd2:#aaa;--glass:#f6f6f6}
   html,body{background:#fff !important;padding-bottom:0 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   /* прячем интерактив и декор: ввод суммируется в шапке печати, свечения и фоны не печатаем */
-  .nav,.noise,.bg-grid,.bg-orb1,.bg-orb2,.head,.presets,.calc-includes,.card,.sticky-res,.cta,.footer,.share,.res-go,.scen,.scen-hint,.budget-presets,.assume summary{display:none !important}
+  .nav,.noise,.bg-grid,.bg-orb1,.bg-orb2,.head,.presets,.calc-includes,.card,.sticky-res,.cta,.footer,.share,.res-go,.scen,.scen-hint,.budget-presets,.cur-toggle,.assume summary{display:none !important}
   .res-border{animation:none;opacity:1;transform:none}
   .layout{display:block;margin-top:0}
   .res-border{padding:0;box-shadow:none;position:static;margin:0;background:none}
@@ -1671,6 +1671,9 @@ function loadState(){
       if(isUsRegion(saved.usRegion)) state.usRegion = saved.usRegion;
       if(isAud(state.country, saved.aud)) state.aud = saved.aud;
       if(saved.curMode === 'usd') state.curMode = 'usd';
+      /* как и в applyParsed: ниша восстановилась, а дирки могли не пройти валидацию -
+         чужие дирки ломали расчет в null (мертвый экран) */
+      if(!validDirs(state.dirs, state.niche)) state.dirs = [Object.keys(DATA.niches[state.niche].dirs)[0]];
       return;                                                 /* 3. память прошлого визита */
     }
   } catch(e){}
@@ -1745,7 +1748,10 @@ document.getElementById('check').addEventListener('keydown', function(e){
 });
 document.getElementById('check').addEventListener('blur', function(){
   var v = parseInt(this.value, 10);
-  if(!(v > 0 && Math.round(v / curCfg().rate) >= LIMITS.checkMin)){ state.checkOverride = 0; update(); }
+  if(!(v > 0 && Math.round(v / curCfg().rate) >= LIMITS.checkMin)) state.checkOverride = 0;
+  /* update всегда: пока поле в фокусе, его не перезаписывают - если в этот момент сменили
+     страну/валюту, после ухода фокуса поле должно догнать расчет (иначе висят чужие цифры) */
+  update();
 });
 function copyFallback(text){
   var t = document.createElement('textarea');
