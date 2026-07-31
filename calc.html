@@ -448,7 +448,9 @@ html.js-cursor input::-webkit-inner-spin-button,html.js-cursor input::-webkit-ou
 .res-border{animation-delay:.22s}
 .cta{animation-delay:.34s}
 @keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
-.noise{position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.03;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+/* без mix-blend-mode: в Firefox блендинг fixed-оверлея поверх всего пересчитывается
+   на каждый кадр анимаций под ним; на 3% непрозрачности разницы не видно */
+.noise{position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 
 /* ===== печать / сохранение в PDF ===== */
 .print-head{display:none}
@@ -496,7 +498,7 @@ html.js-cursor input::-webkit-inner-spin-button,html.js-cursor input::-webkit-ou
 }
 
 /* ===== sticky-бар результата (мобайл) ===== */
-.sticky-res{position:fixed;left:0;right:0;bottom:0;z-index:50;background:rgba(5,8,10,.92);backdrop-filter:blur(18px) saturate(1.6);border-top:1px solid var(--accent-mid);padding:10px 16px calc(10px + env(safe-area-inset-bottom));display:none;align-items:center;justify-content:space-between;gap:12px;transform:translateY(110%);transition:transform .35s cubic-bezier(.22,1,.36,1)}
+.sticky-res{position:fixed;left:0;right:0;bottom:0;z-index:50;background:rgba(5,8,10,.96);border-top:1px solid var(--accent-mid);padding:10px 16px calc(10px + env(safe-area-inset-bottom));display:none;align-items:center;justify-content:space-between;gap:12px;transform:translateY(110%);transition:transform .35s cubic-bezier(.22,1,.36,1)}
 .sticky-res.show{transform:translateY(0)}
 .sticky-nums{display:flex;align-items:center;gap:16px;min-width:0;cursor:pointer}
 .sticky-item{line-height:1.2;white-space:nowrap}
