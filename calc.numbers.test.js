@@ -115,6 +115,25 @@ const g = id => (d.getElementById(id) || {}).textContent || '';
       checked++; if (all.errs.length) fails.push({ cfg: 'edge-us-' + reg, errs: all.errs });
     }
 
+    /* рекламный пресет без d=: смена ниши не должна оставлять чужие дирки (был мертвый экран) */
+    w.location.hash = '#c=ae&n=cosmo&b=10000';
+    w.dispatchEvent(new w.Event('hashchange'));
+    await sleep(140);
+    { const errs = [];
+      if (!w.DATA.niches.cosmo.dirs[w.state.dirs[0]]) errs.push('пресет без d=: дирки чужие: ' + w.state.dirs);
+      if (g('rLeads') === '-') errs.push('пресет без d=: мертвая плитка');
+      const all = checkAll(); errs.push(...all.errs);
+      checked++; if (errs.length) fails.push({ cfg: 'edge-preset-no-d', errs }); }
+
+    /* шаринг большого бюджета США: 45 000 не должен резаться глобальным клампом */
+    w.location.hash = '#c=us&n=dental&d=implants&b=45000&s=base';
+    w.dispatchEvent(new w.Event('hashchange'));
+    await sleep(140);
+    { const errs = [];
+      if (w.state.budget !== 45000) errs.push('бюджет США порезан: ' + w.state.budget);
+      const all = checkAll(); errs.push(...all.errs);
+      checked++; if (errs.length) fails.push({ cfg: 'edge-us-45k', errs }); }
+
     /* сегменты аудитории: DOM сходится с моделью + механика множителей */
     for (const [c, a] of [['il','ru'], ['il','loc'], ['ae','ex'], ['ae','loc'], ['es','ru'], ['us','ru']]) {
       w.location.hash = '#c=' + c + '&n=dental&d=implants&b=1000&s=base&a=' + a;

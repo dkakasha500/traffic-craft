@@ -1116,7 +1116,9 @@ function trackEvent(name, extra, opts){
    Любое значение из hash/query/localStorage/полей проходит через
    эти проверки - никаких сырых чисел или чужих ключей в state.
    ============================================================ */
-var LIMITS = { budgetMin: 500, budgetMax: 30000, checkMin: 1, checkMax: 100000, maxDirs: 20 };
+/* budgetMax - защитный колпак ПО ВСЕМ странам (США до 52 500): точный кламп под страну
+   делает applyBudgetRange. 30 000 тут резал шаринг больших бюджетов США */
+var LIMITS = { budgetMin: 500, budgetMax: 55000, checkMin: 1, checkMax: 100000, maxDirs: 20 };
 function toInt(v){ var n = parseInt(v, 10); return isFinite(n) ? n : NaN; }
 function clampInt(v, min, max){ var n = toInt(v); return isNaN(n) ? NaN : Math.min(Math.max(n, min), max); }
 function isCountry(k){ return !!(k && DATA.countries[k]); }
@@ -1630,6 +1632,9 @@ function applyParsed(h){
   state._audCand = null;
   /* направления - после ниши, валидируем под выбранную нишу */
   each(function(k, v){ if(k === 'd'){ var ds = validDirs(v.split('.'), state.niche); if(ds) state.dirs = ds; } });
+  /* ниша могла смениться БЕЗ d= (рекламные пресеты /calc?c=ae&n=cosmo&b=10000):
+     чужие дирки ломали расчет в null - ставим первый дир ниши */
+  if(!validDirs(state.dirs, state.niche)) state.dirs = [Object.keys(DATA.niches[state.niche].dirs)[0]];
 }
 /* страна по часовому поясу браузера - тихий умный дефолт для первого визита */
 function smartCountry(){
