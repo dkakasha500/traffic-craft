@@ -567,6 +567,9 @@ html.js-cursor input::-webkit-inner-spin-button,html.js-cursor input::-webkit-ou
   .metric .m-lbl{font-size:9.5px}
   .res-summary{font-size:12px}
 }
+/* Фоновая вкладка не жжет батарею: все вечные анимации на паузе, пока вкладку не видно
+   (Zen/Firefox продолжают компоситить анимации скрытых вкладок) */
+.tab-hidden *,.tab-hidden *::before,.tab-hidden *::after{animation-play-state:paused !important}
 </style>
 </head>
 <body>
@@ -2043,6 +2046,11 @@ update();
   window.addEventListener('blur', hideCursor);
   document.addEventListener('visibilitychange', function(){ if (document.hidden) hideCursor(); });
 })();
+</script>
+<script>/* пауза вечных анимаций в фоновой вкладке */
+document.addEventListener('visibilitychange', function(){
+  document.documentElement.classList.toggle('tab-hidden', document.hidden);
+});
 </script>
 </body>
 </html>

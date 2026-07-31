@@ -754,6 +754,9 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 @keyframes ctFlash{0%{border-color:#0ee0cf;background:rgba(14,224,207,.10)}100%{border-color:var(--brd);background:rgba(255,255,255,.02)}}
 @media(prefers-reduced-motion:reduce){.ct-cursor,.ct-knob{display:none}}
 
+/* Фоновая вкладка не жжет батарею: все вечные анимации на паузе, пока вкладку не видно
+   (Zen/Firefox продолжают компоситить анимации скрытых вкладок) */
+.tab-hidden *,.tab-hidden *::before,.tab-hidden *::after{animation-play-state:paused !important}
 </style>
 </head>
 <body>
@@ -1733,15 +1736,29 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
 
   setStatic(CFG[0]);
   place(-40, 40);
+  let demoInView = false;
   if ('IntersectionObserver' in window){
-    new IntersectionObserver(es => { es.some(x => x.isIntersecting) ? start() : stop(); }, { threshold: .3 }).observe(demo);
-  } else { start(); }
+    new IntersectionObserver(es => {
+      demoInView = es.some(x => x.isIntersecting);
+      (demoInView && !document.hidden) ? start() : stop();
+    }, { threshold: .3 }).observe(demo);
+  } else { demoInView = true; start(); }
+  /* фоновая вкладка: таймеры цикла не должны тикать и копиться */
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stop();
+    else if (demoInView) start();
+  });
 
   openBtn.addEventListener('click', () => {
     try { if (typeof fbq === 'function') fbq('trackCustom', 'CalcTeaserClick', { config: CFG[idx].c + '/' + CFG[idx].n + '/' + CFG[idx].aud.key }); } catch(e){}
   });
 })();
 
+</script>
+<script>/* пауза вечных анимаций в фоновой вкладке */
+document.addEventListener('visibilitychange', function(){
+  document.documentElement.classList.toggle('tab-hidden', document.hidden);
+});
 </script>
 </body>
 </html>
