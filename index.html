@@ -1264,7 +1264,7 @@ window.addEventListener('scroll', () => {
   }
   lastScrollY = currentScrollY;
   if(scrollProgress) scrollProgress.style.width = (currentScrollY / (document.documentElement.scrollHeight - innerHeight) * 100) + '%';
-});
+}, {passive:true});
 
 /* Spotlight: подсветку видно только на карте под курсором (::before включается на :hover) -
    поэтому слушаем mousemove НА КАЖДОЙ карте и меряем только ее (1 замер за кадр вместо
@@ -1464,7 +1464,7 @@ const floatSocials=document.querySelector('.floating-socials');
 window.addEventListener('scroll',()=>{
   if(sticky && scrollY>300 && !stickyOn){stickyOn=true; sticky.classList.add('show'); if(floatSocials)floatSocials.style.transform='translateY(-60px)';}
   if(sticky && scrollY<200){sticky.classList.remove('show'); stickyOn=false; if(floatSocials)floatSocials.style.transform='';}
-});
+}, {passive:true});
 
 const heroEl=document.getElementById('hero');
 const animBorder=document.querySelector('.animated-border');
