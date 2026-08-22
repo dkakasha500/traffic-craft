@@ -273,7 +273,6 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
   .page-title .w{opacity:0;transform:translateY(26px) rotate(1.5deg);animation:wordIn .75s cubic-bezier(.22,1,.36,1) forwards}
   .page-title .w:nth-child(2){animation-delay:.1s}
   .page-title .w:nth-child(3){animation-delay:.22s}
-  .hero-txt .s-hint{opacity:0;animation:fadeUp .7s .5s cubic-bezier(.22,1,.36,1) forwards}
 }
 @keyframes wordIn{to{opacity:1;transform:none}}
 .p-body strong{color:var(--heading);font-weight:600}
@@ -292,9 +291,6 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 .cta-card::before{content:'';position:absolute;inset:-60%;background:conic-gradient(from 0deg,transparent 0 308deg,rgba(14,224,207,.08) 324deg,rgba(14,224,207,.65) 344deg,transparent 360deg);animation:pSpin 9s linear infinite}
 .cta-card::after{content:'';position:absolute;inset:1px;border-radius:21px;background:radial-gradient(120% 100% at 18% 0%,rgba(14,224,207,.06),transparent 60%),#050505}
 .cta-card>*{position:relative;z-index:1}
-.s-hint{width:22px;height:34px;border:1px solid var(--brd2);border-radius:12px;margin-top:28px;position:relative;opacity:.8;transition:opacity .4s}
-.s-hint i{position:absolute;left:50%;top:6px;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--accent);box-shadow:0 0 6px rgba(14,224,207,.8);animation:hintDrop 1.8s ease-in-out infinite}
-@keyframes hintDrop{0%{transform:translateY(0);opacity:0}25%,70%{opacity:1}100%{transform:translateY(16px);opacity:0}}
 @media(max-width:760px){.p-photo .ph-corners{display:none}.cta-card{padding:28px 20px 32px}}
 </style>
 </head>
@@ -321,7 +317,6 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
           <a class="h-chip" href="#dmitry"><i></i>Маркетинг</a>
           <a class="h-chip" href="#natali"><i></i>Операционка</a>
         </div>
-        <div class="s-hint" id="sHint" aria-hidden="true"><i></i></div>
       </div>
       <!-- общие фото: внутрь каждого .shot вставить <img src="team/shot-1.jpg" alt="Команда Traffic Craft"> вместо span -->
       <div class="hero-shots" id="heroShots" aria-hidden="true">
@@ -479,7 +474,7 @@ var a=map[en.target.id];if(a)a.classList.add('on')}})},{threshold:.35});
 (function(){var bar=document.querySelector('.scroll-progress');if(!bar)return;var raf=null;
 addEventListener('scroll',function(){if(raf)return;raf=requestAnimationFrame(function(){raf=null;
 var h=document.documentElement.scrollHeight-innerHeight;
-bar.style.transform='scaleX('+(h>0?scrollY/h:0)+')';var sh=document.getElementById('sHint');if(sh)sh.style.opacity=scrollY>120?'0':'.8'})},{passive:true})})();
+bar.style.transform='scaleX('+(h>0?scrollY/h:0)+')'})},{passive:true})})();
 </script>
 
 <footer class="site-footer">
