@@ -135,7 +135,7 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 @keyframes pSpin{to{transform:rotate(360deg)}}
 .p-photo span{position:relative;z-index:1;font-size:76px;font-weight:700;letter-spacing:-.03em;color:rgba(244,244,245,.14)}
 .p-photo img{position:relative;z-index:1}
-.p-photo img{width:100%;height:100%;object-fit:cover;display:block}
+.p-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 22%;display:block}
 .p-body h2{font-size:clamp(24px,3.4vw,32px);font-weight:800;color:var(--heading);letter-spacing:-.02em;line-height:1.15}
 .p-role{color:var(--accent);font-size:14px;font-weight:600;letter-spacing:.3px;margin:8px 0 18px}
 .p-body p{margin-bottom:14px;font-size:16px}
@@ -373,8 +373,7 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
   <div class="divider" aria-hidden="true"><div class="divider-diamond"></div></div>
 
   <section class="person rv" id="natali">
-    <!-- фото: заменить span на <img src="team/natali.jpg" alt="Натали Зеленина"> -->
-    <div class="p-photo"><i class="ph-corners" aria-hidden="true"></i><span>Н</span></div>
+    <div class="p-photo"><i class="ph-corners" aria-hidden="true"></i><img src="team/natali.jpg" alt="Натали Зеленина" loading="lazy" width="666" height="1000"></div>
     <div class="p-body">
       <div class="p-num" aria-hidden="true">03</div>
       <h2>Натали Зеленина</h2>
