@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+/* скрипт пикселя - лениво: в idle или при первом действии; события копятся в стабе fbq */
+(function(){var done=false;function load(){if(done)return;done=true;var t=document.createElement('script');t.async=true;t.src='https://connect.facebook.net/en_US/fbevents.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(t,s)}
+if('requestIdleCallback' in window)requestIdleCallback(load,{timeout:3000});else setTimeout(load,2500);
+['pointerdown','keydown','touchstart','scroll'].forEach(function(ev){addEventListener(ev,load,{once:true,passive:true})});})();
+
+/* Дедупликация: каждому событию — уникальный eventID (браузер+сервер схлопываются) */
+!function(){var f=window.fbq;function E(n){return String(n||'ev')+'.'+Date.now()+'.'+Math.random().toString(36).slice(2,10);}
+var w=function(){var a=[].slice.call(arguments);if((a[0]==='track'||a[0]==='trackCustom')&&(!(a[3]&&typeof a[3]==='object')||!a[3].eventID)){a[3]=Object.assign({},(a[3]&&typeof a[3]==='object')?a[3]:null,{eventID:E(a[1])});}
+w.callMethod?w.callMethod.apply(w,a):w.queue.push(a);};
+w.push=w;w.loaded=f?f.loaded:!0;w.version=f?f.version:'2.0';w.queue=(f&&f.queue)?f.queue:[];window.fbq=window._fbq=w;}();
+fbq('init', '2342435819568558');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=2342435819568558&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Команда — Traffic Craft</title>
+<meta name="theme-color" content="#0e0e12">
+<meta name="description" content="Кто ведёт ваш проект: Павел Пеха — трафик и стратегия, Дмитрий Кумыш — маркетинг медцентров, Натали Зеленина — операционка клиник в ОАЭ. Цифры и опыт каждого.">
+<link rel="canonical" href="https://traffic-craft.com/team">
+<meta property="og:title" content="Команда — Traffic Craft">
+<meta property="og:description" content="Трафик, маркетинг и операционка клиник — кто закрывает каждый узел цепочки от клика до оплаты.">
+<meta property="og:url" content="https://traffic-craft.com/team">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://traffic-craft.com/og-image.png">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#000000;--white:#ffffff;--dark:#000000;
+  --accent:#0ee0cf;--accent-soft:rgba(14,224,207,0.15);
+  --txt:#a1a1aa;--txt2:#71717a;--txt3:#52525b;
+  --heading:#f4f4f5;--brd:rgba(255,255,255,0.08);
+  --brd2:rgba(255,255,255,0.15);--glass-bg:rgba(255,255,255,0.02);
+}
+html{scroll-behavior:smooth;overflow-y:scroll}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--txt3);border-radius:4px}
+body{font-family:-apple-system,BlinkMacSystemFont,'Inter',system-ui,sans-serif;background:var(--bg);color:var(--txt);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none;transition:opacity .3s}
+a:hover{opacity:.8}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+
+.wrap{max-width:900px;margin:0 auto;padding:0 32px}
+.page-header{padding:40px 0 32px;border-bottom:1px solid var(--brd)}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:14px;color:var(--txt2);margin-bottom:24px;transition:color .3s}
+.back-link:hover{color:var(--accent);opacity:1}
+.page-title{font-size:clamp(28px,5vw,40px);font-weight:800;color:var(--heading);letter-spacing:-.03em;line-height:1.1}
+
+.content{padding:32px 0 60px}
+.content h2{font-size:20px;font-weight:700;color:var(--heading);margin:32px 0 12px;letter-spacing:-.02em}
+.content h2:first-child{margin-top:0}
+.content h3{font-size:17px;font-weight:600;color:var(--heading);margin:20px 0 8px}
+.content p{margin-bottom:16px;font-size:16px}
+.content ul,.content ol{margin:0 0 16px 20px}
+.content li{margin-bottom:6px;font-size:16px}
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 0 16px}
+.content table{width:100%;border-collapse:collapse;font-size:15px;min-width:480px}
+.content th,.content td{text-align:left;padding:10px 12px;border:1px solid var(--brd);white-space:nowrap}
+.content th{background:rgba(255,255,255,0.03);color:var(--heading);font-weight:600;font-size:14px}
+.content td{font-size:14px}
+.content td:nth-child(3){white-space:normal}
+
+.site-footer{border-top:1px solid var(--brd);padding:32px 0 40px;line-height:normal;font-family:'Inter',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:auto;-moz-osx-font-smoothing:auto;text-rendering:auto}
+.footer-bottom{max-width:1140px;margin:0 auto;padding:0 32px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px}
+.footer-bottom .logo{display:flex;align-items:center;gap:14px;text-decoration:none;transition:opacity .3s;color:var(--heading)}
+.footer-bottom .logo:hover{opacity:.8}
+.footer-bottom .logo svg{width:44px;height:44px}
+.footer-bottom .logo span{font-size:26px;font-weight:700;color:var(--heading);letter-spacing:-0.03em}
+.footer-legal{display:flex;gap:20px;flex-wrap:wrap;align-items:center;width:100%}
+.footer-legal a{font-size:13px;color:var(--txt3);text-decoration:underline;transition:color .3s}
+.footer-legal a:hover{color:var(--txt)}
+.footer-cta{background:var(--glass-bg);border:1px solid var(--brd);color:var(--white);padding:12px 28px;border-radius:60px;font-size:14px;font-weight:600;transition:all .3s;text-decoration:none}
+@media(hover:hover){.footer-cta:hover{background:var(--white);color:var(--dark)}}
+.footer-copy{font-size:14px;color:var(--txt3)}
+@media(max-width:600px){.site-footer{padding:24px 0 32px}.footer-bottom{padding:0 20px;flex-direction:column;align-items:flex-start;gap:16px}.footer-bottom .logo{gap:10px}.footer-bottom .logo span{font-size:20px}.footer-legal{gap:10px}}
+
+/* ===== CUSTOM CURSOR ===== */
+html.js-cursor, html.js-cursor *, html.js-cursor *::before, html.js-cursor *::after { cursor: none !important; }
+html.js-cursor ::-webkit-scrollbar { cursor: auto; }
+html.js-cursor *:focus { cursor: none !important; }
+.cursor-dot, .cursor-outline { position: fixed; top: 0; left: 0; transform: translate(-50%, -50%); border-radius: 50%; z-index: 10000; pointer-events: none; will-change: transform; display: none; }
+@media(pointer: fine){ .cursor-dot, .cursor-outline { display: block; } }
+.cursor-dot { width: 6px; height: 6px; background: var(--accent); transition: opacity 0.15s, width 0.15s, height 0.15s; box-shadow: 0 0 10px var(--accent); }
+.cursor-outline { width: 40px; height: 40px; border: 1px solid rgba(14,224,207,0.5); transition: width 0.3s cubic-bezier(.22,1,.36,1), height 0.3s cubic-bezier(.22,1,.36,1), background 0.3s, border-color 0.3s, opacity 0.3s; }
+body.cursor-hover .cursor-dot { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+body.cursor-hover .cursor-outline { width: 64px; height: 64px; background: rgba(14,224,207,0.1); border-color: var(--accent); }
+body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 !important; }
+
+@media(min-width:768px){
+  .page-header{padding:60px 0 40px}
+  .content{padding:40px 0 80px}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important}}
+/* Фоновая вкладка не жжет батарею: вечные анимации на паузе, пока вкладку не видно */
+.tab-hidden *,.tab-hidden *::before,.tab-hidden *::after{animation-play-state:paused !important}
+
+/* ===== страница команды ===== */
+.bg-glow{position:fixed;inset:0;background:radial-gradient(900px 500px at 72% -10%,rgba(14,224,207,.07),transparent 60%);pointer-events:none;z-index:0}
+.wrap{position:relative;z-index:1}
+.label{font-size:13px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.lead{font-size:17px;line-height:1.7;max-width:640px;margin-top:16px}
+.person{display:grid;grid-template-columns:300px 1fr;gap:40px;padding:56px 0;border-bottom:1px solid var(--brd)}
+.p-photo{width:100%;aspect-ratio:1/1;border-radius:16px;background:radial-gradient(120% 90% at 50% 0%,rgba(14,224,207,.09),transparent 60%),#030303;border:1px solid var(--brd);display:flex;align-items:center;justify-content:center;overflow:hidden;position:sticky;top:24px}
+.p-photo span{font-size:76px;font-weight:700;letter-spacing:-.03em;color:rgba(244,244,245,.14)}
+.p-photo img{width:100%;height:100%;object-fit:cover;display:block}
+.p-body h2{font-size:clamp(24px,3.4vw,32px);font-weight:800;color:var(--heading);letter-spacing:-.02em;line-height:1.15}
+.p-role{color:var(--accent);font-size:14px;font-weight:600;letter-spacing:.3px;margin:8px 0 18px}
+.p-body p{margin-bottom:14px;font-size:16px}
+.p-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:24px 0 18px}
+.p-stat{border:1px solid var(--brd);background:var(--glass-bg);border-radius:14px;padding:16px 18px}
+.p-stat b{display:block;font-size:22px;font-weight:800;color:var(--heading);letter-spacing:-.02em;line-height:1.1}
+.p-stat span{display:block;font-size:13px;color:var(--txt2);line-height:1.45;margin-top:5px}
+.p-geo{font-size:14px;color:var(--txt2);margin-bottom:18px}
+.p-tags{display:flex;flex-wrap:wrap;gap:8px}
+.p-tag{font-size:12.5px;font-weight:600;color:var(--txt);border:1px solid var(--brd);border-radius:999px;padding:7px 14px;background:var(--glass-bg);white-space:nowrap}
+.chain{padding:56px 0;border-bottom:1px solid var(--brd)}
+.sec-title{font-size:clamp(22px,3vw,30px);font-weight:800;color:var(--heading);letter-spacing:-.02em}
+.chain-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}
+.chain-step{border:1px solid var(--brd);border-radius:16px;padding:20px;background:var(--glass-bg)}
+.chain-step .n{color:var(--accent);font-weight:800;font-size:13px;letter-spacing:1.5px}
+.chain-step h3{color:var(--heading);font-size:17px;font-weight:700;margin:8px 0 6px}
+.chain-step p{font-size:14px;line-height:1.55;margin:0}
+.chain-note{margin-top:24px;font-size:17px;color:var(--heading);font-weight:600}
+.cta-band{padding:56px 0 72px}
+.cta-band p{margin:10px 0 26px;font-size:16px;max-width:560px}
+.btn-white{display:inline-flex;align-items:center;gap:8px;background:var(--white);color:var(--dark);font-weight:700;padding:16px 32px;border-radius:60px;font-size:16px;transition:transform .3s,opacity .3s}
+@media(hover:hover){.btn-white:hover{transform:translateY(-2px);opacity:.92}}
+.rv{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+.rv.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none}}
+@media(max-width:760px){
+  .person{grid-template-columns:1fr;gap:20px;padding:40px 0}
+  .p-photo{width:104px;border-radius:50%;position:static}
+  .p-photo span{font-size:40px}
+  .p-stats{grid-template-columns:1fr 1fr;gap:10px}
+  .p-stat b{font-size:19px}
+  .chain-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="bg-glow" aria-hidden="true"></div>
+<div class="wrap">
+  <header class="page-header">
+    <a href="https://traffic-craft.com" class="back-link">&larr; Вернуться на сайт</a>
+    <div class="label">Команда</div>
+    <h1 class="page-title">Кто делает результат</h1>
+    <p class="lead">Заявки делает реклама, деньги — вся цепочка: трафик, путь пациента, продажи внутри клиники. Под каждый узел — свой человек.</p>
+  </header>
+
+  <main>
+  <section class="person rv" id="pavel">
+    <!-- фото: заменить span на <img src="team/pavel.jpg" alt="Павел Пеха"> -->
+    <div class="p-photo"><span>П</span></div>
+    <div class="p-body">
+      <h2>Павел Пеха</h2>
+      <div class="p-role">Основатель · Трафик и стратегия</div>
+      <p>В рекламе с 2020 года. В медицину пришёл через запуск стоматологии в Стамбуле с полного нуля: сайт, сценарии, съёмки, креативы. Уже в первый месяц ролик клиники скопировали 5 конкурентов.</p>
+      <p>С 2024-го фокус — медицина: 70% проектов — медцентры и клиники. Цель в каждом проекте одна — деньги в кассе: заявки доходят до записи и оплаты, реклама окупается, рост объяснимый и повторяемый.</p>
+      <p>Трафик и маркетинг не разделяет — это одна система: оффер, сегменты, сайт, креативы, ретаргет, отдел продаж, повторная продажа. Ломается один блок — падает вся конструкция. Поэтому берёт весь контур, а результат всегда на нём.</p>
+      <div class="p-stats">
+        <div class="p-stat"><b>$1,2 млн+</b><span>рекламного бюджета откручено</span></div>
+        <div class="p-stat"><b>120+</b><span>реализованных проектов</span></div>
+        <div class="p-stat"><b>9 из 10</b><span>клиник получают измеримый результат</span></div>
+        <div class="p-stat"><b>1,5 года</b><span>средний срок работы с клиентом</span></div>
+      </div>
+      <div class="p-geo">Клиники в работе: Израиль, ОАЭ, Испания, Германия, Кипр, Польша, Турция, Казахстан, США, Лондон.</div>
+      <div class="p-tags"><span class="p-tag">Facebook / Instagram</span><span class="p-tag">TikTok</span><span class="p-tag">YouTube</span><span class="p-tag">Telegram Ads</span><span class="p-tag">упаковка аккаунтов</span><span class="p-tag">сайты и посадочные</span><span class="p-tag">воронки</span><span class="p-tag">тексты и сценарии</span><span class="p-tag">съёмки и монтаж</span><span class="p-tag">аналитика</span></div>
+    </div>
+  </section>
+
+  <section class="person rv" id="dmitry">
+    <!-- фото: заменить span на <img src="team/dmitry.jpg" alt="Дмитрий Кумыш"> -->
+    <div class="p-photo"><span>Д</span></div>
+    <div class="p-body">
+      <h2>Дмитрий Кумыш</h2>
+      <div class="p-role">Руководитель маркетинга</div>
+      <p>Более 10 лет в маркетинге медцентров и клиник. В команде отвечает за всё, что происходит с пациентом после клика: сайт, контент, SEO, CRM — чтобы заявка не терялась по дороге к записи и оплате.</p>
+      <p>Собирает маркетинг как систему: от посадочной и семантики до автоматизации на amoCRM, Битрикс24 и 1С со сквозной аналитикой. Создал более 20 сайтов. Органика тоже его: ролики клиентов набирали до 7 млн просмотров.</p>
+      <div class="p-stats">
+        <div class="p-stat"><b>3000</b><span>клиентов в 3 филиала сети за 6 месяцев</span></div>
+        <div class="p-stat"><b>+400%</b><span>к выручке клиники за 3 года ведения</span></div>
+        <div class="p-stat"><b>&times;3</b><span>оборот клиники за год</span></div>
+        <div class="p-stat"><b>1050</b><span>SEO-ключей в топе за 3 месяца</span></div>
+      </div>
+      <div class="p-tags"><span class="p-tag">SEO</span><span class="p-tag">контент и SMM</span><span class="p-tag">сайты и посадочные</span><span class="p-tag">amoCRM / Битрикс24 / 1С</span><span class="p-tag">сквозная аналитика</span><span class="p-tag">чат-боты</span></div>
+    </div>
+  </section>
+
+  <section class="person rv" id="natali">
+    <!-- фото: заменить span на <img src="team/natali.jpg" alt="Натали Зеленина"> -->
+    <div class="p-photo"><span>Н</span></div>
+    <div class="p-body">
+      <h2>Натали Зеленина</h2>
+      <div class="p-role">Запуск и операционка клиник в ОАЭ</div>
+      <p>Эксперт по запуску и операционному управлению медицинскими и бьюти-бизнесами в ОАЭ. С 2023 года живёт и работает в Дубае.</p>
+      <p>За плечами — более 10 лет в управлении и юридическом консалтинге на международных рынках. Редкое сочетание: смотрит на задачу глазами юриста, операционного директора и предпринимателя одновременно.</p>
+      <p>В команде отвечает за то, что происходит с заявкой внутри клиники: найм и адаптация персонала по стандартам ОАЭ, отдел продаж, работа с пациентами, лицензирование по требованиям DHA, контроль качества и сервис. Реклама приводит пациентов — Натали делает так, чтобы клиника их не теряла.</p>
+      <div class="p-stats">
+        <div class="p-stat"><b>&times;3</b><span>оборот клиники за 6 месяцев</span></div>
+        <div class="p-stat"><b>С нуля</b><span>отдел продаж и система работы с пациентами</span></div>
+        <div class="p-stat"><b>DHA</b><span>лицензирование медперсонала</span></div>
+        <div class="p-stat"><b>10+ лет</b><span>в управлении и консалтинге</span></div>
+      </div>
+      <div class="p-tags"><span class="p-tag">найм и адаптация</span><span class="p-tag">отдел продаж</span><span class="p-tag">операционные процессы</span><span class="p-tag">финансы и издержки</span><span class="p-tag">лицензирование DHA</span><span class="p-tag">клиентский сервис</span></div>
+    </div>
+  </section>
+
+  <section class="chain rv">
+    <h2 class="sec-title">Как это складывается в результат</h2>
+    <div class="chain-grid">
+      <div class="chain-step"><div class="n">01 · РЕКЛАМА</div><h3>Павел</h3><p>Живые заявки из Facebook и Instagram — из нужного сегмента и по цене, которая бьётся с экономикой клиники.</p></div>
+      <div class="chain-step"><div class="n">02 · ПУТЬ ПАЦИЕНТА</div><h3>Дмитрий</h3><p>Всё после клика: сайт, контент, CRM — заявка не теряется до записи.</p></div>
+      <div class="chain-step"><div class="n">03 · ВНУТРИ КЛИНИКИ</div><h3>Натали</h3><p>Продажи, сервис и процессы: запись становится оплатой, пациент возвращается.</p></div>
+    </div>
+    <div class="chain-note">Поэтому отвечаем не за клики и охваты — за выручку.</div>
+  </section>
+
+  <section class="cta-band rv">
+    <h2 class="sec-title">Посмотрим на вашу клинику этим составом</h2>
+    <p>Бесплатный разбор: где теряются заявки и сколько даст реклама на вашем рынке.</p>
+    <a class="btn-white" href="https://traffic-craft.com/#cta">Получить разбор клиники &nearr;</a>
+  </section>
+  </main>
+</div>
+
+<script>
+/* появление секций */
+(function(){var els=document.querySelectorAll('.rv');
+if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return}
+var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target)}})},{threshold:.12});
+els.forEach(function(e){io.observe(e)})})();
+</script>
+
+<footer class="site-footer">
+  <div class="footer-bottom">
+    <a href="https://traffic-craft.com" class="logo" aria-label="На главную">
+      <svg viewBox="0 0 40 40" fill="none"><rect x="1" y="1" width="38" height="38" rx="10" fill="#0e0e12" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/><text x="6" y="28" font-family="Inter,sans-serif" font-weight="900" font-size="22" fill="#f4f4f5">T</text><text x="19" y="28" font-family="Inter,sans-serif" font-weight="900" font-size="22" fill="#0ee0cf">C</text></svg>
+      <span>Traffic <span style="color:#0ee0cf">Craft</span></span>
+    </a>
+    <a href="https://traffic-craft.com" class="footer-cta">Вернуться на сайт</a>
+    <div class="footer-legal">
+      <a href="/privacy">Политика конфиденциальности</a>
+      <a href="/terms">Условия использования</a>
+      <div class="footer-copy">&copy; <span class="js-year"></span> Traffic Craft. Все права защищены.</div>
+    </div>
+  </div>
+</footer>
+
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-outline" id="cursorOutline"></div>
+<script>
+const cursorDot = document.getElementById('cursorDot'), cursorOutline = document.getElementById('cursorOutline');
+if (window.matchMedia("(pointer: fine)").matches && cursorDot && cursorOutline) {
+  document.documentElement.classList.add('js-cursor');
+  let mouseX = -100, mouseY = -100, outlineX = -100, outlineY = -100, isCursorActive = false;
+  document.body.classList.add('cursor-hidden');
+  let cursorRafId = null, cursorIdle = null;
+
+  function showCursor() {
+    if (!isCursorActive) { document.body.classList.remove('cursor-hidden'); isCursorActive = true; }
+  }
+  function hideCursor() {
+    document.body.classList.add('cursor-hidden'); isCursorActive = false;
+  }
+
+  window.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX; mouseY = e.clientY;
+    cursorDot.style.transform = 'translate3d(' + mouseX + 'px,' + mouseY + 'px,0) translate(-50%,-50%)';
+    showCursor();
+    if (!cursorRafId) startCursorLoop();
+    clearTimeout(cursorIdle);
+    cursorIdle = setTimeout(() => { if (cursorRafId) { cancelAnimationFrame(cursorRafId); cursorRafId = null; } }, 150);
+  });
+
+  function startCursorLoop() {
+    const step = () => {
+      outlineX += (mouseX - outlineX) * 0.45;
+      outlineY += (mouseY - outlineY) * 0.45;
+      cursorOutline.style.transform = 'translate3d(' + outlineX + 'px,' + outlineY + 'px,0) translate(-50%,-50%)';
+      cursorRafId = requestAnimationFrame(step);
+    };
+    cursorRafId = requestAnimationFrame(step);
+  }
+
+  // Hover effect on interactive elements
+  const hoverSelector = 'a, button, input, select, textarea, label, [role="button"], summary, .cl-card, .btn';
+  document.querySelectorAll(hoverSelector).forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+  });
+  // Catch dynamically added elements too
+  document.addEventListener('mouseover', (e) => {
+    if (e.target.closest(hoverSelector)) document.body.classList.add('cursor-hover');
+  });
+  document.addEventListener('mouseout', (e) => {
+    if (e.target.closest(hoverSelector) && !e.relatedTarget?.closest(hoverSelector)) document.body.classList.remove('cursor-hover');
+  });
+
+  // Hide when cursor leaves window (Windows: mouseleave fires on document)
+  document.addEventListener('mouseleave', hideCursor);
+  // Show when cursor re-enters (important for Windows alt-tab)
+  document.addEventListener('mouseenter', showCursor);
+  // Hide on blur / show on focus (Windows: alt-tab, taskbar click)
+  window.addEventListener('blur', hideCursor);
+  window.addEventListener('focus', () => { /* don't auto-show — wait for mousemove */ });
+  // Hide when tab becomes hidden (Windows: switch tabs)
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) hideCursor();
+  });
+}
+</script>
+<script>document.querySelectorAll(".js-year").forEach(el=>el.textContent=new Date().getFullYear())</script>
+
+<script>
+/* ===== Meta Pixel: захват fbc/fbp для CAPI ===== */
+(function(){
+  function getCookie(name){
+    var m = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+    return m ? decodeURIComponent(m[1]) : null;
+  }
+  var fbc = getCookie('_fbc'), fbp = getCookie('_fbp');
+  if(!fbc){
+    var fbclid = new URLSearchParams(window.location.search).get('fbclid');
+    if(fbclid){
+      fbc = 'fb.1.' + Date.now() + '.' + fbclid;
+      document.cookie = '_fbc=' + fbc + ';max-age=7776000;path=/;SameSite=Lax';
+    }
+  }
+  try {
+    if(fbc) localStorage.setItem('_fbc', fbc); else fbc = localStorage.getItem('_fbc');
+    if(fbp) localStorage.setItem('_fbp', fbp); else fbp = localStorage.getItem('_fbp');
+  } catch(e){}
+})();
+</script>
+<script>/* пауза вечных анимаций в фоновой вкладке */
+document.addEventListener('visibilitychange', function(){
+  document.documentElement.classList.toggle('tab-hidden', document.hidden);
+});
+</script>
+</body>
+</html>
