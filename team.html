@@ -254,11 +254,6 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 .grad{background:linear-gradient(100deg,var(--accent) 0%,#9ffcf4 45%,var(--heading) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;background-size:220% 100%;background-position:120% 0}
 @media(prefers-reduced-motion:no-preference){.grad{animation:gradSlide 1.4s .5s cubic-bezier(.22,1,.36,1) both}}
 @keyframes gradSlide{from{background-position:120% 0}to{background-position:0% 0}}
-.thread{position:absolute;left:-64px;width:2px;background:rgba(255,255,255,.07);border-radius:2px;display:none;overflow:hidden}
-@media(min-width:1240px){.thread{display:block}}
-.th-fill{position:absolute;left:0;top:0;width:100%;height:100%;background:linear-gradient(180deg,var(--accent),rgba(14,224,207,.25));box-shadow:0 0 12px rgba(14,224,207,.5);border-radius:2px;transform:scaleY(0);transform-origin:top;will-change:transform}
-.th-node{position:absolute;left:50%;width:10px;height:10px;border-radius:50%;background:#0a0a0a;border:1px solid var(--brd2);transform:translate(-50%,-50%);transition:background .4s,box-shadow .4s,border-color .4s;z-index:1}
-.th-node.lit{background:var(--accent);border-color:var(--accent);box-shadow:0 0 12px rgba(14,224,207,.8)}
 .chain-grid{position:relative}
 .ch-arr{position:absolute;top:50%;left:calc(33.333% - 2px);transform:translate(-50%,-50%);color:var(--accent);font-size:18px;font-weight:700;text-shadow:0 0 10px rgba(14,224,207,.6);animation:arrPulse 2.4s ease-in-out infinite;z-index:2;pointer-events:none}
 .ch-arr.a2{left:calc(66.666% + 2px);animation-delay:1.2s}
@@ -313,7 +308,6 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 <div class="bg-grid" aria-hidden="true"></div>
 <div class="dust" aria-hidden="true"><i></i><i></i><i></i></div>
 <div class="wrap">
-<div class="thread" id="thread" aria-hidden="true"><i class="th-fill" id="thFill"></i><b class="th-node" data-th="pavel"></b><b class="th-node" data-th="dmitry"></b><b class="th-node" data-th="natali"></b><b class="th-node" data-th="chain"></b></div>
   <header class="page-header">
     <div class="hero-grid">
       <div class="hero-txt">
@@ -479,29 +473,6 @@ if(en.isIntersecting){links.forEach(function(a){a.classList.remove('on')});
 var a=map[en.target.id];if(a)a.classList.add('on')}})},{threshold:.35});
 ['pavel','dmitry','natali'].forEach(function(id){var el=document.getElementById(id);if(el)io.observe(el)})})();
 
-/* нить контура: заливка по скроллу, узлы зажигаются (offset-геометрия, transform-only) */
-(function(){var th=document.getElementById('thread');if(!th)return;
-var fill=document.getElementById('thFill'),wrap=document.querySelector('.wrap');
-var ids=['pavel','dmitry','natali','chain'],nodes={},pos={},top0=0,H=1;
-document.querySelectorAll('.th-node').forEach(function(n){nodes[n.dataset.th]=n});
-function absTop(el){var t=0;while(el){t+=el.offsetTop;el=el.offsetParent}return t}
-function measure(){var first=document.getElementById('pavel'),last=document.getElementById('chain');
-if(!first||!last)return;var wTop=absTop(wrap);
-top0=absTop(first)-wTop+10;
-H=Math.max(1,absTop(last)+last.offsetHeight*.5-wTop-top0);
-th.style.top=top0+'px';th.style.height=H+'px';
-ids.forEach(function(id){var el=document.getElementById(id);if(!el)return;
-pos[id]=absTop(el)-wTop-top0+46;var n=nodes[id];if(n)n.style.top=pos[id]+'px'})}
-var raf=null;
-function onScroll(){if(raf)return;raf=requestAnimationFrame(function(){raf=null;
-var line=scrollY+innerHeight*.45-(absTop(wrap)+top0);
-var h=Math.max(0,Math.min(H,line));
-fill.style.transform='scaleY('+(h/H)+')';
-ids.forEach(function(id){var n=nodes[id];if(n)n.classList.toggle('lit',h>=pos[id])})})}
-measure();onScroll();
-addEventListener('load',function(){measure();onScroll()});
-addEventListener('scroll',onScroll,{passive:true});
-var rt;addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(function(){measure();onScroll()},200)},{passive:true})})();
 
 /* скролл-прогресс */
 (function(){var bar=document.querySelector('.scroll-progress');if(!bar)return;var raf=null;
