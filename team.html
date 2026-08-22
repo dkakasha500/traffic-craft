@@ -129,13 +129,15 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 .label{font-size:13px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:12px;margin-bottom:14px}
 .lead{font-size:17px;line-height:1.7;max-width:640px;margin-top:16px}
 .person{display:grid;grid-template-columns:300px 1fr;gap:40px;padding:56px 0}
-.p-photo{width:100%;aspect-ratio:1/1;border-radius:16px;background:radial-gradient(120% 90% at 50% 0%,rgba(14,224,207,.09),transparent 60%),#030303;border:1px solid var(--brd);display:flex;align-items:center;justify-content:center;overflow:hidden;position:sticky;top:24px}
-.p-photo::before{content:'';position:absolute;inset:-60%;background:conic-gradient(from 0deg,transparent 0deg 296deg,rgba(14,224,207,.05) 316deg,rgba(14,224,207,.6) 342deg,transparent 360deg);animation:pSpin 7s linear infinite}
-.p-photo::after{content:'';position:absolute;inset:1px;border-radius:15px;background:radial-gradient(120% 90% at 50% 0%,rgba(14,224,207,.09),transparent 60%),#030303}
+.p-photo{width:100%;position:sticky;top:24px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent)}
+.p-photo.ph-box{aspect-ratio:1/1;border-radius:16px;background:radial-gradient(120% 90% at 50% 0%,rgba(14,224,207,.09),transparent 60%),#030303;border:1px solid var(--brd);display:flex;align-items:center;justify-content:center;overflow:hidden;-webkit-mask-image:none;mask-image:none}
+.p-photo.ph-box::before{content:'';position:absolute;inset:-60%;background:conic-gradient(from 0deg,transparent 0deg 296deg,rgba(14,224,207,.05) 316deg,rgba(14,224,207,.6) 342deg,transparent 360deg);animation:pSpin 7s linear infinite}
+.p-photo.ph-box::after{content:'';position:absolute;inset:1px;border-radius:15px;background:radial-gradient(120% 90% at 50% 0%,rgba(14,224,207,.09),transparent 60%),#030303}
 @keyframes pSpin{to{transform:rotate(360deg)}}
 .p-photo span{position:relative;z-index:1;font-size:76px;font-weight:700;letter-spacing:-.03em;color:rgba(244,244,245,.14)}
 .p-photo img{position:relative;z-index:1}
-.p-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 22%;display:block}
+.p-photo img{width:100%;height:auto;display:block;-webkit-mask-image:linear-gradient(180deg,transparent,#000 7%,#000 93%,transparent);mask-image:linear-gradient(180deg,transparent,#000 7%,#000 93%,transparent)}
+.p-photo.ph-box img{height:100%;object-fit:cover;object-position:50% 22%;-webkit-mask-image:none;mask-image:none}
 .p-body h2{font-size:clamp(24px,3.4vw,32px);font-weight:800;color:var(--heading);letter-spacing:-.02em;line-height:1.15}
 .p-role{color:var(--accent);font-size:14px;font-weight:600;letter-spacing:.3px;margin:8px 0 18px}
 .p-body p{margin-bottom:14px;font-size:16px}
@@ -169,8 +171,9 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 @media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none}}
 @media(max-width:760px){
   .person{grid-template-columns:1fr;gap:20px;padding:40px 0}
-  .p-photo{width:104px;border-radius:50%;position:relative;top:auto}
-  .p-photo::after{border-radius:50%}
+  .p-photo{width:62%;max-width:230px;position:relative;top:auto}
+  .p-photo.ph-box{width:104px;height:104px;border-radius:50%}
+  .p-photo.ph-box::after{border-radius:50%}
   .p-photo span{font-size:40px}
   .p-stats{grid-template-columns:1fr 1fr;gap:10px}
   .p-stat b{font-size:19px}
@@ -329,7 +332,7 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 
   <main>
   <section class="person rv" id="pavel">
-    <div class="p-photo"><i class="ph-corners" aria-hidden="true"></i><img src="team/pavel.jpg" alt="Павел Пеха" loading="lazy" width="680" height="1208"></div>
+    <div class="p-photo"><img src="team/pavel.jpg" alt="Павел Пеха" loading="lazy" width="680" height="1208"></div>
     <div class="p-body">
       <div class="p-num" aria-hidden="true">01</div>
       <h2>Павел Пеха</h2>
@@ -352,7 +355,7 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 
   <section class="person rv" id="dmitry">
     <!-- фото: заменить span на <img src="team/dmitry.jpg" alt="Дмитрий Кумыш"> -->
-    <div class="p-photo"><i class="ph-corners" aria-hidden="true"></i><span>Д</span></div>
+    <div class="p-photo ph-box"><span>Д</span></div>
     <div class="p-body">
       <div class="p-num" aria-hidden="true">02</div>
       <h2>Дмитрий Кумыш</h2>
@@ -372,7 +375,7 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
   <div class="divider" aria-hidden="true"><div class="divider-diamond"></div></div>
 
   <section class="person rv" id="natali">
-    <div class="p-photo"><i class="ph-corners" aria-hidden="true"></i><img src="team/natali.jpg" alt="Натали Зеленина" loading="lazy" width="666" height="1000"></div>
+    <div class="p-photo ph-box"><img src="team/natali.jpg" alt="Натали Зеленина" loading="lazy" width="666" height="1000"></div>
     <div class="p-body">
       <div class="p-num" aria-hidden="true">03</div>
       <h2>Натали Зеленина</h2>
