@@ -169,24 +169,85 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 @media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none}}
 @media(max-width:760px){
   .person{grid-template-columns:1fr;gap:20px;padding:40px 0}
-  .p-photo{width:104px;border-radius:50%;position:static}
+  .p-photo{width:104px;border-radius:50%;position:relative;top:auto}
   .p-photo::after{border-radius:50%}
   .p-photo span{font-size:40px}
   .p-stats{grid-template-columns:1fr 1fr;gap:10px}
   .p-stat b{font-size:19px}
   .chain-grid{grid-template-columns:1fr}
 }
+
+/* ===== детали и анимации ===== */
+::selection{background:rgba(14,224,207,.25);color:var(--heading)}
+.scroll-progress{position:fixed;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),rgba(14,224,207,.4));transform-origin:0 50%;transform:scaleX(0);z-index:50;box-shadow:0 0 8px rgba(14,224,207,.5)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1fr) 440px;gap:40px;align-items:center}
+.hero-shots{position:relative;height:340px}
+.shot{position:absolute;width:210px;height:260px;border-radius:16px;border:1px solid var(--brd);background:radial-gradient(120% 90% at 50% 0%,rgba(14,224,207,.08),transparent 60%),#050505;display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.55);transition:transform .45s cubic-bezier(.22,1,.36,1),border-color .3s;will-change:transform}
+.shot span{font-size:40px;font-weight:800;color:rgba(244,244,245,.12);letter-spacing:-.03em}
+.shot img{width:100%;height:100%;object-fit:cover;display:block}
+.s1{left:0;top:36px;transform:translate3d(var(--px,0px),var(--py,0px),0) rotate(-8deg);z-index:1}
+.s2{left:112px;top:6px;transform:translate3d(var(--px,0px),var(--py,0px),0) rotate(-1deg);z-index:2}
+.s3{left:226px;top:44px;transform:translate3d(var(--px,0px),var(--py,0px),0) rotate(7deg);z-index:3}
+@media(hover:hover){
+  .shot:hover{transform:translate3d(var(--px,0px),calc(var(--py,0px) - 8px),0) rotate(0deg) scale(1.04);border-color:rgba(14,224,207,.4);z-index:5}
+  .p-tag{transition:border-color .25s,color .25s,transform .25s}
+  .p-tag:hover{border-color:rgba(14,224,207,.45);color:var(--heading);transform:translateY(-1px)}
+}
+@media(prefers-reduced-motion:no-preference){
+  .hero-txt .label,.hero-txt .page-title,.hero-txt .lead{opacity:0;animation:fadeUp .7s cubic-bezier(.22,1,.36,1) forwards}
+  .hero-txt .page-title{animation-delay:.12s}
+  .hero-txt .lead{animation-delay:.26s}
+  .shot{opacity:0;animation:shotIn .8s cubic-bezier(.22,1,.36,1) forwards}
+  .s1{animation-delay:.2s}.s2{animation-delay:.34s}.s3{animation-delay:.48s}
+  .page-title::after{content:'';display:block;width:0;height:2px;margin-top:16px;border-radius:2px;background:linear-gradient(90deg,var(--accent),transparent);animation:lineGrow .9s .6s cubic-bezier(.22,1,.36,1) forwards;box-shadow:0 0 10px rgba(14,224,207,.4)}
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes shotIn{from{opacity:0;transform:translate3d(0,26px,0)}to{opacity:1}}
+@keyframes lineGrow{to{width:120px}}
+.p-body{position:relative}
+.p-num{position:absolute;top:-14px;right:0;font-size:96px;line-height:1;font-weight:800;color:rgba(244,244,245,.05);letter-spacing:-.04em;pointer-events:none;user-select:none;font-variant-numeric:tabular-nums}
+.chain-step .flow{position:absolute;top:0;left:0;right:0;height:1px;overflow:hidden;z-index:1}
+.chain-step .flow::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(14,224,207,.85),transparent);transform:translateX(-100%);animation:flowX 3.2s linear infinite}
+.chain-step:nth-child(2) .flow::before{animation-delay:1.05s}
+.chain-step:nth-child(3) .flow::before{animation-delay:2.1s}
+@keyframes flowX{to{transform:translateX(100%)}}
+.dust{position:fixed;inset:0;pointer-events:none;z-index:0}
+.dust i{position:absolute;width:3px;height:3px;border-radius:50%;background:rgba(14,224,207,.45);box-shadow:0 0 8px rgba(14,224,207,.55);bottom:-4vh;animation:dustF linear infinite;opacity:0}
+.dust i:nth-child(1){left:16%;animation-duration:21s;animation-delay:2s}
+.dust i:nth-child(2){left:52%;animation-duration:26s;animation-delay:9s}
+.dust i:nth-child(3){left:83%;animation-duration:23s;animation-delay:15s}
+@keyframes dustF{0%{transform:translateY(0);opacity:0}8%{opacity:.9}60%{opacity:.5}100%{transform:translateY(-105vh);opacity:0}}
+.btn-white{will-change:transform}
+@media(max-width:900px){.hero-grid{grid-template-columns:1fr;gap:10px}
+  .hero-shots{height:200px;max-width:350px;margin:14px 0 0}
+  .shot{width:130px;height:162px;border-radius:12px}
+  .shot span{font-size:24px}
+  .s1{left:0;top:22px}.s2{left:70px;top:4px}.s3{left:142px;top:26px}
+  .p-num{font-size:56px;top:-8px}
+}
 </style>
 </head>
 <body>
+<div class="scroll-progress" aria-hidden="true"></div>
 <div class="bg-glow" aria-hidden="true"></div>
 <div class="bg-grid" aria-hidden="true"></div>
+<div class="dust" aria-hidden="true"><i></i><i></i><i></i></div>
 <div class="wrap">
   <header class="page-header">
-    <a href="https://traffic-craft.com" class="back-link">&larr; Вернуться на сайт</a>
-    <div class="label">Команда</div>
-    <h1 class="page-title">Кто делает результат</h1>
-    <p class="lead">Заявки делает реклама, деньги — вся цепочка: трафик, путь пациента, продажи внутри клиники. Под каждый узел — свой человек.</p>
+    <div class="hero-grid">
+      <div class="hero-txt">
+        <a href="https://traffic-craft.com" class="back-link">&larr; Вернуться на сайт</a>
+        <div class="label">Команда</div>
+        <h1 class="page-title">Кто делает результат</h1>
+        <p class="lead">Заявки делает реклама, деньги — вся цепочка: трафик, путь пациента, продажи внутри клиники. Под каждый узел — свой человек.</p>
+      </div>
+      <!-- общие фото: внутрь каждого .shot вставить <img src="team/shot-1.jpg" alt="Команда Traffic Craft"> вместо span -->
+      <div class="hero-shots" id="heroShots" aria-hidden="true">
+        <div class="shot s1" data-depth="5"><span>01</span></div>
+        <div class="shot s2" data-depth="9"><span>02</span></div>
+        <div class="shot s3" data-depth="14"><span>03</span></div>
+      </div>
+    </div>
   </header>
 
   <main>
@@ -194,6 +255,7 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
     <!-- фото: заменить span на <img src="team/pavel.jpg" alt="Павел Пеха"> -->
     <div class="p-photo"><span>П</span></div>
     <div class="p-body">
+      <div class="p-num" aria-hidden="true">01</div>
       <h2>Павел Пеха</h2>
       <div class="p-role">Основатель · Трафик и стратегия</div>
       <p>В рекламе с 2020 года. В медицину пришёл через запуск стоматологии в Стамбуле с полного нуля: сайт, сценарии, съёмки, креативы. Уже в первый месяц ролик клиники скопировали 5 конкурентов.</p>
@@ -214,6 +276,7 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
     <!-- фото: заменить span на <img src="team/dmitry.jpg" alt="Дмитрий Кумыш"> -->
     <div class="p-photo"><span>Д</span></div>
     <div class="p-body">
+      <div class="p-num" aria-hidden="true">02</div>
       <h2>Дмитрий Кумыш</h2>
       <div class="p-role">Руководитель маркетинга</div>
       <p>Более 10 лет в маркетинге медцентров и клиник. В команде отвечает за всё, что происходит с пациентом после клика: сайт, контент, SEO, CRM — чтобы заявка не терялась по дороге к записи и оплате.</p>
@@ -232,6 +295,7 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
     <!-- фото: заменить span на <img src="team/natali.jpg" alt="Натали Зеленина"> -->
     <div class="p-photo"><span>Н</span></div>
     <div class="p-body">
+      <div class="p-num" aria-hidden="true">03</div>
       <h2>Натали Зеленина</h2>
       <div class="p-role">Запуск и операционка клиник в ОАЭ</div>
       <p>Эксперт по запуску и операционному управлению медицинскими и бьюти-бизнесами в ОАЭ. С 2023 года живёт и работает в Дубае.</p>
@@ -250,9 +314,9 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
   <section class="chain rv">
     <h2 class="sec-title">Как это складывается в результат</h2>
     <div class="chain-grid">
-      <div class="chain-step spotlight-card"><div class="n">01 · РЕКЛАМА</div><h3>Павел</h3><p>Живые заявки из Facebook и Instagram — из нужного сегмента и по цене, которая бьётся с экономикой клиники.</p></div>
-      <div class="chain-step spotlight-card"><div class="n">02 · ПУТЬ ПАЦИЕНТА</div><h3>Дмитрий</h3><p>Всё после клика: сайт, контент, CRM — заявка не теряется до записи.</p></div>
-      <div class="chain-step spotlight-card"><div class="n">03 · ВНУТРИ КЛИНИКИ</div><h3>Натали</h3><p>Продажи, сервис и процессы: запись становится оплатой, пациент возвращается.</p></div>
+      <div class="chain-step spotlight-card"><i class="flow" aria-hidden="true"></i><div class="n">01 · РЕКЛАМА</div><h3>Павел</h3><p>Живые заявки из Facebook и Instagram — из нужного сегмента и по цене, которая бьётся с экономикой клиники.</p></div>
+      <div class="chain-step spotlight-card"><i class="flow" aria-hidden="true"></i><div class="n">02 · ПУТЬ ПАЦИЕНТА</div><h3>Дмитрий</h3><p>Всё после клика: сайт, контент, CRM — заявка не теряется до записи.</p></div>
+      <div class="chain-step spotlight-card"><i class="flow" aria-hidden="true"></i><div class="n">03 · ВНУТРИ КЛИНИКИ</div><h3>Натали</h3><p>Продажи, сервис и процессы: запись становится оплатой, пациент возвращается.</p></div>
     </div>
     <div class="chain-note">Поэтому отвечаем не за клики и охваты — за выручку.</div>
   </section>
@@ -291,6 +355,32 @@ var step=function(n){var p=Math.min((n-s0)/dur,1),ease=p<.5?4*p*p*p:1-Math.pow(-
 el.textContent=p<1?pre+Math.round(ease*t).toLocaleString('ru-RU')+suf:fin;if(p<1)requestAnimationFrame(step)};
 requestAnimationFrame(step)})},{threshold:.15});
 document.querySelectorAll('[data-count]').forEach(function(el){o.observe(el)})})();
+
+/* параллакс веера фото: события, без вечного rAF */
+(function(){if(!(window.matchMedia&&matchMedia('(hover: hover)').matches))return;
+var zone=document.querySelector('.page-header'),shots=document.querySelectorAll('.shot');
+if(!zone||!shots.length)return;var raf=null,nx=0,ny=0;
+zone.addEventListener('mousemove',function(e){
+var r=zone.getBoundingClientRect();nx=(e.clientX-r.left)/r.width-.5;ny=(e.clientY-r.top)/r.height-.5;
+if(raf)return;raf=requestAnimationFrame(function(){raf=null;
+shots.forEach(function(sh){var d=+sh.dataset.depth||8;
+sh.style.setProperty('--px',(nx*d)+'px');sh.style.setProperty('--py',(ny*d)+'px')})})},{passive:true});
+zone.addEventListener('mouseleave',function(){shots.forEach(function(sh){sh.style.setProperty('--px','0px');sh.style.setProperty('--py','0px')})})})();
+
+/* магнитная кнопка CTA */
+(function(){if(!(window.matchMedia&&matchMedia('(hover: hover)').matches))return;
+var b=document.querySelector('.btn-white');if(!b)return;var raf=null,mx=0,my=0;
+b.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;if(raf)return;
+raf=requestAnimationFrame(function(){raf=null;var r=b.getBoundingClientRect();
+var dx=(mx-r.left-r.width/2)*.18,dy=(my-r.top-r.height/2)*.28;
+b.style.transform='translate('+dx+'px,'+dy+'px)'})},{passive:true});
+b.addEventListener('mouseleave',function(){b.style.transform=''})})();
+
+/* скролл-прогресс */
+(function(){var bar=document.querySelector('.scroll-progress');if(!bar)return;var raf=null;
+addEventListener('scroll',function(){if(raf)return;raf=requestAnimationFrame(function(){raf=null;
+var h=document.documentElement.scrollHeight-innerHeight;
+bar.style.transform='scaleX('+(h>0?scrollY/h:0)+')'})},{passive:true})})();
 </script>
 
 <footer class="site-footer">
