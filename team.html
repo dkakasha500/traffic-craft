@@ -181,15 +181,15 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 ::selection{background:rgba(14,224,207,.25);color:var(--heading)}
 .scroll-progress{position:fixed;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),rgba(14,224,207,.4));transform-origin:0 50%;transform:scaleX(0);z-index:50;box-shadow:0 0 8px rgba(14,224,207,.5)}
 .hero-grid{display:grid;grid-template-columns:minmax(0,1fr) 440px;gap:40px;align-items:center}
-.hero-shots{position:relative;height:340px}
+.hero-shots{position:relative;height:340px;perspective:900px}
 .shot{position:absolute;width:210px;height:260px;border-radius:16px;border:1px solid var(--brd);background:radial-gradient(120% 90% at 50% 0%,rgba(14,224,207,.08),transparent 60%),#050505;display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.55);transition:transform .45s cubic-bezier(.22,1,.36,1),border-color .3s;will-change:transform}
 .shot span{font-size:40px;font-weight:800;color:rgba(244,244,245,.12);letter-spacing:-.03em}
 .shot img{width:100%;height:100%;object-fit:cover;display:block}
-.s1{left:0;top:36px;transform:translate3d(var(--px,0px),var(--py,0px),0) rotate(-8deg);z-index:1}
-.s2{left:112px;top:6px;transform:translate3d(var(--px,0px),var(--py,0px),0) rotate(-1deg);z-index:2}
-.s3{left:226px;top:44px;transform:translate3d(var(--px,0px),var(--py,0px),0) rotate(7deg);z-index:3}
+.s1{left:0;top:36px;transform:translate3d(var(--px,0px),var(--py,0px),0) rotateY(var(--rx,0deg)) rotateX(var(--ry,0deg)) rotate(-8deg);z-index:1}
+.s2{left:112px;top:6px;transform:translate3d(var(--px,0px),var(--py,0px),0) rotateY(var(--rx,0deg)) rotateX(var(--ry,0deg)) rotate(-1deg);z-index:2}
+.s3{left:226px;top:44px;transform:translate3d(var(--px,0px),var(--py,0px),0) rotateY(var(--rx,0deg)) rotateX(var(--ry,0deg)) rotate(7deg);z-index:3}
 @media(hover:hover){
-  .shot:hover{transform:translate3d(var(--px,0px),calc(var(--py,0px) - 8px),0) rotate(0deg) scale(1.04);border-color:rgba(14,224,207,.4);z-index:5}
+  .shot:hover{transform:translate3d(var(--px,0px),calc(var(--py,0px) - 8px),0) rotateY(var(--rx,0deg)) rotateX(var(--ry,0deg)) rotate(0deg) scale(1.04);border-color:rgba(14,224,207,.4);z-index:5}
   .p-tag{transition:border-color .25s,color .25s,transform .25s}
   .p-tag:hover{border-color:rgba(14,224,207,.45);color:var(--heading);transform:translateY(-1px)}
 }
@@ -250,6 +250,27 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 .shot img{filter:grayscale(35%);transition:filter .5s}
 @media(hover:hover){.person:hover .p-photo img,.shot:hover img{filter:none}}
 @media(prefers-reduced-motion:no-preference){.hero-txt .hero-chips{opacity:0;animation:fadeUp .7s .38s cubic-bezier(.22,1,.36,1) forwards}}
+
+/* ===== вау-слой: нить контура, градиент, стрелки, ореол ===== */
+.grad{background:linear-gradient(100deg,var(--accent) 0%,#9ffcf4 45%,var(--heading) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;background-size:220% 100%;background-position:120% 0}
+@media(prefers-reduced-motion:no-preference){.grad{animation:gradSlide 1.4s .5s cubic-bezier(.22,1,.36,1) both}}
+@keyframes gradSlide{from{background-position:120% 0}to{background-position:0% 0}}
+.thread{position:absolute;left:-64px;width:2px;background:rgba(255,255,255,.07);border-radius:2px;display:none;overflow:hidden}
+@media(min-width:1240px){.thread{display:block}}
+.th-fill{position:absolute;left:0;top:0;width:100%;height:100%;background:linear-gradient(180deg,var(--accent),rgba(14,224,207,.25));box-shadow:0 0 12px rgba(14,224,207,.5);border-radius:2px;transform:scaleY(0);transform-origin:top;will-change:transform}
+.th-node{position:absolute;left:50%;width:10px;height:10px;border-radius:50%;background:#0a0a0a;border:1px solid var(--brd2);transform:translate(-50%,-50%);transition:background .4s,box-shadow .4s,border-color .4s;z-index:1}
+.th-node.lit{background:var(--accent);border-color:var(--accent);box-shadow:0 0 12px rgba(14,224,207,.8)}
+.chain-grid{position:relative}
+.ch-arr{position:absolute;top:50%;left:calc(33.333% - 2px);transform:translate(-50%,-50%);color:var(--accent);font-size:18px;font-weight:700;text-shadow:0 0 10px rgba(14,224,207,.6);animation:arrPulse 2.4s ease-in-out infinite;z-index:2;pointer-events:none}
+.ch-arr.a2{left:calc(66.666% + 2px);animation-delay:1.2s}
+@keyframes arrPulse{0%,100%{opacity:.35}50%{opacity:1}}
+.btn-halo{position:relative;display:inline-block}
+.btn-halo::before{content:'';position:absolute;inset:-26px -44px;background:radial-gradient(50% 50% at 50% 50%,rgba(14,224,207,.16),transparent 70%);border-radius:50%;animation:glowPulse 5.5s ease-in-out infinite;pointer-events:none}
+.btn-halo .btn-white{position:relative;z-index:1}
+.rv .p-photo{opacity:0;transform:translateX(-18px);transition:opacity .65s ease .08s,transform .65s cubic-bezier(.22,1,.36,1) .08s}
+.rv.in .p-photo{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.rv .p-photo{opacity:1;transform:none}}
+@media(max-width:760px){.ch-arr{display:none}.btn-halo::before{inset:-18px -24px}body{overflow-x:hidden}}
 </style>
 </head>
 <body>
@@ -263,12 +284,13 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 <div class="bg-grid" aria-hidden="true"></div>
 <div class="dust" aria-hidden="true"><i></i><i></i><i></i></div>
 <div class="wrap">
+<div class="thread" id="thread" aria-hidden="true"><i class="th-fill" id="thFill"></i><b class="th-node" data-th="pavel"></b><b class="th-node" data-th="dmitry"></b><b class="th-node" data-th="natali"></b><b class="th-node" data-th="chain"></b></div>
   <header class="page-header">
     <div class="hero-grid">
       <div class="hero-txt">
         <a href="https://traffic-craft.com" class="back-link">&larr; Вернуться на сайт</a>
         <div class="label">Команда</div>
-        <h1 class="page-title">Кто делает результат</h1>
+        <h1 class="page-title">Кто делает <span class="grad">результат</span></h1>
         <p class="lead">Заявки делает реклама, деньги — вся цепочка: трафик, путь пациента, продажи внутри клиники. Под каждый узел — свой человек.</p>
         <div class="hero-chips">
           <a class="h-chip" href="#pavel"><i></i>Трафик</a>
@@ -350,10 +372,10 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
     </div>
   </section>
 
-  <section class="chain rv">
+  <section class="chain rv" id="chain">
     <div class="label">Система</div>
     <h2 class="sec-title">Как это складывается в результат</h2>
-    <div class="chain-grid">
+    <div class="chain-grid"><span class="ch-arr" aria-hidden="true">&rarr;</span><span class="ch-arr a2" aria-hidden="true">&rarr;</span>
       <div class="chain-step spotlight-card"><i class="flow" aria-hidden="true"></i><div class="n">01 · РЕКЛАМА</div><h3>Павел</h3><p>Живые заявки из Facebook и Instagram — из нужного сегмента и по цене, которая бьётся с экономикой клиники.</p></div>
       <div class="chain-step spotlight-card"><i class="flow" aria-hidden="true"></i><div class="n">02 · ПУТЬ ПАЦИЕНТА</div><h3>Дмитрий</h3><p>Всё после клика: сайт, контент, CRM — заявка не теряется до записи.</p></div>
       <div class="chain-step spotlight-card"><i class="flow" aria-hidden="true"></i><div class="n">03 · ВНУТРИ КЛИНИКИ</div><h3>Натали</h3><p>Продажи, сервис и процессы: запись становится оплатой, пациент возвращается.</p></div>
@@ -365,7 +387,7 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
     <div class="label">Следующий шаг</div>
     <h2 class="sec-title">Посмотрим на вашу клинику этим составом</h2>
     <p>Бесплатный разбор: где теряются заявки и сколько даст реклама на вашем рынке.</p>
-    <a class="btn-white" href="https://traffic-craft.com/#cta">Получить разбор клиники &nearr;</a>
+    <span class="btn-halo"><a class="btn-white" href="https://traffic-craft.com/#cta">Получить разбор клиники &nearr;</a></span>
   </section>
   </main>
 </div>
@@ -405,8 +427,8 @@ zone.addEventListener('mousemove',function(e){
 var r=zone.getBoundingClientRect();nx=(e.clientX-r.left)/r.width-.5;ny=(e.clientY-r.top)/r.height-.5;
 if(raf)return;raf=requestAnimationFrame(function(){raf=null;
 shots.forEach(function(sh){var d=+sh.dataset.depth||8;
-sh.style.setProperty('--px',(nx*d)+'px');sh.style.setProperty('--py',(ny*d)+'px')})})},{passive:true});
-zone.addEventListener('mouseleave',function(){shots.forEach(function(sh){sh.style.setProperty('--px','0px');sh.style.setProperty('--py','0px')})})})();
+sh.style.setProperty('--px',(nx*d)+'px');sh.style.setProperty('--py',(ny*d)+'px');sh.style.setProperty('--rx',(nx*d*.55)+'deg');sh.style.setProperty('--ry',(-ny*d*.55)+'deg')})})},{passive:true});
+zone.addEventListener('mouseleave',function(){shots.forEach(function(sh){sh.style.setProperty('--px','0px');sh.style.setProperty('--py','0px');sh.style.setProperty('--rx','0deg');sh.style.setProperty('--ry','0deg')})})})();
 
 /* магнитная кнопка CTA */
 (function(){if(!(window.matchMedia&&matchMedia('(hover: hover)').matches))return;
@@ -424,6 +446,30 @@ var io=new IntersectionObserver(function(es){es.forEach(function(en){
 if(en.isIntersecting){links.forEach(function(a){a.classList.remove('on')});
 var a=map[en.target.id];if(a)a.classList.add('on')}})},{threshold:.35});
 ['pavel','dmitry','natali'].forEach(function(id){var el=document.getElementById(id);if(el)io.observe(el)})})();
+
+/* нить контура: заливка по скроллу, узлы зажигаются (offset-геометрия, transform-only) */
+(function(){var th=document.getElementById('thread');if(!th)return;
+var fill=document.getElementById('thFill'),wrap=document.querySelector('.wrap');
+var ids=['pavel','dmitry','natali','chain'],nodes={},pos={},top0=0,H=1;
+document.querySelectorAll('.th-node').forEach(function(n){nodes[n.dataset.th]=n});
+function absTop(el){var t=0;while(el){t+=el.offsetTop;el=el.offsetParent}return t}
+function measure(){var first=document.getElementById('pavel'),last=document.getElementById('chain');
+if(!first||!last)return;var wTop=absTop(wrap);
+top0=absTop(first)-wTop+10;
+H=Math.max(1,absTop(last)+last.offsetHeight*.5-wTop-top0);
+th.style.top=top0+'px';th.style.height=H+'px';
+ids.forEach(function(id){var el=document.getElementById(id);if(!el)return;
+pos[id]=absTop(el)-wTop-top0+46;var n=nodes[id];if(n)n.style.top=pos[id]+'px'})}
+var raf=null;
+function onScroll(){if(raf)return;raf=requestAnimationFrame(function(){raf=null;
+var line=scrollY+innerHeight*.45-(absTop(wrap)+top0);
+var h=Math.max(0,Math.min(H,line));
+fill.style.transform='scaleY('+(h/H)+')';
+ids.forEach(function(id){var n=nodes[id];if(n)n.classList.toggle('lit',h>=pos[id])})})}
+measure();onScroll();
+addEventListener('load',function(){measure();onScroll()});
+addEventListener('scroll',onScroll,{passive:true});
+var rt;addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(function(){measure();onScroll()},200)},{passive:true})})();
 
 /* скролл-прогресс */
 (function(){var bar=document.querySelector('.scroll-progress');if(!bar)return;var raf=null;
