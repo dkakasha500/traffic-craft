@@ -153,9 +153,16 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 @media(hover:hover){.nav-back:hover{background:var(--white);color:var(--dark);border-color:var(--white);opacity:1}}
 @media(max-width:600px){.nav-back{padding:8px 16px;font-size:13px}}
 @media(max-width:480px){.nav .logo>span,.nav .logo span{font-size:19px}.nav .logo-mark{width:38px;height:38px}.nav .logo{gap:10px;font-size:19px}}
+
+/* мобильная плавающая кнопка возврата: появляется после скролла */
+.float-home{position:fixed;top:14px;left:14px;z-index:60;display:none;align-items:center;gap:8px;padding:10px 16px;border-radius:60px;background:rgba(5,5,5,.88);border:1px solid var(--brd2);color:var(--heading);font-size:13px;font-weight:600;box-shadow:0 6px 20px rgba(0,0,0,.45);opacity:0;transform:translateY(-8px);transition:opacity .3s,transform .3s;pointer-events:none}
+.float-home.on{opacity:1;transform:none;pointer-events:auto}
+@media(max-width:960px){.float-home{display:inline-flex}}
 </style>
 </head>
 <body>
+<a class="float-home" href="/" aria-label="Вернуться на главную"><span aria-hidden="true">&larr;</span> На главную</a>
+
 <nav class="nav"><div class="nav-ctn nav-in">
   <a class="logo" href="/" aria-label="На главную">
     <div class="logo-mark"><svg viewBox="0 0 40 40" fill="none"><rect x="1" y="1" width="38" height="38" rx="10" fill="#0e0e12" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/><text x="6" y="28" font-family="Inter, sans-serif" font-weight="900" font-size="22" fill="#f4f4f5">T</text><text x="19" y="28" font-family="Inter, sans-serif" font-weight="900" font-size="22" fill="#0ee0cf">C</text></svg></div>
@@ -584,6 +591,12 @@ if (window.matchMedia("(pointer: fine)").matches && cursorDot && cursorOutline) 
 document.addEventListener('visibilitychange', function(){
   document.documentElement.classList.toggle('tab-hidden', document.hidden);
 });
+</script>
+<script>
+/* плавающий возврат: показать после 250px скролла */
+(function(){var f=document.querySelector('.float-home');if(!f)return;var raf=null;
+function upd(){f.classList.toggle('on',scrollY>250)}
+addEventListener('scroll',function(){if(raf)return;raf=requestAnimationFrame(function(){raf=null;upd()})},{passive:true});upd()})();
 </script>
 </body>
 </html>
