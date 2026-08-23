@@ -264,6 +264,11 @@ html.js-anim [data-r].vis{opacity:1;transform:translateY(0)}
 }
 /* Фоновая вкладка не жжет батарею: вечные анимации на паузе, пока вкладку не видно */
 .tab-hidden *,.tab-hidden *::before,.tab-hidden *::after{animation-play-state:paused !important}
+
+.nav-back{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border:1px solid var(--brd);border-radius:60px;color:var(--txt);font-size:14px;font-weight:600;white-space:nowrap;transition:background .3s,color .3s,border-color .3s}
+@media(hover:hover){.nav-back:hover{background:var(--white);color:var(--dark);border-color:var(--white);opacity:1}}
+@media(max-width:600px){.nav-back{padding:8px 16px;font-size:13px}}
+@media(max-width:480px){.nav .logo>span,.nav .logo span{font-size:19px}.nav .logo-mark{width:38px;height:38px}.nav .logo{gap:10px;font-size:19px}}
 </style>
   <meta name="description" content="Спасибо за заявку! Traffic Craft уже работает над вашим проектом. Заберите 4 бесплатных чек-листа по рекламе.">
     <meta property="og:type" content="website">
@@ -286,6 +291,7 @@ html.js-anim [data-r].vis{opacity:1;transform:translateY(0)}
     <span>Traffic <span style="color:#0ee0cf">Craft</span></span>
   </a>
   <ul class="nav-links"><li><a href="/#cases">Кейсы</a></li><li><a href="/#reviews">Отзывы</a></li><li><a href="/#approach">Подход</a></li><li><a href="/team">Команда</a></li><li><a href="/calc">Калькулятор</a></li></ul>
+  <a class="nav-back" href="/"><span aria-hidden="true">&larr;</span> На главную</a>
 </div></nav>
 
 <div class="noise"></div>

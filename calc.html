@@ -575,6 +575,11 @@ html.js-cursor input::-webkit-inner-spin-button,html.js-cursor input::-webkit-ou
    (Zen/Firefox продолжают компоситить анимации скрытых вкладок) */
 .tab-hidden *,.tab-hidden *::before,.tab-hidden *::after{animation-play-state:paused !important}
 /* content-visibility на низ снят: кнопка 'Получить разбор' прыгает к #cta - якорь должен попадать точно */
+
+.nav-back{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border:1px solid var(--brd);border-radius:60px;color:var(--txt);font-size:14px;font-weight:600;white-space:nowrap;transition:background .3s,color .3s,border-color .3s}
+@media(hover:hover){.nav-back:hover{background:var(--white);color:var(--dark);border-color:var(--white);opacity:1}}
+@media(max-width:600px){.nav-back{padding:8px 16px;font-size:13px}}
+@media(max-width:480px){.nav .logo>span,.nav .logo span{font-size:19px}.nav .logo-mark{width:38px;height:38px}.nav .logo{gap:10px;font-size:19px}}
 </style>
 </head>
 <body>
@@ -598,6 +603,7 @@ html.js-cursor input::-webkit-inner-spin-button,html.js-cursor input::-webkit-ou
   </a>
   <ul class="nav-links"><li><a href="/#cases">Кейсы</a></li><li><a href="/#reviews">Отзывы</a></li><li><a href="/#approach">Подход</a></li><li><a href="/#team">Команда</a></li><li><a href="/calc" class="active">Калькулятор</a></li></ul>
   <div class="nav-right">
+    <a class="nav-back" href="/"><span aria-hidden="true">&larr;</span> На главную</a>
     <!-- EN-версии пока нет (index-en.html не существует - вел на 404). Вернуть, когда появится:
     <div class="lang-switcher">
       <a href="javascript:void(0)" class="active">RU</a><span class="lang-sep">/</span><a href="/index-en.html">EN</a>
