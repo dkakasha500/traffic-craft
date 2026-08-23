@@ -247,9 +247,14 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 .team-cta-txt{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}
 .team-cta-txt b{color:var(--heading);font-size:16px;font-weight:700;letter-spacing:-.01em}
 .team-cta-txt span{font-size:13.5px;color:var(--txt2)}
-.team-cta-arr{font-size:22px;color:var(--accent);transition:transform .3s;flex-shrink:0}
-@media(hover:hover){.team-cta:hover .team-cta-arr{transform:translateX(6px)}}
-@media(max-width:600px){.team-cta{padding:14px 16px;gap:12px}.team-cta-txt span{font-size:12.5px}}
+.team-cta-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:60px;border:1px solid rgba(14,224,207,.5);color:var(--accent);font-size:14px;font-weight:600;white-space:nowrap;flex-shrink:0;transition:background .3s,color .3s,border-color .3s}
+.team-cta-btn .arr{transition:transform .3s}
+@media(hover:hover){
+  .team-cta:hover{border-color:rgba(14,224,207,.35)}
+  .team-cta:hover .team-cta-btn{background:var(--accent);color:#02201d;border-color:var(--accent)}
+  .team-cta:hover .arr{transform:translateX(4px)}
+}
+@media(max-width:600px){.team-cta{padding:16px;gap:12px;flex-wrap:wrap}.team-cta-txt{flex:1 1 60%}.team-cta-txt span{font-size:12.5px}.team-cta-btn{width:100%;justify-content:center}}
 @media (max-width:900px){
   .team-grid{grid-template-columns:1fr;gap:16px;max-width:520px;margin:0 auto}
   .tm-top{flex-direction:row;align-items:center;gap:14px}
@@ -1144,7 +1149,7 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
   <a href="/team" class="team-cta spotlight-card" data-reveal>
     <span class="team-cta-avas"><img src="team/ava-pavel.jpg" alt="" width="120" height="120" loading="lazy"><img src="team/ava-dmitry.jpg" alt="" width="120" height="120" loading="lazy"><img src="team/ava-natali.jpg" alt="" width="120" height="120" loading="lazy"></span>
     <span class="team-cta-txt"><b>Познакомиться с командой</b><span>История, цифры и зона ответственности каждого</span></span>
-    <span class="team-cta-arr" aria-hidden="true">&rarr;</span>
+    <span class="team-cta-btn">На страницу команды <span class="arr" aria-hidden="true">&rarr;</span></span>
   </a>
 </div></section>
 
