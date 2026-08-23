@@ -208,11 +208,6 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 @keyframes lineGrow{to{width:120px}}
 .p-body{position:relative}
 .p-num{position:absolute;top:-14px;right:0;font-size:96px;line-height:1;font-weight:800;color:rgba(244,244,245,.05);letter-spacing:-.04em;pointer-events:none;user-select:none;font-variant-numeric:tabular-nums}
-.chain-step .flow{position:absolute;top:0;left:0;right:0;height:1px;overflow:hidden;z-index:1}
-.chain-step .flow::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(14,224,207,.85),transparent);transform:translateX(-100%);animation:flowX 3.2s linear infinite}
-.chain-step:nth-of-type(2) .flow::before{animation-delay:1.05s}
-.chain-step:nth-of-type(3) .flow::before{animation-delay:2.1s}
-@keyframes flowX{to{transform:translateX(100%)}}
 .dust{position:fixed;inset:0;pointer-events:none;z-index:0}
 .dust i{position:absolute;width:3px;height:3px;border-radius:50%;background:rgba(14,224,207,.45);box-shadow:0 0 8px rgba(14,224,207,.55);bottom:-4vh;animation:dustF linear infinite;opacity:0}
 .dust i:nth-child(1){left:16%;animation-duration:21s;animation-delay:2s}
@@ -393,9 +388,9 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
     <div class="label">Система</div>
     <h2 class="sec-title">Как это складывается в результат</h2>
     <div class="chain-grid"><span class="ch-arr" aria-hidden="true">&rarr;</span><span class="ch-arr a2" aria-hidden="true">&rarr;</span>
-      <div class="chain-step spotlight-card"><i class="flow" aria-hidden="true"></i><div class="n">01 · РЕКЛАМА</div><div class="ch-ava">П</div><h3>Павел</h3><p>Живые заявки из Facebook и Instagram — из нужного сегмента и по цене, которая бьётся с экономикой клиники.</p></div>
-      <div class="chain-step spotlight-card"><i class="flow" aria-hidden="true"></i><div class="n">02 · ПУТЬ ПАЦИЕНТА</div><div class="ch-ava">Д</div><h3>Дмитрий</h3><p>Всё после клика: сайт, контент, CRM — заявка не теряется до записи.</p></div>
-      <div class="chain-step spotlight-card"><i class="flow" aria-hidden="true"></i><div class="n">03 · ВНУТРИ КЛИНИКИ</div><div class="ch-ava">Н</div><h3>Натали</h3><p>Продажи, сервис и процессы: запись становится оплатой, пациент возвращается.</p></div>
+      <div class="chain-step spotlight-card"><div class="n">01 · РЕКЛАМА</div><div class="ch-ava">П</div><h3>Павел</h3><p>Живые заявки из Facebook и Instagram — из нужного сегмента и по цене, которая бьётся с экономикой клиники.</p></div>
+      <div class="chain-step spotlight-card"><div class="n">02 · ПУТЬ ПАЦИЕНТА</div><div class="ch-ava">Д</div><h3>Дмитрий</h3><p>Всё после клика: сайт, контент, CRM — заявка не теряется до записи.</p></div>
+      <div class="chain-step spotlight-card"><div class="n">03 · ВНУТРИ КЛИНИКИ</div><div class="ch-ava">Н</div><h3>Натали</h3><p>Продажи, сервис и процессы: запись становится оплатой, пациент возвращается.</p></div>
     </div>
     <div class="chain-note">Поэтому отвечаем не за клики и охваты — за выручку.</div>
   </section>
