@@ -50,6 +50,8 @@ const g = id => (d.getElementById(id) || {}).textContent || '';
     const m = g('verdict').match(/~([\d.,]+)/);
     if (!m) errs.push('нет ROAS в вердикте');
     else { const shown = parseFloat(m[1].replace(',', '.')); if (Math.abs(shown - r.roas) > 0.15) errs.push('ROAS ' + shown + ' vs ' + r.roas.toFixed(2)); }
+    eq('метрика цена заявки', g('mCpl'), '~' + w.fmtMoney(r.cpl));
+    eq('метрика цена пациента', g('mCpp'), (r.sales > 0.05 && isFinite(w.state.budget / r.sales)) ? '~' + w.fmtMoney(w.state.budget / r.sales) : '-');
     eq('sticky заявки', g('sLeads'), w.fmtInt(r.leads));
     eq('sticky выручка', g('sRevenue'), w.fmtMoney(r.revenue));
     const sum = w.calcSummary();

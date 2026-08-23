@@ -693,6 +693,10 @@ html.js-cursor input::-webkit-inner-spin-button,html.js-cursor input::-webkit-ou
       <div class="frow"><div class="f-top"><span class="f-name">Выручка</span><b class="gold" id="fRev">-</b></div><div class="f-track"><div class="fbar gold" id="bRev" style="width:100%"></div></div></div>
     </div>
     <div class="verdict" id="verdict" aria-live="polite">-</div>
+    <div class="res-metrics">
+      <div class="metric"><div class="m-val" id="mCpl">-</div><div class="m-lbl">цена заявки</div></div>
+      <div class="metric"><div class="m-val" id="mCpp">-</div><div class="m-lbl">цена пациента</div></div>
+    </div>
     <!-- критичное предупреждение: показываем всегда, когда бюджет выше потолка рынка -->
     <div class="res-burn" id="resBurn" hidden></div>
     <a class="btn res-go" href="#cta">Получить разбор под вашу клинику ↗</a>
@@ -1551,6 +1555,10 @@ function update(){
   document.getElementById('verdict').innerHTML =
     'Реклама окупается <b>~' + (Math.round(r.roas * 10) / 10).toLocaleString('ru-RU') + ' раз</b> по выручке, до ваших расходов.' +
     '<span class="v2">Дальше все решает воронка внутри клиники.</span>';
+  /* метрики: цена заявки и цена привлечения оплатившего пациента */
+  document.getElementById('mCpl').textContent = '~' + fmtMoney(r.cpl);
+  document.getElementById('mCpp').textContent =
+    (r.sales > 0.05 && isFinite(state.budget / r.sales)) ? '~' + fmtMoney(state.budget / r.sales) : '-';
   /* бейдж выбранной конфигурации в заголовке результата */
   var dirNames = state.dirs.map(function(k){ return DATA.niches[state.niche].dirs[k].name; }).join(' + ');
   var cObj = DATA.countries[state.country];
