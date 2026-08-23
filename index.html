@@ -89,6 +89,8 @@ src="https://www.facebook.com/tr?id=2342435819568558&ev=PageView&noscript=1"
 }
 
 html {-webkit-tap-highlight-color: transparent; scroll-behavior: smooth; scroll-padding-top: 80px; overflow-y: scroll;}
+/* якоря из меню: шапка при скролле вниз прячется, запас не нужен - заголовок секции сразу у верха */
+@media(min-width:961px){#cases,#reviews,#approach,#team{scroll-margin-top:-70px}}
 body { font-family: -apple-system, BlinkMacSystemFont, 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--txt); line-height: 1.6; -webkit-font-smoothing: antialiased; opacity: 0; animation: pageReveal 1s cubic-bezier(.22,1,.36,1) forwards; overflow-x: clip; width: 100%; position: relative; }
 @keyframes pageReveal{to{opacity:1}}
 a{color:inherit;text-decoration:none}
