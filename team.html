@@ -276,7 +276,11 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 .ph-corners::before,.ph-corners::after{content:'';position:absolute;width:14px;height:14px;border-color:rgba(14,224,207,.45);border-style:solid}
 .ph-corners::before{left:0;top:0;border-width:1px 0 0 1px}
 .ph-corners::after{right:0;bottom:0;border-width:0 1px 1px 0}
-.ch-ava{width:34px;height:34px;border-radius:50%;border:1px solid rgba(14,224,207,.4);color:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;margin:10px 0 2px;background:rgba(14,224,207,.06);box-shadow:0 0 12px rgba(14,224,207,.12)}
+.ch-ava{width:38px;height:38px;border-radius:50%;border:1px solid rgba(14,224,207,.4);object-fit:cover;display:block;margin:10px 0 2px;box-shadow:0 0 12px rgba(14,224,207,.12)}
+.cta-actions{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.cta-team{display:flex}
+.cta-team img{width:40px;height:40px;border-radius:50%;border:2px solid #050505;object-fit:cover;display:block}
+.cta-team img+img{margin-left:-11px}
 @media(prefers-reduced-motion:no-preference){
   .rv.in .chain-step:nth-of-type(1){animation:stepFlash 1.1s .15s ease 1}
   .rv.in .chain-step:nth-of-type(2){animation:stepFlash 1.1s .5s ease 1}
@@ -389,9 +393,9 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
     <div class="label">Система</div>
     <h2 class="sec-title">Как это складывается в результат</h2>
     <div class="chain-grid"><span class="ch-arr" aria-hidden="true">&rarr;</span><span class="ch-arr a2" aria-hidden="true">&rarr;</span>
-      <div class="chain-step spotlight-card"><div class="n">01 · РЕКЛАМА</div><div class="ch-ava">П</div><h3>Павел</h3><p>Живые заявки из Facebook и Instagram — из нужного сегмента и по цене, которая бьётся с экономикой клиники.</p></div>
-      <div class="chain-step spotlight-card"><div class="n">02 · ПУТЬ ПАЦИЕНТА</div><div class="ch-ava">Д</div><h3>Дмитрий</h3><p>Всё после клика: сайт, контент, CRM — заявка не теряется до записи.</p></div>
-      <div class="chain-step spotlight-card"><div class="n">03 · ВНУТРИ КЛИНИКИ</div><div class="ch-ava">Н</div><h3>Натали</h3><p>Продажи, сервис и процессы: запись становится оплатой, пациент возвращается.</p></div>
+      <div class="chain-step spotlight-card"><div class="n">01 · РЕКЛАМА</div><img class="ch-ava" src="team/ava-pavel.jpg" alt="Павел" loading="lazy" width="120" height="120"><h3>Павел</h3><p>Живые заявки из Facebook и Instagram — из нужного сегмента и по цене, которая бьётся с экономикой клиники.</p></div>
+      <div class="chain-step spotlight-card"><div class="n">02 · ПУТЬ ПАЦИЕНТА</div><img class="ch-ava" src="team/ava-dmitry.jpg" alt="Дмитрий" loading="lazy" width="120" height="120"><h3>Дмитрий</h3><p>Всё после клика: сайт, контент, CRM — заявка не теряется до записи.</p></div>
+      <div class="chain-step spotlight-card"><div class="n">03 · ВНУТРИ КЛИНИКИ</div><img class="ch-ava" src="team/ava-natali.jpg" alt="Натали" loading="lazy" width="120" height="120"><h3>Натали</h3><p>Продажи, сервис и процессы: запись становится оплатой, пациент возвращается.</p></div>
     </div>
     <div class="chain-note">Поэтому отвечаем не за клики и охваты — за выручку.</div>
   </section>
@@ -401,7 +405,10 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
       <div class="label">Следующий шаг</div>
       <h2 class="sec-title">Посмотрим на вашу клинику этим составом</h2>
       <p>Бесплатный разбор: где теряются заявки и сколько даст реклама на вашем рынке.</p>
-      <span class="btn-halo"><a class="btn-white" href="https://traffic-craft.com/#cta">Получить разбор клиники &nearr;</a></span>
+      <div class="cta-actions">
+        <span class="btn-halo"><a class="btn-white" href="https://traffic-craft.com/#cta">Получить разбор клиники &nearr;</a></span>
+        <div class="cta-team" aria-hidden="true"><img src="team/ava-pavel.jpg" alt=""><img src="team/ava-dmitry.jpg" alt=""><img src="team/ava-natali.jpg" alt=""></div>
+      </div>
     </div>
   </section>
   </main>
