@@ -240,6 +240,16 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 .tm-facts{list-style:none;margin:16px 0 0;padding:0}
 .tm-facts li{font-size:14.5px;line-height:1.55;color:var(--txt);padding:9px 0}
 .tm-facts li+li{border-top:1px solid var(--brd)}
+.team-cta{margin-top:24px;display:flex;align-items:center;gap:18px;padding:18px 24px;border-radius:16px;color:var(--txt)}
+.team-cta-avas{display:flex;flex-shrink:0}
+.team-cta-avas img{width:44px;height:44px;border-radius:50%;border:2px solid #050505;object-fit:cover;display:block}
+.team-cta-avas img+img{margin-left:-12px}
+.team-cta-txt{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}
+.team-cta-txt b{color:var(--heading);font-size:16px;font-weight:700;letter-spacing:-.01em}
+.team-cta-txt span{font-size:13.5px;color:var(--txt2)}
+.team-cta-arr{font-size:22px;color:var(--accent);transition:transform .3s;flex-shrink:0}
+@media(hover:hover){.team-cta:hover .team-cta-arr{transform:translateX(6px)}}
+@media(max-width:600px){.team-cta{padding:14px 16px;gap:12px}.team-cta-txt span{font-size:12.5px}}
 @media (max-width:900px){
   .team-grid{grid-template-columns:1fr;gap:16px;max-width:520px;margin:0 auto}
   .tm-top{flex-direction:row;align-items:center;gap:14px}
@@ -808,7 +818,7 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
     </div>
     <span>Traffic <span style="color:#0ee0cf">Craft</span></span>
   </a>
-  <ul class="nav-links" id="navLinks"><li><a href="#approach" data-section="approach">О нас</a></li><li><a href="#cases" data-section="cases">Кейсы</a></li><li><a href="#reviews" data-section="reviews">Отзывы</a></li><li><a href="#approach" data-section="approach">Подход</a></li><li><a href="/calc">Калькулятор</a></li></ul>
+  <ul class="nav-links" id="navLinks"><li><a href="#team" data-section="team">Команда</a></li><li><a href="#cases" data-section="cases">Кейсы</a></li><li><a href="#reviews" data-section="reviews">Отзывы</a></li><li><a href="#approach" data-section="approach">Подход</a></li><li><a href="/calc">Калькулятор</a></li></ul>
   
   <div class="nav-right">
     <!-- EN-версии пока нет (index-en.html не существует - вел на 404). Вернуть, когда появится:
@@ -1131,7 +1141,11 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
       </ul>
     </div>
   </div>
-  <div data-reveal style="margin-top:28px"><a href="/team" style="display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:600;color:var(--accent)">Подробнее о каждом &rarr;</a></div>
+  <a href="/team" class="team-cta spotlight-card" data-reveal>
+    <span class="team-cta-avas"><img src="team/ava-pavel.jpg" alt="" width="120" height="120" loading="lazy"><img src="team/ava-dmitry.jpg" alt="" width="120" height="120" loading="lazy"><img src="team/ava-natali.jpg" alt="" width="120" height="120" loading="lazy"></span>
+    <span class="team-cta-txt"><b>Познакомиться с командой</b><span>История, цифры и зона ответственности каждого</span></span>
+    <span class="team-cta-arr" aria-hidden="true">&rarr;</span>
+  </a>
 </div></section>
 
 <div class="divider"><div class="divider-diamond"></div></div>
