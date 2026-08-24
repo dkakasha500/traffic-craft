@@ -345,6 +345,8 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 /* компактный подвал на мобиле: две колонки, плотнее ссылки */
 @media(max-width:600px){
   .footer{padding:36px 0 26px;margin-top:24px}
+  .footer .ctn{padding:0 24px}
+  .footer .footer-bottom{padding:0 24px}
   .footer-top{display:grid;grid-template-columns:1fr .82fr;gap:20px 32px;padding-bottom:22px;align-items:start}
   /* колонки без провалов: слева Контакты и Ещё, справа Навигация на всю высоту */
   .footer-top>.footer-col:nth-child(1){grid-column:1;grid-row:1}
@@ -356,9 +358,10 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
   .footer-contact-link svg{width:16px;height:16px}
   .footer .footer-bottom{margin-top:20px;gap:12px;flex-direction:row;justify-content:space-between;align-items:center;flex-wrap:wrap;text-align:left}
   .footer .footer-bottom .logo{gap:8px}
-  .footer .footer-cta{padding:10px 15px;font-size:12.5px;white-space:nowrap}
-  .footer .footer-bottom .logo svg{width:30px;height:30px}
-  .footer .footer-bottom .logo span{font-size:17px}
+  /* на тач-экранах кнопка сразу в активном виде: hover там не работает */
+  .footer .footer-cta{padding:12px 16px;font-size:13px;white-space:nowrap;background:var(--white);color:var(--dark);border-color:var(--white);font-weight:700}
+  .footer .footer-bottom .logo svg{width:36px;height:36px}
+  .footer .footer-bottom .logo span{font-size:19px}
   .footer .footer-legal{gap:12px}
 }
 </style>
