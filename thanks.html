@@ -120,6 +120,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Inter',system-ui,sans-serif;b
 
 .cl-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:32px}
 @media(max-width:560px){.cl-grid{grid-template-columns:1fr 1fr;gap:10px}.cl-body{padding:12px 12px}.cl-name{font-size:13px;line-height:1.35}}
+@media(max-width:899px){
+  .cl-section{padding-top:40px;margin-top:30px}
+  .cl-section .sec-title{margin-bottom:12px}
+  .cl-section .sec-desc{margin-bottom:20px}
+  .cl-section .cl-note{margin-bottom:24px}
+  .hero-actions{gap:22px}
+}
 
 .cl-card{border-radius:16px;border:1px solid var(--brd);background:var(--glass-bg);transition:all .35s cubic-bezier(.22,1,.36,1);position:relative;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;text-decoration:none;color:inherit}
 .cl-card::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;border-radius:16px;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(14,224,207,0.06) 0%,transparent 60%);opacity:0;transition:opacity .4s;pointer-events:none}
@@ -312,7 +319,7 @@ html.js-anim [data-r].vis{opacity:1;transform:translateY(0)}
 .footer .footer-copy{font-size:14px;color:var(--txt3)}
 @media(max-width:760px){.footer-top{grid-template-columns:1fr;gap:28px}.footer{padding:48px 0 32px}}
 /* на этой странице глобальные ссылки с подчеркиванием - в шапке и подвале снимаем */
-.nav .logo,.nav-links a,.nav-back,.footer-link,.footer-contact-link,.footer .footer-bottom .logo{text-decoration:none}
+.nav .logo,.nav-links a,.nav-back,.float-home,.footer-link,.footer-contact-link,.footer .footer-bottom .logo{text-decoration:none}
 @media(max-width:480px){.nav .logo>span,.nav .logo span{font-size:19px}.nav .logo-mark{width:38px;height:38px}.nav .logo{gap:10px;font-size:19px}}
 
 /* превью канала */
