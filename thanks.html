@@ -369,6 +369,20 @@ html.js-anim [data-r].vis{opacity:1;transform:translateY(0)}
   .tl-step::before{display:none}
   .tl-steps{gap:12px}
 }
+
+/* компактный подвал на мобиле: две колонки, плотнее ссылки */
+@media(max-width:600px){
+  .footer{padding:36px 0 26px;margin-top:24px}
+  .footer-top{display:grid;grid-template-columns:1fr 1fr;gap:22px 18px;padding-bottom:22px}
+  .footer-col-title{font-size:11.5px;letter-spacing:1.4px;margin-bottom:10px}
+  .footer-link,.footer-contact-link{font-size:14px;margin-bottom:9px}
+  .footer-contact-link{gap:8px}
+  .footer-contact-link svg{width:16px;height:16px}
+  .footer .footer-bottom{margin-top:20px;gap:14px}
+  .footer .footer-bottom .logo svg{width:36px;height:36px}
+  .footer .footer-bottom .logo span{font-size:20px}
+  .footer .footer-legal{gap:12px}
+}
 </style>
   <meta name="description" content="Спасибо за заявку! Ответим в течение дня. А пока подпишитесь на Telegram-канал — разборы рекламы клиник, кейсы и чек-листы.">
     <meta property="og:type" content="website">

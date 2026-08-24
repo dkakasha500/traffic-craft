@@ -805,6 +805,20 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 .marquee-wrap.mq-paused .marquee-track{animation-play-state:paused}
 /* content-visibility снят: у одностраничника с якорной навигацией он сдвигал
    позиции при прыжках к #cta/#reviews (промах до 772px) - навигация важнее экономии рендера */
+
+/* компактный подвал на мобиле: две колонки, плотнее ссылки */
+@media(max-width:600px){
+  .footer{padding:36px 0 26px;margin-top:24px}
+  .footer-top{display:grid;grid-template-columns:1fr 1fr;gap:22px 18px;padding-bottom:22px}
+  .footer-col-title{font-size:11.5px;letter-spacing:1.4px;margin-bottom:10px}
+  .footer-link,.footer-contact-link{font-size:14px;margin-bottom:9px}
+  .footer-contact-link{gap:8px}
+  .footer-contact-link svg{width:16px;height:16px}
+  .footer .footer-bottom{margin-top:20px;gap:14px}
+  .footer .footer-bottom .logo svg{width:36px;height:36px}
+  .footer .footer-bottom .logo span{font-size:20px}
+  .footer .footer-legal{gap:12px}
+}
 </style>
 </head>
 <body>
