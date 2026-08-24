@@ -331,11 +331,13 @@ html.js-anim [data-r].vis{opacity:1;transform:translateY(0)}
 .msg-line p{margin:0;font-size:14.5px;color:var(--txt2);text-align:left}
 .msg-line .btn-row{margin:0;flex-shrink:0}
 .msg-line .btn{padding:12px 22px;font-size:14px}
-@media(min-width:768px){
-  .cl-section{text-align:center}
-  .cl-section .cl-left{margin-left:auto;margin-right:auto}
-  .cl-section .sec-desc{margin-left:auto;margin-right:auto;max-width:760px;margin-bottom:10px}
-  .cl-section .cl-note{margin-bottom:26px}
+@media(min-width:900px){
+  .cl-section .cl-left{display:grid;grid-template-columns:1fr auto;column-gap:56px;align-items:center;max-width:none;margin-bottom:30px;text-align:left}
+  .cl-section .cl-left>.sec-label{grid-column:1;margin-bottom:10px}
+  .cl-section .cl-left>.sec-title{grid-column:1;margin-bottom:8px}
+  .cl-section .cl-left>.sec-desc{grid-column:1;margin:0 0 8px;max-width:640px}
+  .cl-section .cl-left>.cl-note{grid-column:1;margin:0}
+  .cl-section .cl-left>.btn-accent{grid-column:2;grid-row:1/5;align-self:center;justify-self:end}
 }
 @media(max-width:640px){
   .tg-card{flex-direction:column;text-align:center;padding:24px 20px}
