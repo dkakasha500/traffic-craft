@@ -8,9 +8,9 @@
 // 1. Создай Google Таблицу: https://sheets.new
 //    Назови её "TC Заявки"
 //    В первой строке заполни заголовки:
-//    A1: Дата (Мск)    B1: Имя    C1: Телефон    D1: Проект
-//    E1: UTM Source    F1: UTM Medium    G1: UTM Campaign
-//    H1: fbclid    I1: Event ID    J1: Гео
+//    A1: Дата (Мск)    B1: Имя    C1: Телефон    D1: Проект    E1: Гео
+//    F1: UTM Source    G1: UTM Medium    H1: UTM Campaign
+//    I1: fbclid    J1: Event ID
 //
 // 2. Открой: Расширения → Apps Script
 //
@@ -64,12 +64,12 @@ function doPost(e) {
       data.name || '',
       data.phone || '',
       data.project || '',
+      data.geo || '',
       data.utm_source || '',
       data.utm_medium || '',
       data.utm_campaign || '',
       data.fbclid || '',
-      data.eventId || '',
-      data.geo || ''
+      data.eventId || ''
     ]);
 
     return ContentService
