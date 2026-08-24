@@ -365,6 +365,7 @@ html.js-anim [data-r].vis{opacity:1;transform:translateY(0)}
 /* шаги разбора на тач-экранах: рамка постоянная (hover там либо не работает, либо залипает после тапа) */
 @media(max-width:900px),(hover:none){
   .tl-step{border:1px solid var(--brd);background:rgba(255,255,255,.015);transform:none !important;box-shadow:none !important}
+  .tl-step+.tl-step{border-top:1px solid var(--brd);margin-top:0}
   .tl-step::before{display:none}
   .tl-steps{gap:12px}
 }
