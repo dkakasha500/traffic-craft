@@ -361,6 +361,13 @@ html.js-anim [data-r].vis{opacity:1;transform:translateY(0)}
   .hero-actions-cta{padding:0}
   .cl-section{margin-top:34px;padding-top:28px}
 }
+
+/* шаги разбора на тач-экранах: рамка постоянная (hover там либо не работает, либо залипает после тапа) */
+@media(max-width:900px),(hover:none){
+  .tl-step{border:1px solid var(--brd);background:rgba(255,255,255,.015);transform:none !important;box-shadow:none !important}
+  .tl-step::before{display:none}
+  .tl-steps{gap:12px}
+}
 </style>
   <meta name="description" content="Спасибо за заявку! Ответим в течение дня. А пока подпишитесь на Telegram-канал — разборы рекламы клиник, кейсы и чек-листы.">
     <meta property="og:type" content="website">
