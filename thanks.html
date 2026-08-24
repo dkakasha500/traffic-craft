@@ -119,7 +119,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Inter',system-ui,sans-serif;b
 .sec-desc{font-size:16px;color:var(--txt);line-height:1.7;margin-bottom:24px;max-width:540px}
 
 .cl-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:32px}
-@media(max-width:560px){.cl-grid{grid-template-columns:1fr;gap:12px}}
+@media(max-width:560px){.cl-grid{grid-template-columns:1fr 1fr;gap:10px}.cl-body{padding:12px 12px}.cl-name{font-size:13px;line-height:1.35}}
 
 .cl-card{border-radius:16px;border:1px solid var(--brd);background:var(--glass-bg);transition:all .35s cubic-bezier(.22,1,.36,1);position:relative;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;text-decoration:none;color:inherit}
 .cl-card::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;border-radius:16px;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(14,224,207,0.06) 0%,transparent 60%);opacity:0;transition:opacity .4s;pointer-events:none}
