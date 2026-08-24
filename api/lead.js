@@ -82,6 +82,16 @@ module.exports = async (req, res) => {
   }
 
   const clientIp = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim();
+
+  /* Гео запроса: Vercel проставляет заголовки по IP (city бывает URL-encoded) */
+  let geoCity = String(req.headers['x-vercel-ip-city'] || '');
+  try { geoCity = decodeURIComponent(geoCity); } catch (e) {}
+  const geoCode = String(req.headers['x-vercel-ip-country'] || '');
+  let geoCountry = geoCode;
+  try {
+    if (geoCode) geoCountry = new Intl.DisplayNames(['ru'], { type: 'region' }).of(geoCode) || geoCode;
+  } catch (e) {}
+  const geo = [geoCountry, geoCity].filter(Boolean).join(', ');
   if (rateLimited(clientIp)) {
     // Тихий дроп: спамеру отвечаем «ок», в логах видно реальную причину
     console.log('lead: rate limit exceeded for ' + clientIp + ', silently dropped');
@@ -98,17 +108,18 @@ module.exports = async (req, res) => {
     console.error('lead: TG_BOT_TOKEN / TG_CHAT_ID не заданы в Environment Variables');
   }
   if (tgToken && tgChatId) {
-    const utmText = Object.keys(utm)
-      .map((k) => k.replace('utm_', '') + ': ' + esc(utm[k]))
-      .join('\n');
+    const mskTime = new Date().toLocaleString('ru-RU', {
+      timeZone: 'Europe/Moscow',
+      day: '2-digit', month: '2-digit', year: 'numeric',
+      hour: '2-digit', minute: '2-digit',
+    });
     const text =
       '🔥 Новая заявка!\n\n' +
       '👤 Имя: ' + esc(name) + '\n' +
       '📞 Телефон: ' + esc(phone) + '\n' +
       (project ? '🏥 Проект: ' + esc(project) + '\n' : '') +
-      (utmText ? '\n📊 UTM:\n' + utmText + '\n' : '') +
-      (fbclid ? '\n🔗 fbclid: ' + esc(fbclid) + '\n' : '') +
-      '\n📅 ' + new Date().toLocaleString('ru-RU', { timeZone: 'Asia/Almaty' });
+      '\n🕒 ' + mskTime + ' (Мск)' +
+      (geo ? '\n📍 ' + esc(geo) : '');
 
     tasks.push(
       fetch('https://api.telegram.org/bot' + tgToken + '/sendMessage', {
