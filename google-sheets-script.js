@@ -8,9 +8,9 @@
 // 1. Создай Google Таблицу: https://sheets.new
 //    Назови её "TC Заявки"
 //    В первой строке заполни заголовки:
-//    A1: Дата    B1: Имя    C1: Телефон    D1: Проект
+//    A1: Дата (Мск)    B1: Имя    C1: Телефон    D1: Проект
 //    E1: UTM Source    F1: UTM Medium    G1: UTM Campaign
-//    H1: fbclid    I1: Event ID
+//    H1: fbclid    I1: Event ID    J1: Гео
 //
 // 2. Открой: Расширения → Apps Script
 //
@@ -54,10 +54,10 @@ function doPost(e) {
 
     var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
 
-    // Форматируем дату в Алматы
+    // Форматируем дату по Москве
     var date = data.date
-      ? Utilities.formatDate(new Date(data.date), 'Asia/Almaty', 'dd.MM.yyyy HH:mm:ss')
-      : Utilities.formatDate(new Date(), 'Asia/Almaty', 'dd.MM.yyyy HH:mm:ss');
+      ? Utilities.formatDate(new Date(data.date), 'Europe/Moscow', 'dd.MM.yyyy HH:mm:ss')
+      : Utilities.formatDate(new Date(), 'Europe/Moscow', 'dd.MM.yyyy HH:mm:ss');
 
     sheet.appendRow([
       date,
@@ -68,7 +68,8 @@ function doPost(e) {
       data.utm_medium || '',
       data.utm_campaign || '',
       data.fbclid || '',
-      data.eventId || ''
+      data.eventId || '',
+      data.geo || ''
     ]);
 
     return ContentService

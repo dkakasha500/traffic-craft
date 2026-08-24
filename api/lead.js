@@ -154,6 +154,7 @@ module.exports = async (req, res) => {
           fbclid,
           date: new Date().toISOString(),
           eventId,
+          geo,
         }),
         redirect: 'follow', // GAS отвечает 302 на script.googleusercontent.com
         signal: AbortSignal.timeout(8000),
