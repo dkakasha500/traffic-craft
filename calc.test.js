@@ -1,3 +1,4 @@
+process.env.TZ = 'Asia/Jerusalem'; /* дефолт-страна в тестах - Израиль; иначе тест зависит от TZ машины */
 const { JSDOM, VirtualConsole } = require('jsdom');
 const fs = require('fs');
 const assert = require('assert');
