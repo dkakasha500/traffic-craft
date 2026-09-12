@@ -1640,11 +1640,13 @@ const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date()
     }, {once: true});
   });
 
-  /* MessengerClick: клик в WhatsApp/Telegram - намерение связаться. */
-  document.querySelectorAll('a[href*="wa.me"], a[href*="t.me"]').forEach(function(link){
+  /* MessengerClick: клик по кнопке контакта (теперь все они ведут на мост /go) -
+     аудитории ретаргета по этому событию продолжают пополняться.
+     Канал и бот сюда не попадают - подписка не «намерение связаться». */
+  document.querySelectorAll('a[href^="/go?"]').forEach(function(link){
     link.addEventListener('click', function(){
       fbq('trackCustom', 'MessengerClick', {
-        messenger: link.href.includes('wa.me') ? 'whatsapp' : 'telegram',
+        messenger: link.href.indexOf('m=tg') > -1 ? 'telegram' : 'whatsapp',
         location: link.closest('.floating-socials') ? 'floating' : 'footer',
         page: 'leadgen'
       });
