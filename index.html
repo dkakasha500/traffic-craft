@@ -343,9 +343,13 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 
 @media(min-width: 961px) {
   .case { position: sticky; box-shadow: 0 -10px 30px rgba(0,0,0,0.9); }
+  /* стек: второй ряд с бОльшим z-index наезжает ПОВЕРХ первого - верхние ныряют под нижние */
   .case:nth-child(1) { top: 120px; z-index: 10; }
   .case:nth-child(2) { top: 140px; z-index: 11; }
   .case:nth-child(3) { top: 160px; z-index: 12; }
+  .case:nth-child(4) { top: 140px; z-index: 13; }
+  .case:nth-child(5) { top: 160px; z-index: 14; }
+  .case:nth-child(6) { top: 180px; z-index: 15; }
 }
 
 .case{border-radius:24px;padding:40px 32px;display:flex;flex-direction:column; background:var(--bg2); border:1px solid var(--brd); transition: opacity 0.6s cubic-bezier(0.22,1,0.36,1), transform 0.3s cubic-bezier(0.22,1,0.36,1), background 0.3s, border-color 0.3s, box-shadow 0.3s}
