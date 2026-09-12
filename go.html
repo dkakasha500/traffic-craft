@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Открываем чат — Traffic Craft</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0e0e12">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<!-- Мост в мессенджер: страница живет ~1 секунду.
+     Смысл: событие Lead/Contact уходит на ЗАГРУЗКЕ страницы - этот момент
+     пиксель успевает всегда, в отличие от клика по прямой ссылке wa.me,
+     после которого человек мгновенно покидает сайт.
+     Ссылки сюда ведут БЕЗ target="_blank": дедупликация Lead живет
+     в sessionStorage, а он у каждой вкладки свой.
+     Параметры: ?m=wa|tg (мессенджер) &pl=метка-кнопки (латиница) -->
+<script>
+/* Пиксель грузится сразу, не лениво - мосту он нужен в первые же миллисекунды */
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('set', 'autoConfig', false, '2342435819568558');
+fbq('init', '2342435819568558');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=2342435819568558&ev=PageView&noscript=1"
+/></noscript>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{background:#000;color:#a1a1aa;font-family:-apple-system,BlinkMacSystemFont,'Inter',system-ui,sans-serif;display:flex;align-items:center;justify-content:center;padding:24px;position:relative;overflow:hidden}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(700px 420px at 50% 30%,rgba(14,224,207,.08),transparent 65%);pointer-events:none}
+.card{position:relative;text-align:center;max-width:360px;width:100%}
+.logo{display:inline-flex;align-items:center;gap:12px;margin-bottom:26px;color:#f4f4f5;font-weight:700;font-size:22px;letter-spacing:-.03em}
+.logo svg{width:40px;height:40px}
+.logo b{color:#0ee0cf;font-weight:700}
+.ttl{font-size:20px;font-weight:700;color:#f4f4f5;letter-spacing:-.02em;margin-bottom:18px}
+.dots{display:flex;gap:8px;justify-content:center;margin-bottom:26px}
+.dots i{width:8px;height:8px;border-radius:50%;background:#0ee0cf;animation:b 1.2s ease-in-out infinite}
+.dots i:nth-child(2){animation-delay:.15s}
+.dots i:nth-child(3){animation-delay:.3s}
+@keyframes b{0%,100%{transform:translateY(0);opacity:.4}40%{transform:translateY(-7px);opacity:1}}
+.hint{font-size:13.5px;color:#71717a;margin-bottom:16px}
+.go{display:inline-flex;align-items:center;gap:9px;padding:14px 30px;border-radius:60px;font-size:15px;font-weight:700;text-decoration:none;color:#fff;background:#25D366;transition:transform .2s}
+.go.tg{background:#2AABEE}
+.go:active{transform:scale(.97)}
+.go svg{width:18px;height:18px;fill:currentColor;flex-shrink:0}
+@media(prefers-reduced-motion:reduce){.dots i{animation:none;opacity:.8}}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo"><svg viewBox="0 0 40 40" fill="none"><rect x="1" y="1" width="38" height="38" rx="10" fill="#0e0e12" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/><text x="6" y="28" font-family="Inter,sans-serif" font-weight="900" font-size="22" fill="#f4f4f5">T</text><text x="19" y="28" font-family="Inter,sans-serif" font-weight="900" font-size="22" fill="#0ee0cf">C</text></svg>Traffic <b>Craft</b></div>
+  <div class="ttl" id="ttl">Открываем WhatsApp…</div>
+  <div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
+  <div class="hint">Если чат не открылся — нажмите кнопку</div>
+  <a class="go" id="go" href="https://wa.me/77782182305">
+    <svg id="goIco" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+    <span id="goTxt">Открыть WhatsApp</span>
+  </a>
+</div>
+<script>
+(function(){
+  function once(key){
+    try { if (sessionStorage.getItem(key)) return false;
+          sessionStorage.setItem(key, '1'); return true; }
+    catch (e) { return true; }
+  }
+  function cookie(n){ var m = document.cookie.match(new RegExp('(?:^|; )' + n + '=([^;]*)')); return m ? decodeURIComponent(m[1]) : ''; }
+
+  /* параметры: белый список, мусор молча заменяется дефолтами */
+  var q = new URLSearchParams(location.search);
+  var m = q.get('m') === 'tg' ? 'tg' : 'wa';
+  var pl = String(q.get('pl') || '');
+  if (!/^[a-z0-9-]{1,16}$/i.test(pl)) pl = 'other';
+
+  var WA_TEXT = 'Добрый день! Пишу по поводу рекламы с сайта';
+  var DEST = m === 'tg'
+    ? 'https://t.me/PPavel_D'
+    : 'https://wa.me/77782182305?text=' + encodeURIComponent(WA_TEXT);
+
+  var go = document.getElementById('go');
+  go.href = DEST;
+  if (m === 'tg') {
+    document.getElementById('ttl').textContent = 'Открываем Telegram…';
+    document.getElementById('goTxt').textContent = 'Открыть Telegram';
+    go.classList.add('tg');
+    document.getElementById('goIco').innerHTML = '<path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.492-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>';
+  }
+
+  /* Lead - один на вкладку, каким бы путем человек ни пошел.
+     Тот же ключ tc_lead пишут формы при сабмите - дублей не будет. */
+  var leadEid = '';
+  var isFirst = once('tc_lead');
+  try {
+    if (isFirst) {
+      leadEid = 'msg_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
+      fbq('track', 'Lead', { content_category: 'messenger_' + m, placement: pl, value: 0, currency: 'KZT' }, { eventID: leadEid });
+    }
+    fbq('track', 'Contact', { content_category: 'messenger_' + m, placement: pl });
+  } catch (e) {}
+
+  /* заметка своим + серверный дубль Lead (CAPI, переживает адблок).
+     keepalive - запрос доживает после редиректа */
+  try {
+    var ref = document.referrer || '';
+    var utm = {};
+    try {
+      var ru = ref ? new URL(ref) : null;
+      if (ru) ['utm_source', 'utm_medium', 'utm_campaign'].forEach(function(k){
+        var v = ru.searchParams.get(k); if (v) utm[k] = v;
+      });
+    } catch (e) {}
+    var fbc = cookie('_fbc'), fbp = cookie('_fbp');
+    try { fbc = fbc || localStorage.getItem('_fbc') || ''; fbp = fbp || localStorage.getItem('_fbp') || ''; } catch (e) {}
+    fetch('/api/lead', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      keepalive: true,
+      body: JSON.stringify({
+        kind: 'msg', messenger: m, placement: pl,
+        first: isFirst ? 1 : 0, leadEventId: leadEid,
+        page: ref || location.href,
+        utm_source: utm.utm_source || '', utm_medium: utm.utm_medium || '', utm_campaign: utm.utm_campaign || '',
+        fbc: fbc, fbp: fbp
+      })
+    }).catch(function(){});
+  } catch (e) {}
+
+  /* 0.9с хватает пикселю; локально (file:) ждать нечего */
+  var wait = location.protocol === 'file:' ? 300 : 900;
+  setTimeout(function(){ location.replace(DEST); }, wait);
+})();
+</script>
+</body>
+</html>

@@ -76,8 +76,10 @@ module.exports = async (req, res) => {
     if (b[k]) utm[k] = String(b[k]).slice(0, 256);
   });
 
+  const isMsgNote = b.kind === 'msg'; // заметка с моста /go - формы там нет
+
   // Та же валидация, что и на клиенте
-  if (name.length < 2 || phone.length < 3) {
+  if (!isMsgNote && (name.length < 2 || phone.length < 3)) {
     return res.status(400).json({ ok: false, error: 'invalid_payload' });
   }
 
@@ -99,6 +101,90 @@ module.exports = async (req, res) => {
   }
 
   const tasks = [];
+
+  /* --- Заметка с моста /go: человек ушел в мессенджер --- */
+  if (isMsgNote) {
+    const messenger = b.messenger === 'tg' ? 'Telegram' : 'WhatsApp';
+    const placement = /^[a-z0-9-]{1,24}$/i.test(String(b.placement || '')) ? String(b.placement) : 'other';
+    let page = '';
+    try { const u = new URL(String(b.page || '')); page = (u.pathname + u.search).slice(0, 120); } catch (e) {}
+    const noteToken = process.env.TG_BOT_TOKEN;
+    const noteChat = process.env.TG_CHAT_ID;
+    const isFirst = b.first === 1 || b.first === '1';
+
+    if (noteToken && noteChat && isFirst) {
+      const mskTime = new Date().toLocaleString('ru-RU', {
+        timeZone: 'Europe/Moscow',
+        day: '2-digit', month: '2-digit', year: 'numeric',
+        hour: '2-digit', minute: '2-digit',
+      });
+      const noteText =
+        '\ud83d\udc63 Ушел в ' + messenger + ' \u00b7 кнопка: ' + esc(placement) + '\n' +
+        (page ? '\ud83d\udcc4 Со страницы: ' + esc(page) + '\n' : '') +
+        '\n\ud83d\udd52 ' + mskTime + ' (Мск)' +
+        (geo ? '\n\ud83d\udccd ' + esc(geo) : '');
+      tasks.push(
+        fetch('https://api.telegram.org/bot' + noteToken + '/sendMessage', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ chat_id: noteChat, text: noteText, parse_mode: 'HTML' }),
+          signal: AbortSignal.timeout(8000),
+        }).then((r) => {
+          if (!r.ok) return r.text().then((t) => Promise.reject(new Error('telegram_note: ' + t)));
+        })
+      );
+    }
+
+    /* серверный дубль Lead моста: тот же eventID, что у пикселя - Meta дедуплицирует,
+       но серверное событие доходит даже при адблоке */
+    const noteCapi = process.env.META_CAPI_TOKEN;
+    const notePixel = process.env.META_PIXEL_ID || '2342435819568558';
+    const noteEid = String(b.leadEventId || '').slice(0, 64);
+    if (noteCapi && noteEid && isFirst) {
+      const userData = {};
+      const ua = String(req.headers['user-agent'] || '').slice(0, 512);
+      if (ua) userData.client_user_agent = ua;
+      if (clientIp) userData.client_ip_address = clientIp;
+      const nFbp = String(b.fbp || '').slice(0, 128);
+      const nFbc = String(b.fbc || '').slice(0, 512);
+      if (nFbp) userData.fbp = nFbp;
+      if (nFbc) userData.fbc = nFbc;
+      const event = {
+        event_name: 'Lead',
+        event_time: Math.floor(Date.now() / 1000),
+        event_id: noteEid,
+        action_source: 'website',
+        user_data: userData,
+        custom_data: Object.assign(
+          { content_category: 'messenger_' + (b.messenger === 'tg' ? 'tg' : 'wa'), placement: placement, value: 0, currency: 'KZT' },
+          utm
+        ),
+      };
+      if (b.page) event.event_source_url = String(b.page).slice(0, 500);
+      const capiBody = { data: [event] };
+      if (process.env.META_TEST_EVENT_CODE) capiBody.test_event_code = process.env.META_TEST_EVENT_CODE;
+      tasks.push(
+        fetch(
+          'https://graph.facebook.com/v25.0/' + notePixel + '/events?access_token=' + encodeURIComponent(noteCapi),
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(capiBody),
+            signal: AbortSignal.timeout(8000),
+          }
+        ).then((r) => {
+          if (!r.ok) return r.text().then((t) => Promise.reject(new Error('meta_capi_note: ' + t.slice(0, 200))));
+        })
+      );
+    }
+
+    try {
+      await Promise.allSettled(tasks).then((rs) => {
+        rs.forEach((r) => { if (r.status === 'rejected') console.error('lead msg-note:', r.reason && r.reason.message); });
+      });
+    } catch (e) { console.error('lead msg-note:', e && e.message); }
+    return res.status(200).json({ ok: true });
+  }
 
   /* --- Telegram --- */
   const tgToken = process.env.TG_BOT_TOKEN;
