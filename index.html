@@ -522,8 +522,18 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 .cta-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(14,224,207,.15),transparent 60%);pointer-events:none}
 .cta-card .heading{color:var(--white);font-size:clamp(28px,4.5vw,48px);margin-bottom:16px;position:relative;text-shadow:0 0 40px rgba(14,224,207,.3)}
 .cta-desc{font-size:18px;color:var(--txt);max-width:560px;margin:0 auto 32px;line-height:1.7;position:relative}
+/* Быстрый путь: мессенджеры до формы (Lead уходит на мосту /go) */
+.cta-msg{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative;z-index:2}
+.cta-msg-btn{display:inline-flex;align-items:center;gap:10px;padding:16px 30px;border-radius:60px;font-size:15.5px;font-weight:700;text-decoration:none;color:#fff;transition:transform .2s,box-shadow .3s}
+.cta-msg-btn svg{width:20px;height:20px;fill:currentColor;flex-shrink:0}
+.cta-msg-btn.wa{background:#25D366}
+.cta-msg-btn.tg{background:#2AABEE}
+.cta-msg-btn:active{transform:scale(.97)}
+@media(hover:hover){.cta-msg-btn.wa:hover{transform:translateY(-2px);box-shadow:0 12px 34px rgba(37,211,102,.35)}.cta-msg-btn.tg:hover{transform:translateY(-2px);box-shadow:0 12px 34px rgba(42,171,238,.35)}}
+.cta-or{display:flex;align-items:center;gap:16px;max-width:560px;margin:32px auto 0;position:relative;z-index:2;color:var(--txt2);font-size:14.5px;white-space:nowrap}
+.cta-or::before,.cta-or::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.1);min-width:24px}
 
-.cta-form{display:flex;gap:16px;justify-content:center;max-width:760px;margin:40px auto 32px;position:relative;z-index:2;flex-wrap:wrap;transition:opacity 0.4s}
+.cta-form{display:flex;gap:16px;justify-content:center;max-width:760px;margin:24px auto 32px;position:relative;z-index:2;flex-wrap:wrap;transition:opacity 0.4s}
 .cta-input-wrap{position:relative;flex:1;min-width:220px}
 .cta-input{width:100%;padding:24px 28px 12px;border-radius:60px !important;border:1px solid var(--brd2);background:rgba(0,0,0,0.4);color:var(--white);font-size:16px;outline:none;transition:border-color .3s,background-color .3s,box-shadow .3s;font-family:inherit;backdrop-filter:blur(10px); -webkit-appearance:none !important; appearance:none !important;}
 .cta-input:-webkit-autofill,
@@ -681,6 +691,9 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
   .cases-grid{max-width:none}
   
   .cta-card{padding:48px 24px;border-radius:24px}
+  .cta-msg{flex-direction:column;gap:12px}
+  .cta-msg-btn{width:100%;justify-content:center;padding:16px 24px}
+  .cta-or{white-space:normal;text-align:center;margin-top:26px}
   .cta-form{flex-direction:column;gap:12px}
   .cta-proof{flex-direction:column;gap:4px;text-align:center}
   .cta-proof-dot{display:none}
@@ -1281,7 +1294,16 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
     <div class="cta-watermark"><svg viewBox="0 0 180 180" fill="none" stroke="#fff" stroke-width=".6"><rect x="60" y="10" width="60" height="160" rx="10"/><rect x="10" y="60" width="160" height="60" rx="10"/></svg></div>
     <div class="heading" style="position:relative">Разберём ваш проект<br>и покажем, что мешает деньгам</div>
     <p class="cta-desc">Проверим всю цепочку — от первого клика до оплаты.</p>
-    
+
+    <!-- Быстрый путь: сразу в мессенджер. Ссылки на мост /go (Lead уходит там),
+         без target="_blank" - дедуп tc_lead живет в sessionStorage вкладки -->
+    <div class="cta-msg">
+      <a href="/go?m=wa&pl=cta" class="cta-msg-btn wa"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>Написать в WhatsApp</a>
+      <a href="/go?m=tg&pl=cta" class="cta-msg-btn tg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.833.94z"/></svg>Написать в Telegram</a>
+    </div>
+
+    <div class="cta-or"><span>или оставьте заявку — свяжемся с вами сами</span></div>
+
     <form class="cta-form" id="ctaForm">
       <div class="cta-input-wrap">
         <input type="text" id="ctaName" class="cta-input" placeholder=" " required autocapitalize="words" aria-label="Ваше имя" minlength="2">
