@@ -340,21 +340,20 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 .cg1{top:10%;right:5%;width:200px;height:200px}
 .cg2{bottom:10%;left:5%;width:150px;height:150px}
 .cases-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:56px;position:relative;z-index:2}
-.cases-grid .cases-more{grid-column:span 2;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:24px;background:var(--bg2);border:1px solid var(--brd)}
-@media(max-width:960px){.cases-grid .cases-more{grid-column:auto}}
+
 
 @media(min-width: 961px) {
   .case { position: sticky; box-shadow: 0 -10px 30px rgba(0,0,0,0.9); }
   /* стек: второй ряд с бОльшим z-index наезжает ПОВЕРХ первого - верхние ныряют под нижние */
-  .case:nth-child(1) { top: 120px; z-index: 10; }
-  .case:nth-child(2) { top: 140px; z-index: 11; }
-  .case:nth-child(3) { top: 160px; z-index: 12; }
-  .case:nth-child(4) { top: 140px; z-index: 13; }
-  .case:nth-child(5) { top: 160px; z-index: 14; }
-  .case:nth-child(6) { top: 180px; z-index: 15; }
+  .case:nth-child(1) { top: 100px; z-index: 10; }
+  .case:nth-child(2) { top: 110px; z-index: 11; }
+  .case:nth-child(3) { top: 120px; z-index: 12; }
+  .case:nth-child(4) { top: 130px; z-index: 13; }
+  .case:nth-child(5) { top: 140px; z-index: 14; }
+  .case:nth-child(6) { top: 150px; z-index: 15; }
   .case:nth-child(7) { top: 160px; z-index: 16; }
-  .case:nth-child(8) { top: 180px; z-index: 17; }
-  .case:nth-child(9) { top: 160px; z-index: 18; }
+  .case:nth-child(8) { top: 170px; z-index: 17; }
+  .case:nth-child(9) { top: 180px; z-index: 18; }
 }
 
 .case{border-radius:24px;padding:40px 32px;display:flex;flex-direction:column; background:var(--bg2); border:1px solid var(--brd); transition: opacity 0.6s cubic-bezier(0.22,1,0.36,1), transform 0.3s cubic-bezier(0.22,1,0.36,1), background 0.3s, border-color 0.3s, box-shadow 0.3s}
@@ -1050,12 +1049,12 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
         </div>
         <div class="case-roi" data-glow><div class="case-roi-label">Цена лида</div><div class="case-roi-num"><span data-count="1" data-prefix="$">$1</span></div><div class="roi-track"><i></i></div></div>
       </div>
+    </div>
 
-    <div class="cases-more spotlight-card" data-reveal style="text-align:center; padding: 40px 28px; border-radius: 24px; display:flex; flex-direction:column; align-items:center;background:var(--bg2); border:1px solid var(--brd)">
+    <div class="cases-more spotlight-card" data-reveal style="margin-top:40px; text-align:center; padding: 48px 32px; border-radius: 24px; display:flex; flex-direction:column; align-items:center;background:var(--bg2); border:1px solid var(--brd)">
       <h3 class="heading" style="font-size: clamp(20px, 3vw, 26px); margin-bottom:12px; max-width:800px;">У нас также есть клиенты в Турции, Казахстане, России, Узбекистане, Польше и других странах</h3>
       <p class="body-text" style="margin: 0 auto 32px; color:var(--txt2); max-width:600px;">Хотите изучить больше кейсов или получить разбор, релевантный вашему проекту?</p>
       <a href="#cta" class="btn-primary" style="margin:0;"><span>Оставить заявку ↗</span></a>
-    </div>
     </div>
   </div>
 </section>
