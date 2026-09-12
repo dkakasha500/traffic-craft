@@ -393,6 +393,14 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 .cases-more{margin-top:40px;text-align:center;padding:48px 32px;border-radius:24px;display:flex;flex-direction:column;align-items:center;background:var(--bg2); border:1px solid var(--brd)}
 .cases-more .heading{font-size:clamp(20px,3vw,26px);margin-bottom:12px;max-width:800px}
 .cases-more .body-text{margin:0 auto 32px;color:var(--txt2);max-width:600px}
+/* Мобилка: 9 кейсов подряд = 6 экранов скролла. Показываем 3 витринных,
+   остальные - по кнопке. На десктопе sticky-стеку нужны все карточки сразу */
+.cases-showmore{display:none;width:100%;margin:18px auto 0;padding:16px 28px;border-radius:60px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);color:var(--white);font-weight:600;font-size:15px;font-family:inherit;cursor:pointer;align-items:center;justify-content:center;gap:8px;-webkit-appearance:none;appearance:none}
+.cases-showmore:active{transform:scale(.98)}
+@media(max-width:960px){
+  .cases-grid:not(.cases-open) .case:nth-child(n+4){display:none}
+  .cases-showmore{display:flex}
+}
 
 .reviews-layout{display:grid;gap:24px}
 
@@ -1067,6 +1075,9 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
         <div class="case-roi" data-glow><div class="case-roi-label">Цена лида</div><div class="case-roi-num"><span data-count="1" data-prefix="$">$1</span></div><div class="roi-track"><i></i></div></div>
       </div>
     </div>
+
+    <button class="cases-showmore" type="button"
+      onclick="document.getElementById('casesGrid').classList.add('cases-open');this.remove()">Показать ещё 6 кейсов ↓</button>
 
     <div class="cases-more spotlight-card" data-reveal style="margin-top:40px; text-align:center; padding: 48px 32px; border-radius: 24px; display:flex; flex-direction:column; align-items:center;background:var(--bg2); border:1px solid var(--brd)">
       <h3 class="heading" style="font-size: clamp(20px, 3vw, 26px); margin-bottom:12px; max-width:800px;">У нас также есть клиенты в Турции, Казахстане, России, Узбекистане, Польше и других странах</h3>
