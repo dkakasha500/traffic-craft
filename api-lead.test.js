@@ -17,7 +17,10 @@ global.fetch = async (url, opts) => {
   return { ok: true, status: 200, json: async () => ({ ok: true }), text: async () => '' };
 };
 
-const handler = require('./api/lead.js');
+const handler = require('./api/request.js');
+/* алиас переходного периода: /api/lead должен остаться тем же обработчиком */
+const alias = require('./api/lead.js');
+if (alias !== handler) { console.log('  \u2717 алиас /api/lead не совпадает с /api/request'); process.exit(1); }
 const signToken = handler.signToken;
 
 function mkReq(body, headers, method) {

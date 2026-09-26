@@ -2,7 +2,7 @@
 const { JSDOM, VirtualConsole } = require("jsdom"); const fs = require("fs"); const path = require("path");
 const root = path.join(__dirname, "..");
 const html = fs.readFileSync(path.join(__dirname, "example", "index.html"), "utf8").replace(/\.\.\/lead-guard\.(js|css)/g, "lead-guard.$1");
-const js = fs.readFileSync(path.join(root, "lead-guard.js"), "utf8");
+const js = fs.readFileSync(path.join(root, "tc-ui.js"), "utf8");
 let P = 0, F = 0; const ok = (c, m) => { c ? P++ : F++; console.log((c ? "  ✓ " : "  ✗ FAIL: ") + m); };
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 function boot(opts = {}) {

@@ -117,7 +117,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(700px 
     } catch (e) {}
     var fbc = cookie('_fbc'), fbp = cookie('_fbp');
     try { fbc = fbc || localStorage.getItem('_fbc') || ''; fbp = fbp || localStorage.getItem('_fbp') || ''; } catch (e) {}
-    fetch('/api/lead', {
+    fetch('/api/request', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       keepalive: true,

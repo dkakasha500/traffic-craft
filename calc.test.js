@@ -5,7 +5,7 @@ const assert = require('assert');
 const html = fs.readFileSync('/sessions/gifted-clever-clarke/mnt/traffic-craft/calc.html', 'utf8');
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-const leadGuardSrc = fs.readFileSync('/sessions/gifted-clever-clarke/mnt/traffic-craft/lead-guard.js', 'utf8');
+const leadGuardSrc = fs.readFileSync('/sessions/gifted-clever-clarke/mnt/traffic-craft/tc-ui.js', 'utf8');
 
 function boot(opts = {}) {
   const errors = [], beacons = [], leadPosts = [];
@@ -22,10 +22,10 @@ function boot(opts = {}) {
          исполняем исходник руками. Сеть эндпоинта - мок: GET токен (minAge 0 - без
          ожиданий в тестах), POST лида копится в leadPosts */
       window.fetch = (url, o) => {
-        if (String(url).includes('/api/lead') && (!o || !o.method || o.method === 'GET')) {
+        if (String(url).includes('/api/') && (!o || !o.method || o.method === 'GET')) {
           return Promise.resolve({ json: () => Promise.resolve({ ok: true, token: '1234567890123.' + 'a'.repeat(32), minAge: 1 }) });
         }
-        if (String(url).includes('/api/lead')) {
+        if (String(url).includes('/api/')) {
           leadPosts.push({ url: String(url), body: JSON.parse(o.body) });
           return Promise.resolve({ json: () => Promise.resolve({ ok: true }) });
         }

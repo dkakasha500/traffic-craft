@@ -862,8 +862,8 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
   .footer .footer-legal{gap:12px}
 }
 </style>
-<link rel="stylesheet" href="/lead-guard.css">
-<script src="/lead-guard.js" defer></script>
+<link rel="stylesheet" href="/tc-ui.css">
+<script src="/tc-ui.js" defer></script>
 </head>
 <body>
 <div class="cursor-dot" id="cursorDot"></div>
@@ -1321,7 +1321,7 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 
     <div class="cta-form-card">
       <div class="cta-form-ttl">Или оставьте заявку <span>— свяжемся с вами сами</span></div>
-      <form class="cta-form lead-form" id="ctaForm" data-form-location="cta" onsubmit="return false">
+      <form class="cta-form tc-form" id="ctaForm" data-form-location="cta" onsubmit="return false">
       <div class="cta-input-wrap">
         <input type="text" id="ctaName" class="cta-input" placeholder=" " required autocapitalize="words" aria-label="Ваше имя" minlength="2">
         <label for="ctaName" class="cta-label">Ваше имя</label>
@@ -1541,7 +1541,8 @@ if(dashWrap) dashWrap.addEventListener('mouseleave', () => dashWrap.style.transf
 document.addEventListener('DOMContentLoaded', function(){
   if (!window.LeadGuard) return;
   LeadGuard.init({
-    endpoint: '/api/lead',
+    formSelector: 'form.tc-form', /* без слова lead: cosmetic-фильтры адблоков скрывают .lead-* классы */
+    endpoint: '/api/request',
     thankYouUrl: '/thanks',
     extraPayload: function(){
       var d = { name: (document.getElementById('ctaName').value || '').trim().slice(0, 120) };

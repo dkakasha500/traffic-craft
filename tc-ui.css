@@ -38,7 +38,7 @@
 .slide-confirm[hidden] { display: none; }
 /* Кнопка отправки на время показа слайдера. Без этого правила .btn { display:inline-flex }
    перебил бы браузерное [hidden] { display:none } — кнопка и слайдер были бы видны вместе. */
-.lead-form button[type="submit"][hidden] { display: none; }
+.lead-form button[type="submit"][hidden], .tc-form button[type="submit"][hidden] { display: none; }
 @keyframes slide-confirm-in {
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
