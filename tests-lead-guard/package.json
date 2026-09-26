@@ -1,0 +1,9 @@
+{
+  "name": "lead-guard-tests",
+  "private": true,
+  "description": "Автотесты Lead Guard: npm install && npm test",
+  "scripts": {
+    "test": "node test-server.js && node test-client.js"
+  },
+  "devDependencies": { "jsdom": "^24.0.0" }
+}

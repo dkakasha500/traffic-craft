@@ -3,3 +3,8 @@
 node_modules/
 .env.local
 .env*
+
+# рабочие материалы - не для деплоя
+insta/
+instagram-*.md
+traffic-craft-context.md

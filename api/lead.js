@@ -31,29 +31,96 @@ const esc = (s) =>
 
 const sha256 = (s) => crypto.createHash('sha256').update(s, 'utf8').digest('hex');
 
-/* Простейший анти-флуд: не больше RATE_LIMIT заявок с одного IP за окно.
-   Память живёт в пределах тёплого инстанса Vercel — от распределённой
-   атаки не спасёт, но конвейерный спам с одного адреса режет. */
-const RATE_LIMIT = 5;
+/* ============================================================
+   Lead Guard v1.0: анти-бот токен + лимиты (SPEC.md комплекта).
+   GET /api/lead выдает подписанный токен; POST формы принимается только
+   с валидным токеном возрастом 2.5с...3ч и с нашего же домена.
+   Ветка kind:'msg' (мост /go) токена не требует - это заметка, не лид.
+   ============================================================ */
+const TOKEN_MIN_AGE_MS = 2500;        // раньше человек физически не успеет: ввод + кнопка + свайп
+const TOKEN_MAX_AGE_MS = 3 * 3600e3;  // клиент обновляет токен каждые 40 минут
+
+/* Ключ подписи: отдельный секрет не обязателен - по умолчанию выводится из
+   токена бота через SHA-256 (сам токен бота из подписи не восстановить). */
+function tokenKey() {
+  const base = process.env.LEAD_TOKEN_SECRET || process.env.TG_BOT_TOKEN || '';
+  return crypto.createHash('sha256').update('lead-token:' + base).digest();
+}
+function signToken(ts) {
+  const sig = crypto.createHmac('sha256', tokenKey()).update(String(ts)).digest('hex').slice(0, 32);
+  return ts + '.' + sig;
+}
+/* null = токен валиден, иначе код причины */
+function verifyToken(token) {
+  const m = /^(\d{10,16})\.([a-f0-9]{32})$/.exec(String(token || ''));
+  if (!m) return 'token_missing';
+  const ts = Number(m[1]);
+  const expected = signToken(ts).split('.')[1];
+  const a = Buffer.from(m[2]), b = Buffer.from(expected);
+  if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) return 'token_invalid';
+  const age = Date.now() - ts;
+  if (age < TOKEN_MIN_AGE_MS) return 'token_too_fresh';
+  if (age > TOKEN_MAX_AGE_MS) return 'token_expired';
+  return null;
+}
+/* Запрос с нашего же домена? Отклоняем только явное несовпадение. */
+function sameSite(req) {
+  const host = String(req.headers.host || '').toLowerCase();
+  let src = req.headers.origin || req.headers.referer || '';
+  if (src === 'null') src = req.headers.referer || ''; // приватные режимы шлют Origin: null
+  if (!src) return true; // заголовков нет - решает токен
+  try { return new URL(src).host.toLowerCase() === host; } catch (e) { return false; }
+}
+/* Правило контакта - ЗЕРКАЛО клиентского validateContact (lead-guard.js):
+   телефон >= 9 цифр ИЛИ текст >= 3 символов (ведущие @ не считаются).
+   Сервер не строже клиента: что клиент принял - принимаем и мы. */
+function contactOk(v) {
+  v = String(v || '').replace(/[\p{Cc}\p{Cf}]/gu, '').replace(/\s+/g, ' ').trim();
+  if (!v) return false;
+  if (/^[+\d][\d\s\-()]*$/.test(v)) return v.replace(/\D/g, '').length >= 9;
+  return v.replace(/^@+/, '').length >= 3;
+}
+/* Ключ дедупликации: телефон - по цифрам, текст - без регистра */
+function dedupeKey(contact) {
+  return /^[+\d][\d\s\-()]*$/.test(contact) ? contact.replace(/\D/g, '') : contact.toLowerCase();
+}
+const recentContacts = new Map(); // dedupeKey(contact) → ts; тот же контакт за 10 мин не дублируем
+
+/* Анти-флуд: не больше RATE_LIMIT ПРИНЯТЫХ лидов с одного IP за окно
+   (SPEC Lead Guard: порог не ниже 20 - мобильные операторы сажают тысячи
+   людей за один CGNAT-адрес). Память тёплого инстанса - best-effort;
+   настоящий флуд решается Vercel Firewall одним переключателем. */
+const RATE_LIMIT = 20;
 const RATE_WINDOW_MS = 10 * 60 * 1000;
-const rateMap = new Map(); // ip -> [timestamps]
-function rateLimited(ip) {
-  if (!ip) return false;
+const rateMap = new Map(); // ip -> [timestamps принятых лидов]
+function rateHits(ip) {
   const now = Date.now();
   const arr = (rateMap.get(ip) || []).filter((t) => now - t < RATE_WINDOW_MS);
-  arr.push(now);
   if (rateMap.size > 5000) rateMap.clear(); // защита памяти инстанса
   rateMap.set(ip, arr);
-  return arr.length > RATE_LIMIT;
+  return arr;
+}
+function pruneContacts() {
+  const now = Date.now();
+  for (const [k, ts] of recentContacts) if (now - ts > RATE_WINDOW_MS) recentContacts.delete(k);
 }
 
 module.exports = async (req, res) => {
+  res.setHeader('Cache-Control', 'no-store');
+  if (req.method === 'OPTIONS') return res.status(204).end();
+
+  /* Выдача анти-бот токена: страница запрашивает при загрузке, обновляет раз в 40 мин */
+  if (req.method === 'GET') {
+    return res.status(200).json({ ok: true, token: signToken(Date.now()), minAge: TOKEN_MIN_AGE_MS });
+  }
   if (req.method !== 'POST') {
-    res.setHeader('Allow', 'POST');
+    res.setHeader('Allow', 'GET, POST');
     return res.status(405).json({ ok: false, error: 'method_not_allowed' });
   }
 
-  const b = req.body || {};
+  /* Тело: JSON-строкой (fetch из lead-guard.js) или объект (urlencoded от sendBeacon) */
+  let b = req.body || {};
+  if (typeof b === 'string') { try { b = JSON.parse(b); } catch (e) { b = {}; } }
 
   /* Honeypot: скрытое поле формы. Люди его не заполняют — если пришло
      со значением, это бот. Отвечаем «ок», ничего никуда не отправляя. */
@@ -63,7 +130,8 @@ module.exports = async (req, res) => {
   }
 
   const name = String(b.name || '').trim().slice(0, 120);
-  const phone = String(b.phone || '').trim().slice(0, 120);
+  /* Новый клиент (lead-guard.js) шлет поле contact; легаси-пейлоады - phone */
+  const phone = String(b.contact || b.phone || '').replace(/[\p{Cc}\p{Cf}]/gu, '').replace(/\s+/g, ' ').trim().slice(0, 120);
   const project = String(b.project || '').trim().slice(0, 500);
   const eventId = String(b.eventId || '').slice(0, 64);
   const fbclid = String(b.fbclid || '').slice(0, 256);
@@ -78,12 +146,26 @@ module.exports = async (req, res) => {
 
   const isMsgNote = b.kind === 'msg'; // заметка с моста /go - формы там нет
 
-  // Та же валидация, что и на клиенте
-  if (!isMsgNote && (name.length < 2 || phone.length < 3)) {
-    return res.status(400).json({ ok: false, error: 'invalid_payload' });
-  }
-
   const clientIp = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim();
+
+  /* Любой отказ - в логи (Vercel → Logs): лид не пропадает бесследно */
+  const reject = (code, error) => {
+    console.warn('LEAD_REJECTED ' + JSON.stringify({ error, contact: phone, name, ip: clientIp, at: new Date().toISOString() }));
+    return res.status(code).json({ ok: false, error });
+  };
+
+  if (!isMsgNote) {
+    /* Анти-бот (Lead Guard): наш домен + валидный «выдержанный» токен */
+    if (!sameSite(req)) return reject(403, 'bad_origin');
+    const tokenError = verifyToken(b.token);
+    if (tokenError) return reject(403, tokenError);
+    /* Контакт - зеркало клиентского правила (сервер не строже клиента) */
+    if (!contactOk(phone)) return reject(400, 'no_contact');
+  } else if (!sameSite(req)) {
+    /* Мост /go: чужой Origin - тихо игнорируем (заметка, не лид) */
+    console.warn('msg-note: foreign origin dropped');
+    return res.status(200).json({ ok: true });
+  }
 
   /* Гео запроса: Vercel проставляет заголовки по IP (city бывает URL-encoded) */
   let geoCity = String(req.headers['x-vercel-ip-city'] || '');
@@ -94,10 +176,21 @@ module.exports = async (req, res) => {
     if (geoCode) geoCountry = new Intl.DisplayNames(['ru'], { type: 'region' }).of(geoCode) || geoCode;
   } catch (e) {}
   const geo = [geoCountry, geoCity].filter(Boolean).join(', ');
-  if (rateLimited(clientIp)) {
-    // Тихий дроп: спамеру отвечаем «ок», в логах видно реальную причину
-    console.log('lead: rate limit exceeded for ' + clientIp + ', silently dropped');
-    return res.status(200).json({ ok: true });
+
+  let ipArr = null;
+  if (!isMsgNote) {
+    /* Лимит IP (429 - клиент честно узнает) и отсечка дублей (тот же контакт
+       за 10 мин - тихо ok, в группу не дублируем). Заметки моста не считаем. */
+    ipArr = rateHits(clientIp);
+    if (ipArr.length >= RATE_LIMIT) return reject(429, 'rate_limited');
+    pruneContacts();
+    const dKey = dedupeKey(phone);
+    if (recentContacts.has(dKey)) {
+      console.log('lead: duplicate contact within 10 min, skipped');
+      return res.status(200).json({ ok: true, skipped: 'duplicate' });
+    }
+    recentContacts.set(dKey, Date.now());
+    ipArr.push(Date.now()); rateMap.set(clientIp, ipArr);
   }
 
   const tasks = [];
@@ -215,6 +308,11 @@ module.exports = async (req, res) => {
         signal: AbortSignal.timeout(8000),
       }).then((r) => {
         if (!r.ok) return r.text().then((t) => Promise.reject(new Error('telegram: ' + t)));
+      }).catch((e) => {
+        /* и сетевые ошибки (fetch бросил, таймаут) помечаем как telegram -
+           иначе LEAD_NOT_DELIVERED ниже их не распознает */
+        const msg = String(e && e.message || e);
+        return Promise.reject(msg.startsWith('telegram') ? e : new Error('telegram_network: ' + msg.slice(0, 200)));
       })
     );
   }
@@ -313,7 +411,16 @@ module.exports = async (req, res) => {
 
   // Ошибки доставки не показываем посетителю (редирект не блокируем),
   // но пишем в логи Vercel (Project → Logs)
-  if (errors.length) console.error('lead delivery errors:', errors);
+  if (errors.length) {
+    console.error('lead delivery errors:', errors);
+    if (errors.some((e) => e.startsWith('telegram'))) {
+      /* Lead Guard: лид, не доехавший до группы, остается в логах с контактом */
+      console.error('LEAD_NOT_DELIVERED ' + JSON.stringify({ contact: phone, name, at: new Date().toISOString() }));
+    }
+  }
 
   return res.status(200).json({ ok: true });
 };
+
+// Для автотестов: подпись токена с произвольной временной меткой
+module.exports.signToken = signToken;

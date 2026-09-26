@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Заявка получена</title>
+  <meta name="robots" content="noindex, nofollow" />
+</head>
+<body>
+  <h1>Заявка получена</h1>
+  <p>Менеджер свяжется с вами.</p>
+
+  <script src="../lead-guard.js" defer></script>
+  <script defer>
+    document.addEventListener("DOMContentLoaded", function () {
+      /* Конверсию (Meta Lead / GA / Метрика) отправляем ЗДЕСЬ, а не на странице формы:
+         так событие гарантированно успевает уйти и не дублируется при обновлении страницы —
+         consumePendingLead() возвращает флаг один раз и сразу его снимает.
+         Прямой заход на thank-you без формы → null → событие не отправляется. */
+      var pending = LeadGuard.consumePendingLead();
+      if (pending) {
+        // пример: if (typeof fbq === "function") fbq("track", "Lead", { form_location: pending.form_location });
+        console.log("Lead conversion:", pending);
+      }
+    });
+  </script>
+</body>
+</html>

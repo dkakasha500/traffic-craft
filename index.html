@@ -862,6 +862,8 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
   .footer .footer-legal{gap:12px}
 }
 </style>
+<link rel="stylesheet" href="/lead-guard.css">
+<script src="/lead-guard.js" defer></script>
 </head>
 <body>
 <div class="cursor-dot" id="cursorDot"></div>
@@ -1319,13 +1321,13 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 
     <div class="cta-form-card">
       <div class="cta-form-ttl">Или оставьте заявку <span>— свяжемся с вами сами</span></div>
-      <form class="cta-form" id="ctaForm">
+      <form class="cta-form lead-form" id="ctaForm" data-form-location="cta" onsubmit="return false">
       <div class="cta-input-wrap">
         <input type="text" id="ctaName" class="cta-input" placeholder=" " required autocapitalize="words" aria-label="Ваше имя" minlength="2">
         <label for="ctaName" class="cta-label">Ваше имя</label>
       </div>
       <div class="cta-input-wrap">
-        <input type="text" id="ctaPhone" class="cta-input" placeholder=" " required aria-label="Телефон или Telegram" minlength="3">
+        <input type="text" id="ctaPhone" name="contact" class="cta-input" placeholder=" " required aria-label="Телефон или Telegram" minlength="3">
         <label for="ctaPhone" class="cta-label">Телефон или Telegram</label>
       </div>
       <div class="cta-input-wrap" style="width:100%;">
@@ -1336,6 +1338,7 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
       <div style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden" aria-hidden="true">
         <input type="text" id="ctaWebsite" name="website" tabindex="-1" autocomplete="off">
       </div>
+      <p class="field-error" hidden>Впишите телефон (от 9 цифр) или ник в Telegram</p>
       <button type="submit" class="btn-white" id="ctaSubmitBtn">Получить разбор ↗</button>
       </form>
     </div>
@@ -1530,72 +1533,54 @@ if (window.matchMedia && matchMedia('(hover: hover)').matches) {
 }
 if(dashWrap) dashWrap.addEventListener('mouseleave', () => dashWrap.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`);
 
-const ctaForm = document.getElementById('ctaForm');
-if(ctaForm) { ctaForm.addEventListener('submit', function(e) {
-  e.preventDefault(); const btn = document.getElementById('ctaSubmitBtn');
-  const name = document.getElementById('ctaName').value.trim();
-  const phone = document.getElementById('ctaPhone').value.trim();
-  const project = document.getElementById('ctaProject').value.trim();
-  /* Honeypot: заполнено скрытое поле → бот. Тихо изображаем успех,
-     не отправляя ничего и не трогая пиксель */
-  const hpEl = document.getElementById('ctaWebsite');
-  if(hpEl && hpEl.value){ window.location.href = '/thanks'; return; }
-  if(!name || name.length < 2 || !phone || phone.length < 3) return;
-
-  btn.textContent = 'Отправляем...'; btn.style.opacity = '0.8'; btn.style.pointerEvents = 'none';
-
-  /* --- Meta Pixel: Lead + Dedup + UTM + fbclid (без PII) --- */
-  const eventId = 'lead_' + Date.now() + '_' + Math.random().toString(36).substr(2,9);
-  const urlParams = new URLSearchParams(window.location.search);
-  const leadData = {
-    content_name: project || 'Разбор клиники',
-    content_category: 'form_submit',
-    value: 0,
-    currency: 'KZT'
-  };
-  /* PII (имя/телефон) в пиксель НЕ кладем: они уходят хэшированными через
-     серверный CAPI (api/lead.js) с тем же eventID. В браузере - только не-PII. */
-  ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'].forEach(function(k){
-    const v = urlParams.get(k); if(v) leadData[k] = v;
+/* ===== Lead Guard: слайдер «проведите вправо» + анти-бот токен =====
+   Отправка формы: валидный контакт → кнопка сменяется слайдером → свайп →
+   POST /api/lead с подписанным токеном → редирект на /thanks.
+   Пиксельный Lead уходит ТАМ (по флагу consumePendingLead) с тем же eventID,
+   что у серверного CAPI - Meta дедуплицирует. Ключ tc_lead общий с мостом /go. */
+document.addEventListener('DOMContentLoaded', function(){
+  if (!window.LeadGuard) return;
+  LeadGuard.init({
+    endpoint: '/api/lead',
+    thankYouUrl: '/thanks',
+    extraPayload: function(){
+      var d = { name: (document.getElementById('ctaName').value || '').trim().slice(0, 120) };
+      var project = (document.getElementById('ctaProject').value || '').trim().slice(0, 500);
+      if (project) d.project = project;
+      d.pageUrl = location.href.split('#')[0].slice(0, 500);
+      var qp = new URLSearchParams(location.search);
+      var utm = {};
+      ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'].forEach(function(k){
+        var v = qp.get(k); if (v) { d[k] = v; utm[k] = v; }
+      });
+      var fbclid = qp.get('fbclid'); if (fbclid) d.fbclid = fbclid;
+      function ck(n){ var m = document.cookie.match(new RegExp('(?:^|; )' + n + '=([^;]*)')); return m ? decodeURIComponent(m[1]) : ''; }
+      var fbp = ck('_fbp'); if (fbp) d.fbp = fbp;
+      var fbc = ck('_fbc'); if (fbc) d.fbc = fbc;
+      /* Lead один на вкладку (дедуп с мостом /go). Метку для пикселя на /thanks
+         кладем сейчас: eventID общий с серверным CAPI */
+      try {
+        if (!sessionStorage.getItem('tc_lead')) {
+          var eid = 'lead_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+          d.eventId = eid;
+          sessionStorage.setItem('tc_lead', '1');
+          sessionStorage.setItem('tc_lead_pix', JSON.stringify({
+            eid: eid,
+            data: Object.assign({ content_name: project || 'Разбор клиники', content_category: 'form_submit', value: 0, currency: 'KZT' }, utm)
+          }));
+        }
+      } catch (e) {}
+      return d;
+    },
+    onEvent: function(name, detail){
+      /* только не-PII: диагностика воронки слайдера */
+      try {
+        if (name === 'slider_shown')   fbq('trackCustom', 'SliderShown',   { placement: detail.form_location });
+        if (name === 'lead_confirmed') fbq('trackCustom', 'LeadConfirmed', { placement: detail.form_location });
+      } catch (e) {}
+    }
   });
-  fbq('track', 'Lead', leadData, {eventID: eventId});
-  try { sessionStorage.setItem('tc_lead', '1'); } catch(e){} /* общий ключ дедупликации с мостом /go */
-  /* --- End Meta Pixel --- */
-
-  /* --- Отправка лида на свой бэкенд: /api/lead ---
-     Токен бота, chat_id и URL таблицы хранятся в env-переменных Vercel,
-     в клиентском коде их больше нет. Функция сама шлёт в Telegram и Sheets.
-     URLSearchParams = application/x-www-form-urlencoded → без preflight,
-     sendBeacon доставляет запрос надёжно даже при уходе со страницы */
-  var leadParams = new URLSearchParams();
-  leadParams.append('name', name);
-  leadParams.append('phone', phone);
-  if(project) leadParams.append('project', project);
-  leadParams.append('eventId', eventId);
-  ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'].forEach(function(k){
-    var v = urlParams.get(k); if(v) leadParams.append(k, v);
-  });
-  var leadFbclid = urlParams.get('fbclid');
-  if(leadFbclid) leadParams.append('fbclid', leadFbclid);
-  /* Для серверного Meta Conversions API: куки пикселя и адрес страницы */
-  function tcCookie(n){var m=document.cookie.match(new RegExp('(?:^|; )'+n+'=([^;]*)'));return m?decodeURIComponent(m[1]):''}
-  var fbpC = tcCookie('_fbp'); if(fbpC) leadParams.append('fbp', fbpC);
-  var fbcC = tcCookie('_fbc'); if(fbcC) leadParams.append('fbc', fbcC);
-  leadParams.append('pageUrl', location.href.split('#')[0].slice(0, 500));
-  var leadSent = false;
-  if(navigator.sendBeacon){
-    leadSent = navigator.sendBeacon('/api/lead', leadParams);
-  }
-  if(!leadSent){
-    fetch('/api/lead', {method:'POST', body:leadParams, keepalive:true}).catch(function(){});
-  }
-  /* --- End отправка лида --- */
-
-  setTimeout(() => {
-    window.location.href = '/thanks';
-  }, 600);
-}); }
-
+});
 const ro=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');x.target.querySelectorAll('[data-pain]').forEach((n,i)=>setTimeout(()=>n.classList.add('revealed'),200+i*350));x.target.querySelectorAll('[data-glow]').forEach(g=>setTimeout(()=>g.classList.add('glow'),600))}})},{threshold:.1,rootMargin:'0px 0px -50px 0px'});
 document.querySelectorAll('[data-reveal]').forEach(el=>ro.observe(el));
 

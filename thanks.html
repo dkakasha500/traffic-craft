@@ -755,5 +755,25 @@ else if(y<lastY-2){f.classList.add('on');}
 else if(y>lastY+2){f.classList.remove('on');}
 lastY=y;})},{passive:true})})();
 </script>
+<script src="/lead-guard.js" defer></script>
+<script defer>
+/* ===== Lead Guard: конверсия Lead - ЗДЕСЬ, а не на странице формы =====
+   consumePendingLead() возвращает флаг один раз и снимает его: при обновлении
+   страницы дубля нет, при прямом заходе события нет. eventID берем из метки
+   tc_lead_pix - он же ушел в серверный CAPI, Meta дедуплицирует. Если метки
+   нет - Lead в этой вкладке уже уходил раньше (мост /go), не дублируем. */
+document.addEventListener('DOMContentLoaded', function(){
+  if (!window.LeadGuard) return;
+  var pending = LeadGuard.consumePendingLead();
+  if (!pending) return;
+  try {
+    var raw = sessionStorage.getItem('tc_lead_pix');
+    if (!raw) return;
+    sessionStorage.removeItem('tc_lead_pix');
+    var m = JSON.parse(raw);
+    if (m && m.eid) fbq('track', 'Lead', m.data || {}, { eventID: m.eid });
+  } catch (e) {}
+});
+</script>
 </body>
 </html>

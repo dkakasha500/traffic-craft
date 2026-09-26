@@ -11,3 +11,8 @@ google-sheets-script.js
 insta/
 .env.local
 calc-backup.html
+# Lead Guard: спецификация и тестовый стенд - не деплоим
+docs/
+tests-lead-guard/
+api-lead.test.js
+traffic-craft-context.md

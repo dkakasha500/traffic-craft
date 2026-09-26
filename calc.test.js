@@ -5,8 +5,10 @@ const assert = require('assert');
 const html = fs.readFileSync('/sessions/gifted-clever-clarke/mnt/traffic-craft/calc.html', 'utf8');
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
+const leadGuardSrc = fs.readFileSync('/sessions/gifted-clever-clarke/mnt/traffic-craft/lead-guard.js', 'utf8');
+
 function boot(opts = {}) {
-  const errors = [], beacons = [];
+  const errors = [], beacons = [], leadPosts = [];
   const vc = new VirtualConsole();
   vc.on('jsdomError', e => { if(!/navigation/i.test(e.message)) errors.push('jsdom: ' + e.message); });
   const dom = new JSDOM(html, {
@@ -16,6 +18,20 @@ function boot(opts = {}) {
       window.matchMedia = q => ({ matches: /reduce/.test(q), addListener(){}, removeListener(){}, addEventListener(){}, removeEventListener(){} });
       window.HTMLElement.prototype.scrollIntoView = function(){};
       window.navigator.sendBeacon = (url, data) => { beacons.push({ url, body: String(data) }); return true; };
+      /* Lead Guard: страница грузит /lead-guard.js внешним тегом - jsdom его не тянет,
+         исполняем исходник руками. Сеть эндпоинта - мок: GET токен (minAge 0 - без
+         ожиданий в тестах), POST лида копится в leadPosts */
+      window.fetch = (url, o) => {
+        if (String(url).includes('/api/lead') && (!o || !o.method || o.method === 'GET')) {
+          return Promise.resolve({ json: () => Promise.resolve({ ok: true, token: '1234567890123.' + 'a'.repeat(32), minAge: 1 }) });
+        }
+        if (String(url).includes('/api/lead')) {
+          leadPosts.push({ url: String(url), body: JSON.parse(o.body) });
+          return Promise.resolve({ json: () => Promise.resolve({ ok: true }) });
+        }
+        return Promise.resolve({ json: () => Promise.resolve({}) });
+      };
+      window.eval(leadGuardSrc);
       window.addEventListener('error', e => errors.push(e.message));
       if (opts.storage) for (const [k, v] of Object.entries(opts.storage)) window.localStorage.setItem(k, v);
     }
@@ -25,7 +41,7 @@ function boot(opts = {}) {
   const chipTexts = id => Array.from(d.getElementById(id).children).map(b => b.textContent);
   const onChip = id => Array.from(d.getElementById(id).children).find(b => b.className.includes('on'));
   const clickChip = (id, match) => { Array.from(d.getElementById(id).children).find(b => b.textContent.includes(match)).click(); };
-  return { w, d, errors, beacons, fbqCalls, chipTexts, onChip, clickChip };
+  return { w, d, errors, beacons, leadPosts, fbqCalls, chipTexts, onChip, clickChip };
 }
 
 (async () => {
@@ -92,41 +108,54 @@ function boot(opts = {}) {
   assert.strictEqual(saved.country, 'ae', 'localStorage пишется');
   console.log('✓ v32: чипы, слайдер, сценарии, hash, localStorage — работают');
 
-  /* v33: форма */
+  /* v33: форма - слайдер Lead Guard: submit → бегунок → подтверждение → POST с токеном */
   t = boot();
+  await sleep(60); /* init Lead Guard висит на DOMContentLoaded */
   t.d.getElementById('cName').value = 'Тест Тестович';
   t.d.getElementById('cPhone').value = '+7 777 000 11 22';
   t.d.getElementById('calcForm').dispatchEvent(new t.w.Event('submit', { bubbles: true, cancelable: true }));
-  assert.strictEqual(t.beacons.length, 1, 'один beacon');
-  assert.ok(t.beacons[0].url === '/api/lead', 'на /api/lead');
-  const body = decodeURIComponent(t.beacons[0].body.replace(/\+/g, ' '));
-  for (const part of ['name=Тест Тестович', 'phone=+7 777 000 11 22', 'project=Калькулятор: Израиль', 'eventId=calc_', 'pageUrl=https://traffic-craft.com/calc']) {
-    assert.ok(body.includes(part), 'в заявке есть ' + part.split('=')[0] + ': ' + body);
-  }
-  /* il считает в шекелях, доллар - припиской */
-  assert.ok(body.includes('чек ₪'), 'чек в сводке в шекелях: ' + body);
-  assert.ok(body.includes('(≈ $'), 'долларовая приписка в сводке');
-  const lead = t.fbqCalls().find(c => c[0] === 'track' && c[1] === 'Lead');
-  assert.ok(lead, 'пиксель Lead отправлен (через стаб-очередь — сценарий адблока)');
-  assert.ok(lead[3] && /^calc_/.test(lead[3].eventID), 'eventID для дедупликации');
-  const idInBody = body.match(/eventId=(calc_[^&]+)/)[1];
-  assert.strictEqual(lead[3].eventID, idInBody, 'eventID пикселя == eventId заявки (дедуп CAPI)');
-  console.log('✓ v33: сабмит — beacon полный, Lead с тем же eventID');
+  const wrap = t.d.querySelector('#calcForm .slide-confirm');
+  assert.ok(wrap && !wrap.hidden, 'слайдер показан после submit');
+  assert.ok(t.d.getElementById('cBtn').hidden, 'кнопка скрыта на время слайдера');
+  assert.strictEqual(t.leadPosts.length, 0, 'до свайпа ничего не уходит');
+  /* подтверждение с клавиатуры (Enter на бегунке) - тот же путь complete() */
+  wrap.querySelector('.slide-confirm__knob').dispatchEvent(new t.w.KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
+  await sleep(250); /* выдержка токена (minAge 1мс) + microtasks доставки */
+  assert.strictEqual(t.leadPosts.length, 1, 'один POST лида');
+  const body = t.leadPosts[0].body;
+  assert.strictEqual(body.contact, '+7 777 000 11 22', 'contact');
+  assert.strictEqual(body.name, 'Тест Тестович', 'имя в extraPayload');
+  assert.ok(body.project.includes('Калькулятор: Израиль'), 'сводка расчета в проекте: ' + body.project);
+  assert.ok(body.project.includes('чек ₪') && body.project.includes('(≈ $'), 'чек в шекелях с долларовой припиской');
+  assert.ok(/^calc_/.test(body.eventId), 'eventId для CAPI');
+  assert.ok(/^\d+\.a{32}$/.test(body.token), 'анти-бот токен приложен');
+  assert.ok(body.pageUrl.startsWith('https://traffic-craft.com/calc'), 'pageUrl');
+  /* пиксельный Lead уходит НЕ здесь, а на /thanks - по метке tc_lead_pix */
+  assert.ok(!t.fbqCalls().some(c => c[0] === 'track' && c[1] === 'Lead'), 'Lead на странице формы не стреляет');
+  assert.strictEqual(t.w.sessionStorage.getItem('tc_lead'), '1', 'tc_lead проставлен (дедуп с мостом)');
+  const pix = JSON.parse(t.w.sessionStorage.getItem('tc_lead_pix'));
+  assert.strictEqual(pix.eid, body.eventId, 'eventID метки для /thanks == eventId заявки (дедуп CAPI)');
+  assert.strictEqual(pix.data.content_category, 'calc_form', 'категория события');
+  assert.ok(t.fbqCalls().some(c => c[1] === 'SliderShown') && t.fbqCalls().some(c => c[1] === 'LeadConfirmed'), 'воронка слайдера в пикселе');
+  console.log('✓ v33: сабмит через слайдер — POST полный, с токеном, Lead отложен на /thanks');
 
-  /* валидация и honeypot */
+  /* валидация и honeypot (правило Lead Guard: телефон ≥ 9 цифр или текст ≥ 3) */
   t = boot();
+  await sleep(60);
   t.d.getElementById('cName').value = 'A';
-  t.d.getElementById('cPhone').value = '1';
+  t.d.getElementById('cPhone').value = '12345';
   t.d.getElementById('calcForm').dispatchEvent(new t.w.Event('submit', { bubbles: true, cancelable: true }));
-  assert.strictEqual(t.beacons.length, 0, 'невалидное не ушло');
-  assert.ok(t.d.getElementById('cName').className.includes('err'), 'подсветка ошибки');
-  assert.strictEqual(t.d.getElementById('cName').getAttribute('aria-invalid'), 'true', 'aria-invalid');
+  assert.strictEqual(t.leadPosts.length, 0, 'невалидное не ушло');
+  assert.ok(!t.d.querySelector('#calcForm .slide-confirm') || t.d.querySelector('#calcForm .slide-confirm').hidden, 'слайдер не показан');
+  assert.ok(t.d.getElementById('cPhone').className.includes('is-invalid'), 'подсветка контакта');
+  assert.ok(!t.d.querySelector('#calcForm .field-error').hidden, 'строка ошибки видна');
   t = boot();
+  await sleep(60);
   t.d.getElementById('cName').value = 'Бот Ботович';
   t.d.getElementById('cPhone').value = '+123456789';
   t.d.getElementById('cWebsite').value = 'http://spam';
   t.d.getElementById('calcForm').dispatchEvent(new t.w.Event('submit', { bubbles: true, cancelable: true }));
-  assert.strictEqual(t.beacons.length, 0, 'honeypot: ничего не ушло');
+  assert.strictEqual(t.leadPosts.length, 0, 'honeypot: ничего не ушло');
   assert.ok(!t.fbqCalls().some(c => c[1] === 'Lead'), 'honeypot: пиксель Lead не стрелял');
   console.log('✓ v33b: валидация и honeypot — чисто');
 
@@ -149,4 +178,5 @@ function boot(opts = {}) {
   console.log('✓ v34: hash / query / storage / hashchange — все входные точки работают');
 
   console.log('\nИНТЕГРАЦИОННЫЕ ТЕСТЫ ПРОШЛИ');
+  process.exit(0); /* setInterval обновления токена (lead-guard) держит процесс */
 })().catch(e => { console.error('УПАЛО:', e.message); process.exit(1); });
