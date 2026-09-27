@@ -64,6 +64,18 @@ async function t(name, fn) {
     assert.strictEqual(res.headers['Cache-Control'], 'no-store');
   });
 
+  await t('GET ?m=1 (мост) → тот же токен, minAge 300', async () => {
+    const res = mkRes();
+    const req = mkReq(null, {}, 'GET'); req.url = '/api/request?m=1'; req.query = { m: '1' };
+    await handler(req, res);
+    assert.strictEqual(res.jsonBody.minAge, 300);
+    assert.match(res.jsonBody.token, /^\d{10,16}\.[a-f0-9]{32}$/);
+    /* токен моста для ФОРМЫ всё равно должен выдержаться 2.5с */
+    const res2 = mkRes();
+    await handler(mkReq({ contact: '+77012340077', name: 'Мост', token: res.jsonBody.token }), res2);
+    assert.strictEqual(res2.jsonBody.error, 'token_too_fresh');
+  });
+
   await t('POST формы без токена → 403 token_missing', async () => {
     const res = mkRes();
     await handler(mkReq({ contact: '+77012345678', name: 'Тест' }), res);

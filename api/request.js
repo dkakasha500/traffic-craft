@@ -111,7 +111,11 @@ module.exports = async (req, res) => {
 
   /* Выдача анти-бот токена: страница запрашивает при загрузке, обновляет раз в 40 мин */
   if (req.method === 'GET') {
-    return res.status(200).json({ ok: true, token: signToken(Date.now()), minAge: TOKEN_MIN_AGE_MS });
+    /* ?m=1 - мост в мессенджер: ему выдержка не нужна (ветка msg токен не проверяет),
+       клиент не заставляет человека ждать после свайпа. Сам токен тот же - для форм
+       сервер всё равно требует возраст >= 2.5с */
+    const isBridge = String(req.query && req.query.m || '') === '1' || /[?&]m=1(&|$)/.test(String(req.url || ''));
+    return res.status(200).json({ ok: true, token: signToken(Date.now()), minAge: isBridge ? 300 : TOKEN_MIN_AGE_MS });
   }
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'GET, POST');
