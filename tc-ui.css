@@ -186,7 +186,9 @@
    Попап моста в мессенджер (tc-go.js): окно поверх страницы,
    на телефоне - шторка снизу. Поверх плавающих кнопок и sticky-панели.
    ============================================================ */
-.tc-go { position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px; }
+/* z-index ниже кастомного курсора сайта (.cursor-dot/.cursor-outline: 10000), иначе на десктопе
+   курсор прячется под затемнением и кажется, что мышь «осталась на фоне» */
+.tc-go { position: fixed; inset: 0; z-index: 9990; display: flex; align-items: center; justify-content: center; padding: 20px; }
 .tc-go[hidden] { display: none; }
 .tc-go__bg { position: absolute; inset: 0; background: rgba(0, 0, 0, .74); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); animation: tcGoFade .2s ease-out; }
 .tc-go__card { position: relative; width: 100%; max-width: 420px; padding: 34px 24px 24px; border-radius: 24px; background: #0e0e12; border: 1px solid rgba(255, 255, 255, .1); box-shadow: 0 30px 80px rgba(0, 0, 0, .6), 0 0 80px rgba(14, 224, 207, .08); text-align: center; color: #a1a1aa; animation: tcGoUp .28s cubic-bezier(.22, 1, .36, 1); }

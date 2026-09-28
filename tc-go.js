@@ -85,6 +85,14 @@
     doc.addEventListener("keydown", function (e) {
       if (e.key === "Escape" && root && !root.hidden) { e.preventDefault(); close(); }
     });
+    /* кастомный курсор сайта (кольцо) реагирует на кнопки по body.cursor-hover;
+       бегунок и ✕ в его список не входят - подсказываем сами */
+    root.addEventListener("mouseover", function (e) {
+      if (e.target.closest && e.target.closest(".slide-confirm__knob, .tc-go__x")) doc.body.classList.add("cursor-hover");
+    });
+    root.addEventListener("mouseout", function (e) {
+      if (e.target.closest && e.target.closest(".slide-confirm__knob, .tc-go__x") && !(e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest(".slide-confirm__knob, .tc-go__x"))) doc.body.classList.remove("cursor-hover");
+    });
   }
 
   function ensureInstance() {
@@ -198,6 +206,7 @@
     if (!root || root.hidden) return;
     root.hidden = true;
     doc.documentElement.classList.remove("tc-go-open");
+    doc.body.classList.remove("cursor-hover");
     if (form) { form.parentNode && form.parentNode.removeChild(form); form = null; }
     notify("close");
     state = null;
