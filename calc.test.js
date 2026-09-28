@@ -54,7 +54,19 @@ function boot(opts = {}) {
   assert.notStrictEqual(t.d.getElementById('rLeads').textContent, '—', 'заявки посчитаны');
   assert.ok(/\d{4}/.test(t.d.getElementById('footerYear').textContent), 'год в подвале');
   assert.ok(t.d.getElementById('check').value > 0, 'чек подставлен');
-  assert.ok(t.d.getElementById('waBtn').href.includes('wa.me/77782182305'), 'WA-ссылка собрана');
+  /* мессенджеры - только через мост /go с бегунком (Lead после свайпа), без новой вкладки */
+  ['waBtn', 'stickyWa', 'tgBtn', 'stickyTg'].forEach(function (id) {
+    var a = t.d.getElementById(id);
+    assert.ok(/\/go\?m=(wa|tg)&pl=calc(-sticky)?$/.test(a.getAttribute('href')), id + ' ведет на мост: ' + a.getAttribute('href'));
+    assert.ok(!a.getAttribute('target'), id + ' без target=_blank');
+  });
+  assert.ok(!t.d.body.innerHTML.includes('wa.me/'), 'прямых ссылок wa.me нет');
+  /* клик по кнопке отдает расчет мосту и НЕ стреляет Lead */
+  t.d.getElementById('waBtn').dispatchEvent(new t.w.MouseEvent('click', { bubbles: true, cancelable: true }));
+  var handed = t.w.sessionStorage.getItem('tc_go_text');
+  assert.ok(handed && handed.includes('Мой расчет из калькулятора') && handed.includes('Израиль'), 'расчет передан мосту: ' + handed);
+  assert.ok(!t.fbqCalls().some(c => c[1] === 'Lead'), 'Lead на клик по WhatsApp не стреляет (только после свайпа на мосту)');
+  assert.ok(t.fbqCalls().some(c => c[1] === 'CalcWhatsApp'), 'CalcWhatsApp на клик есть');
   assert.ok(t.d.getElementById('scenHint').textContent.length > 0, 'подсказка сценария показана');
   console.log('✓ v31: страница загружается без ошибок, всё отрендерено');
 

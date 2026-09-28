@@ -87,6 +87,12 @@ document.addEventListener('DOMContentLoaded', function () {
   if (!/^[a-z0-9-]{1,16}$/i.test(pl)) pl = 'other';
 
   var WA_TEXT = 'Добрый день! Пишу по поводу рекламы с сайта';
+  /* калькулятор передает свой расчет через sessionStorage: WhatsApp получит его
+     в тексте ссылки, для Telegram скопируем в буфер на свайпе. Только текст,
+     до 500 символов, без управляющих символов; в разметку не попадает */
+  var HAND = '';
+  try { HAND = String(sessionStorage.getItem('tc_go_text') || '').replace(/[\u0000-\u001f\u007f]/g, ' ').slice(0, 500).trim(); sessionStorage.removeItem('tc_go_text'); } catch (e) {}
+  if (HAND) WA_TEXT = HAND;
   var DEST = m === 'tg'
     ? 'https://t.me/PPavel_D'
     : 'https://wa.me/77782182305?text=' + encodeURIComponent(WA_TEXT);
@@ -111,10 +117,12 @@ document.addEventListener('DOMContentLoaded', function () {
       hint: 'Проведите вправо',
       aria: 'Ползунок: проведите вправо до конца, чтобы открыть ' + NAME,
       confirm: 'Открыть ' + NAME,
-      sending: 'Открываем ' + NAME + '…'
+      sending: (HAND && m === 'tg') ? 'Расчёт скопирован · открываем Telegram…' : 'Открываем ' + NAME + '…'
     },
     onEvent: function (name) {
       if (name !== 'lead_confirmed') return;
+      /* Telegram не умеет предзаполнять чат ссылкой - кладем расчет в буфер */
+      if (HAND && m === 'tg' && navigator.clipboard && navigator.clipboard.writeText) { try { navigator.clipboard.writeText(HAND).catch(function () {}); } catch (e) {} }
       /* Lead - один на вкладку, каким бы путем человек ни пошел (тот же ключ tc_lead
          пишут формы). Contact - на каждый переход. Всё - ПОСЛЕ свайпа */
       isFirst = once('tc_lead');
