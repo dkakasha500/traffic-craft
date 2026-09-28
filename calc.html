@@ -2087,7 +2087,9 @@ update();
   /* мышь шлет до 1000 событий/сек: в обработчике только координаты, запись стилей - в rAF;
      простой ловим меткой времени вместо тысяч setTimeout */
   var lastMoveT = 0;
-  window.addEventListener('mousemove', function(e){
+  /* pointermove, а не mousemove: пока бегунок Lead Guard тянут (pointerdown с preventDefault),
+     браузер не шлёт mousemove - кольцо застывало на месте; pointermove идёт всегда */
+  window.addEventListener('onpointermove' in window ? 'pointermove' : 'mousemove', function(e){
     /* системный курсор прячем только когда кастомный уже есть где рисовать -
        иначе после перезагрузки страницы до первого движения нет НИКАКОГО курсора */
     if (!isCursorActive){ document.documentElement.classList.add('js-cursor'); showCursor(); }

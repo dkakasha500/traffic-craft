@@ -546,7 +546,9 @@ if (window.matchMedia("(pointer: fine)").matches && cursorDot && cursorOutline) 
     document.body.classList.add('cursor-hidden'); isCursorActive = false;
   }
 
-  window.addEventListener('mousemove', (e) => {
+  /* pointermove, а не mousemove: пока бегунок Lead Guard тянут (pointerdown с preventDefault),
+     браузер не шлёт mousemove - кольцо застывало на месте; pointermove идёт всегда */
+  window.addEventListener('onpointermove' in window ? 'pointermove' : 'mousemove', (e) => {
     mouseX = e.clientX; mouseY = e.clientY;
     cursorDot.style.transform = 'translate3d(' + mouseX + 'px,' + mouseY + 'px,0) translate(-50%,-50%)';
     showCursor();

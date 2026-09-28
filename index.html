@@ -1441,7 +1441,9 @@ if (window.matchMedia("(pointer: fine)").matches && cursorDot && cursorOutline) 
   /* мышь шлет до 1000 событий/сек: в обработчике - только координаты, вся запись стилей
      в rAF-цикле (не чаще кадра); простой ловим меткой времени, без тысяч setTimeout */
   let lastMoveT = 0;
-  window.addEventListener('mousemove', (e) => {
+  /* pointermove, а не mousemove: пока бегунок Lead Guard тянут (pointerdown с preventDefault),
+     браузер не шлёт mousemove - кольцо застывало на месте; pointermove идёт всегда */
+  window.addEventListener('onpointermove' in window ? 'pointermove' : 'mousemove', (e) => {
     mouseX = e.clientX; mouseY = e.clientY; lastMoveT = performance.now();
     if (!isCursorActive) showCursor();
     if (!cursorRafId) startCursorLoop();
