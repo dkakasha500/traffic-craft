@@ -615,6 +615,7 @@ html.js-cursor input::-webkit-inner-spin-button,html.js-cursor input::-webkit-ou
 </style>
 <link rel="stylesheet" href="/tc-ui.css">
 <script src="/tc-ui.js" defer></script>
+<script src="/tc-go.js" defer></script>
 </head>
 <body>
 <a class="float-home" href="/" aria-label="Вернуться на главную"><span aria-hidden="true">&larr;</span> На главную</a>
@@ -1918,7 +1919,8 @@ function msgText(){
   return 'Здравствуйте! Мой расчет из калькулятора: ' + calcSummary().replace('Калькулятор: ', '') + '. Хочу понять, где это усилить в моей клинике.';
 }
 function updateWa(){
-  /* Кнопки ведут на мост /go с бегунком (Lead Guard) - Lead уходит только после свайпа.
+  /* Кнопки ведут на мост /go, но tc-go.js перехватывает клик и открывает попап
+     с бегунком (Lead Guard) прямо здесь - Lead уходит только после свайпа.
      Расчет передаем мосту через sessionStorage при клике (см. handMsgText) */
 }
 /* Расчет для мессенджера: WhatsApp подставит его в ссылку, для Telegram мост
@@ -1934,7 +1936,7 @@ function tgHandler(e){
   trackEvent('CalcTelegram', { channel: 'telegram' });
   var txt = handMsgText();
   if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).catch(function(){}); }
-  /* дальше - мост /go с бегунком, чат откроется после свайпа */
+  /* дальше - попап моста с бегунком (tc-go.js), чат откроется после свайпа */
 }
 
 /* ============================================================
@@ -1985,8 +1987,17 @@ window.addEventListener('pagehide', function(){
   document.getElementById(id).addEventListener('click', function(){
     waClicked = true;
     trackEvent('CalcWhatsApp', { channel: 'whatsapp' });
-    handMsgText(); /* Lead - на мосту, после свайпа */
+    handMsgText(); /* Lead - в попапе моста, после свайпа */
   });
+});
+/* Попап моста (tc-go.js): закрыли окно без свайпа - это не «ушёл в чат»,
+   CalcAbandon при уходе со страницы снова считается */
+var bridgeConfirmed = false;
+document.addEventListener('tc:bridge', function(e){
+  var t = e.detail && e.detail.type;
+  if(t === 'open') bridgeConfirmed = false;
+  if(t === 'confirm') bridgeConfirmed = true;
+  if(t === 'close') waClicked = bridgeConfirmed;
 });
 ['tgBtn', 'stickyTg'].forEach(function(id){
   document.getElementById(id).addEventListener('click', tgHandler);

@@ -30,6 +30,11 @@
    Аналитика: модуль НИКОГДА не передаёт контакт в onEvent — только
    нейтральные параметры. Конверсию (Lead) шлите на thank-you странице,
    прочитав флаг через LeadGuard.consumePendingLead().
+
+   Traffic Craft: настройки живут в экземпляре, а не в модуле - на одной
+   странице могут работать форма заявки (init) и попап моста в мессенджер
+   (LeadGuard.create + bindForm) с разными endpoint/thankYouUrl/текстами.
+   thankYouUrl может быть функцией: тогда вместо редиректа вызывается она.
    ============================================================ */
 (function (global) {
   "use strict";
@@ -74,9 +79,6 @@
   var ICON_ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
   var ICON_CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>';
 
-  var cfg = null;
-  var TOKEN = null; // { value, at, minAge }
-
   function merge(base, over) {
     var out = {};
     Object.keys(base).forEach(function (k) { out[k] = base[k]; });
@@ -87,6 +89,14 @@
     });
     return out;
   }
+  var pageshowBound = false;
+
+  /* Экземпляр: собственные cfg и токен. Всё ниже до «Публичный API» - внутри. */
+  function createInstance(userCfg) {
+  var cfg = merge(DEFAULTS, userCfg || {});
+  var TOKEN = null; // { value, at, minAge }
+  var refreshTimer = null;
+
   function emit(name, detail) { try { cfg.onEvent(name, detail || {}); } catch (e) {} }
 
   /* ------------------------------------------------------------
@@ -158,7 +168,8 @@
       if (gone) return; gone = true;
       try { sessionStorage.setItem(cfg.pendingFlagKey, JSON.stringify({ form_location: loc, ts: Date.now() })); } catch (e) {}
       emit("lead_redirect", { form_location: loc });
-      global.location.href = cfg.thankYouUrl;
+      if (typeof cfg.thankYouUrl === "function") { try { cfg.thankYouUrl(loc); } catch (e) {} }
+      else global.location.href = cfg.thankYouUrl;
     }
     var startedAt = Date.now();
     var hardDeadline = setTimeout(go, cfg.timing.hardDeadlineMs);
@@ -439,25 +450,59 @@
       slider.show();
       emit("slider_shown", { form_location: loc });
     });
+    return { reset: function () { if (!submitting) slider.reset(); }, isSubmitting: function () { return submitting; } };
   }
+
+  /* Токен: получить сейчас и обновлять в фоне (один таймер на экземпляр). */
+  function start() {
+    fetchToken();
+    if (refreshTimer === null) refreshTimer = setInterval(fetchToken, cfg.timing.tokenRefreshMs);
+  }
+  function destroy() { if (refreshTimer !== null) { clearInterval(refreshTimer); refreshTimer = null; } }
+
+  return {
+    cfg: cfg,
+    bindForm: bindForm,
+    start: start,
+    destroy: destroy,
+    _token: { get: function () { return TOKEN; }, set: function (v) { TOKEN = v; } }
+  };
+  } /* createInstance */
 
   /* ------------------------------------------------------------
      Публичный API
      ------------------------------------------------------------ */
-  function init(userCfg) {
-    cfg = merge(DEFAULTS, userCfg || {});
-    var forms = document.querySelectorAll(cfg.formSelector);
-    if (!forms.length) return;
-    forms.forEach(bindForm);
-    fetchToken();
-    setInterval(fetchToken, cfg.timing.tokenRefreshMs);
+  var current = null; // экземпляр init() - для consumePendingLead и тестов
+
+  function bindPageshow() {
+    if (pageshowBound) return;
+    pageshowBound = true;
     // «Назад» из bfcache возвращает страницу в состоянии «Отправляем…» — перезагружаем.
     global.addEventListener("pageshow", function (e) { if (e.persisted) location.reload(); });
   }
 
+  /* Классический запуск: все формы formSelector с одной конфигурацией. */
+  function init(userCfg) {
+    var inst = createInstance(userCfg);
+    current = inst;
+    var forms = document.querySelectorAll(inst.cfg.formSelector);
+    if (!forms.length) return inst;
+    forms.forEach(function (f) { inst.bindForm(f); });
+    inst.start();
+    bindPageshow();
+    return inst;
+  }
+
+  /* Экземпляр без привязки: формы подключаются позже через inst.bindForm(form),
+     токен - inst.start(). Для попапа моста в мессенджер. */
+  function create(userCfg) {
+    bindPageshow();
+    return createInstance(userCfg);
+  }
+
   /* На thank-you: вернуть и снять флаг ожидающей конверсии (или null). Вызывать один раз. */
   function consumePendingLead(key) {
-    key = key || (cfg && cfg.pendingFlagKey) || DEFAULTS.pendingFlagKey;
+    key = key || (current && current.cfg.pendingFlagKey) || DEFAULTS.pendingFlagKey;
     try {
       var raw = sessionStorage.getItem(key);
       if (!raw) return null;
@@ -468,8 +513,13 @@
 
   global.LeadGuard = {
     init: init,
+    create: create,
     consumePendingLead: consumePendingLead,
     validateContact: DEFAULTS.validateContact,
-    _internals: { get token() { return TOKEN; }, set token(v) { TOKEN = v; }, get cfg() { return cfg; } } // для тестов
+    _internals: { // для тестов: экземпляр последнего init()
+      get token() { return current ? current._token.get() : null; },
+      set token(v) { if (current) current._token.set(v); },
+      get cfg() { return current ? current.cfg : null; }
+    }
   };
 })(window);

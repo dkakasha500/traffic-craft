@@ -406,7 +406,8 @@ html.js-anim [data-r].vis{opacity:1;transform:translateY(0)}
   <meta name="twitter:title" content="Спасибо за заявку — Traffic Craft">
   <meta name="twitter:description" content="Мы уже видим вашу заявку и ответим в течение дня.">
   <meta name="twitter:image" content="https://traffic-craft.com/og-image.png">
-  </head>
+  <link rel="stylesheet" href="/tc-ui.css">
+</head>
 <body>
 <a class="float-home" href="/" aria-label="Вернуться на главную"><span aria-hidden="true">&larr;</span> На главную</a>
 
@@ -756,6 +757,7 @@ else if(y>lastY+2){f.classList.remove('on');}
 lastY=y;})},{passive:true})})();
 </script>
 <script src="/tc-ui.js" defer></script>
+<script src="/tc-go.js" defer></script>
 <script defer>
 /* ===== Lead Guard: конверсия Lead - ЗДЕСЬ, а не на странице формы =====
    consumePendingLead() возвращает флаг один раз и снимает его: при обновлении

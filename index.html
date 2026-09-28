@@ -606,6 +606,9 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 .sticky-cta{display:none;position:fixed;bottom:0;left:0;right:0;padding:12px 20px;padding-bottom:calc(12px + env(safe-area-inset-bottom));background:rgba(5, 5, 5, .92);border-top:1px solid var(--brd);z-index:998;transform:translateY(150%);opacity:0;pointer-events:none;transition:transform .5s cubic-bezier(.22,1,.36,1), opacity .5s}
 .sticky-cta.show{transform:translateY(0);opacity:1;pointer-events:auto}
 .sticky-cta.hide-zone{transform:translateY(150%);opacity:0;pointer-events:none}
+/* пока на экране карточка формы - плавающие кнопки и sticky-панель не нужны (на телефоне они перекрывали форму) */
+.floating-socials.hide-zone{opacity:0;pointer-events:none;transition:opacity .3s,transform .4s}
+.cta-form-card{scroll-margin-top:12px}
 .sticky-cta a{display:block;text-align:center;background:linear-gradient(135deg, var(--accent), var(--blue));color:var(--dark);padding:16px;border-radius:16px !important;font-weight:700;font-size:16px;box-shadow:0 8px 24px rgba(14,224,207,.2); -webkit-appearance:none !important; appearance:none !important;}
 
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.marquee-track{animation:none!important}}
@@ -864,6 +867,7 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
 </style>
 <link rel="stylesheet" href="/tc-ui.css">
 <script src="/tc-ui.js" defer></script>
+<script src="/tc-go.js" defer></script>
 </head>
 <body>
 <div class="cursor-dot" id="cursorDot"></div>
@@ -1312,8 +1316,9 @@ body.cursor-hidden .cursor-dot, body.cursor-hidden .cursor-outline { opacity: 0 
     <div class="heading" style="position:relative">Разберём ваш проект<br>и покажем, что мешает деньгам</div>
     <p class="cta-desc">Проверим всю цепочку — от первого клика до оплаты.</p>
 
-    <!-- Быстрый путь: сразу в мессенджер. Ссылки на мост /go (Lead уходит там),
-         без target="_blank" - дедуп tc_lead живет в sessionStorage вкладки -->
+    <!-- Быстрый путь: сразу в мессенджер. Ссылки на мост /go, но tc-go.js открывает
+         бегунок попапом прямо здесь (Lead уходит после свайпа); /go - запасной путь.
+         Без target="_blank" - дедуп tc_lead живет в sessionStorage вкладки -->
     <div class="cta-msg">
       <a href="/go?m=wa&pl=cta" class="cta-msg-btn wa"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>Написать в WhatsApp</a>
       <a href="/go?m=tg&pl=cta" class="cta-msg-btn tg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.833.94z"/></svg>Написать в Telegram</a>
@@ -1679,11 +1684,31 @@ document.querySelectorAll('[data-stars]').forEach(el=>stO.observe(el));
 const sticky=document.getElementById('stickyCta'), footerEl=document.getElementById('footer');
 let stickyOn=false;
 const scO=new IntersectionObserver(e=>{e.forEach(x=>{
-  if(sticky && x.target===footerEl) x.isIntersecting ? sticky.classList.add('hide-zone') : sticky.classList.remove('hide-zone');
+  if(sticky && x.target===footerEl){ sticky.dataset.footer=x.isIntersecting?'1':'0'; sticky.classList.toggle('hide-zone', x.isIntersecting || sticky.dataset.card==='1'); }
 })},{threshold:.1});
 if(footerEl) scO.observe(footerEl);
 
 const floatSocials=document.querySelector('.floating-socials');
+/* «Оставить заявку» / «Получить разбор клиники» на телефоне ведут не к заголовку
+   блока (форма оставалась ниже экрана), а к самой карточке формы */
+const ctaCard=document.querySelector('.cta-form-card');
+function scrollToCtaCard(){
+  /* цель считаем сами: пока страница едет, ниже догружаются/раскрываются блоки и
+     высота меняется - scrollIntoView в Chrome от этого останавливается на полпути.
+     Едем, ждём остановки и, если промахнулись, доводим */
+  const NAV=92, top=()=>ctaCard.getBoundingClientRect().top+scrollY-NAV;
+  window.scrollTo({top:top(),behavior:'smooth'});
+  let last=-1,idle=0,tries=0;
+  const iv=setInterval(()=>{const y=scrollY; idle=(y===last)?idle+1:0; last=y;
+    if(idle>=2||++tries>20){clearInterval(iv); if(Math.abs(ctaCard.getBoundingClientRect().top-NAV)>3) window.scrollTo({top:top(),behavior:'smooth'});}
+  },120);
+}
+/* карточка формы на экране → прячем sticky-панель и плавающие кнопки: они дублируют блок и перекрывали форму */
+if(ctaCard&&'IntersectionObserver' in window){new IntersectionObserver(e=>{const on=e[0].isIntersecting;
+  if(sticky) sticky.classList.toggle('hide-zone',on||sticky.dataset.footer==='1');
+  if(sticky) sticky.dataset.card=on?'1':'0';
+  if(floatSocials) floatSocials.classList.toggle('hide-zone',on);
+},{threshold:.15}).observe(ctaCard);}
 window.addEventListener('scroll',()=>{
   if(sticky && scrollY>300 && !stickyOn){stickyOn=true; sticky.classList.add('show'); if(floatSocials)floatSocials.style.transform='translateY(-60px)';}
   if(sticky && scrollY<200){sticky.classList.remove('show'); stickyOn=false; if(floatSocials)floatSocials.style.transform='';}
@@ -1697,9 +1722,12 @@ if(heroEl&&animBorder){const hO=new IntersectionObserver(e=>{if(!e[0].isIntersec
 const mqWrap=document.querySelector('.marquee-wrap');
 if(mqWrap&&'IntersectionObserver' in window){new IntersectionObserver(e=>{mqWrap.classList.toggle('mq-paused',!e[0].isIntersecting)},{threshold:0}).observe(mqWrap);}
 
-document.querySelectorAll('.case').forEach(c=>{c.style.cursor='pointer';c.addEventListener('click',()=>{document.getElementById('cta').scrollIntoView({behavior:'smooth'})})});
+document.querySelectorAll('.case').forEach(c=>{c.style.cursor='pointer';c.addEventListener('click',()=>{if(window.innerWidth<=768&&document.querySelector('.cta-form-card')){scrollToCtaCard();return;}document.getElementById('cta').scrollIntoView({behavior:'smooth'})})});
 
-document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth'})})});
+document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();
+  /* #cta на телефоне - к карточке формы (см. scrollToCtaCard), остальное - к блоку */
+  if(a.getAttribute('href')==='#cta'&&window.innerWidth<=768&&document.querySelector('.cta-form-card')){scrollToCtaCard();try{history.replaceState(null,'','#cta')}catch(err){}return;}
+  const t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth'})})});
 
 const fy=document.getElementById('footerYear'); if(fy) fy.textContent=new Date().getFullYear();
 
